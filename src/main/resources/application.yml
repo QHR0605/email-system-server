@@ -5,7 +5,7 @@ spring:
   datasource:
     username: qhr666
     password: Email666
-    url: jdbc:mysql://rm-wz9ev2rzm1e4s0r7eyo.mysql.rds.aliyuncs.com/3306/email-system?characterEncoding=utf-8
+    url: jdbc:mysql://rm-wz9ev2rzm1e4s0r7eyo.mysql.rds.aliyuncs.com:3306/email-system?characterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis:
