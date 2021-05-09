@@ -1,4 +1,4 @@
-package com.example.server.util;
+package com.example.server.util.base64;
 
 import java.util.Base64;
 import java.util.Base64.Encoder;

@@ -1,4 +1,4 @@
-package com.example.server.util;
+package com.example.server.util.command;
 
 /**
  * @author 全鸿润
@@ -20,5 +20,4 @@ public class CommandConstant {
     public static final String RETR = "RETE";
     public static final String DELE = "DELE";
     public static final String REST = "REST";
-    // public static final String QUIT = "QUIT";
 }
