@@ -1,32 +1,22 @@
 package com.example.server.util.json;
 
+import com.example.server.entity.SmtpResult;
+
 /**
  * @author 全鸿润
  */
 public class JsonResultFactory {
 
-    static JsonResult buildJsonResult(Integer stateCode , String message , Object body){
+    public static JsonResult buildJsonResult(Integer stateCode , String message , Object body){
         return new JsonResult(stateCode,message,body);
     }
-    static JsonResult buildSmtpReadyResult(){
-        return new JsonResult(JsonResultStateCode.SUCCESS,null,SmtpStateCode.READY);
+    public static JsonResult buildSuccessResult(SmtpResult smtpResult){
+        return buildJsonResult(JsonResultStateCode.SUCCESS,"",smtpResult);
     }
-    static JsonResult buildSmtpSuccessResult(){
-        return new JsonResult(JsonResultStateCode.SUCCESS,null,SmtpStateCode.SUCCESS);
+    public static JsonResult buildSuccessResult(){
+        return buildJsonResult(JsonResultStateCode.SUCCESS,"",null);
     }
-    static JsonResult buildSmtpAuthSuccessResult(){
-        return new JsonResult(JsonResultStateCode.SUCCESS,null,SmtpStateCode.AUTH_SUCCESS);
-    }
-    static JsonResult buildSmtpProcessingResult(){
-        return new JsonResult(JsonResultStateCode.SUCCESS,null,SmtpStateCode.PROCESSING);
-    }
-    static JsonResult buildSmtpSendingResult(){
-        return new JsonResult(JsonResultStateCode.SUCCESS,null,SmtpStateCode.SENDING);
-    }
-    static JsonResult buildSmtpCommandErrorResult(){
-        return new JsonResult(JsonResultStateCode.SUCCESS,null,SmtpStateCode.COMMAND_ERROR);
-    }
-    static JsonResult buildSmtpInterruptedResult(){
-        return new JsonResult(JsonResultStateCode.SUCCESS,null,SmtpStateCode.INTERRUPTED);
+    public static JsonResult buildSmtpCommandErrorResult(){
+        return buildSuccessResult(new SmtpResult(SmtpStateCode.COMMAND_ERROR,""));
     }
 }
