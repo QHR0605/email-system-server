@@ -9,10 +9,12 @@ import com.example.server.util.annotation.isRcpt;
 import com.example.server.util.command.CommandConstant;
 import com.example.server.util.json.SmtpStateCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author 全鸿润
  */
+@Service
 public class SmtpServiceImpl implements SmtpService {
 
     @Autowired
@@ -33,11 +35,15 @@ public class SmtpServiceImpl implements SmtpService {
     @isHello
     public SmtpResult handleAuthCommand(String[] args) {
         SmtpResult result = null;
-        String command = args[0]+args[1];
-        if (CommandConstant.AUTH_LOGIN.replaceAll(" ","").equals(command)){
+        if (args.length != 2){
             result = new SmtpResult(SmtpStateCode.COMMAND_ERROR,SmtpStateCode.COMMAND_ERROR_DESC);
         }else{
-            result = new SmtpResult(SmtpStateCode.SUCCESS,SmtpStateCode.SUCCESS_DESC);
+            String command = args[0]+args[1];
+            if (!CommandConstant.AUTH_LOGIN.replaceAll(" ","").equals(command)){
+                result = new SmtpResult(SmtpStateCode.COMMAND_ERROR,SmtpStateCode.COMMAND_ERROR_DESC);
+            }else{
+                result = new SmtpResult(SmtpStateCode.SUCCESS,SmtpStateCode.SUCCESS_DESC);
+            }
         }
         return result;
     }

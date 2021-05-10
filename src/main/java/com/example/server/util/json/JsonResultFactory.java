@@ -17,6 +17,6 @@ public class JsonResultFactory {
         return buildJsonResult(JsonResultStateCode.SUCCESS,"",null);
     }
     public static JsonResult buildSmtpCommandErrorResult(){
-        return buildSuccessResult(new SmtpResult(SmtpStateCode.COMMAND_ERROR,""));
+        return buildSuccessResult(new SmtpResult(SmtpStateCode.COMMAND_ERROR,SmtpStateCode.COMMAND_ERROR_DESC));
     }
 }

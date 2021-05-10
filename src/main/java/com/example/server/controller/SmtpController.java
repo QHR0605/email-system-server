@@ -1,15 +1,17 @@
 package com.example.server.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.server.entity.SmtpResult;
 import com.example.server.service.SmtpService;
 import com.example.server.util.command.CommandConstant;
-import com.example.server.util.commandParser.CommandParse;
+import com.example.server.util.command.CommandParse;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.SmtpStateCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,7 +25,9 @@ public class SmtpController {
     private SmtpService smtpService;
 
     @PostMapping("/")
-    public JsonResult handleSmtpCommand(@RequestBody String command) {
+    public JsonResult handleSmtpCommand(@RequestBody JSONObject commandJson) {
+
+        String command = commandJson.getString("command");
         String[] args = CommandParse.parseCommand(command);
         JsonResult result = null;
         Integer stateCode;
