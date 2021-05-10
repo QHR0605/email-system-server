@@ -1,4 +1,4 @@
-package com.example.server.util.commandParser;
+package com.example.server.util.command;
 
 import org.springframework.util.StringUtils;
 
@@ -12,7 +12,7 @@ public class CommandParse {
         if (StringUtils.isEmpty(command) || command.startsWith(" ")){
             return null;
         }
-        args = command.split("//s");
+        args = command.split("\\s+");
         return args;
     }
 }
