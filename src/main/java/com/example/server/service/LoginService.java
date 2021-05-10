@@ -10,5 +10,5 @@ public interface LoginService {
      * @param password 密码
      * @return 验证状态
      */
-    Integer loginService(String username , String password);
+    Integer handleLogin(String username , String password);
 }
