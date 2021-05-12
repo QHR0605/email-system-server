@@ -103,10 +103,8 @@ public class SmtpServiceImpl extends SmtpService {
     public void handleRcptCommand(String[] args) {
         if (!this.session.isHelloSent() || !this.session.isAuthSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR_DESC);
-            return;
         } else if (!this.session.isMailSent()) {
             this.writer.println(" send MAIL FROM:<sender address> first");
-            return;
         } else {
             if (args.length <= 2) {
                 this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
