@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.MailMapper">
+
+    <insert id="addMail">
+        INSERT INTO email(mid, sender_email, receiver_email, send_time, subject, body, `read`, deleted, tag, send, annex_url, summary, size)
+        VALUES (#{mid}, #{senderEmail}, #{receiverEmail}, #{sendTime}, #{subject}, #{body},#{read},#{deleted},#{tag},#{send},#{annexUrl},
+                #{summary}, #{size})
+    </insert>
+</mapper>
