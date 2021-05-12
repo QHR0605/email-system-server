@@ -34,7 +34,6 @@ public class SpringContextConfig implements ApplicationContextAware {
 
     /**
      * 通过类名获取对象实例
-     *
      * @param name 类名
      * @param <T>  返回的对象的类型
      * @return 对象实例

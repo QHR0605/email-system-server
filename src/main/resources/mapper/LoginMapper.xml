@@ -3,6 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.server.mapper.LoginMapper">
+    <insert id="insertNewUser">
+        INSERT INTO user(username, password, phone, `account-type`, `latest-login-time`, `latest-login-ip`,
+                         `avatar-url`)
+        VALUES (#{username}, #{password}, #{phone}, #{accountType}, #{latestLoginTime}, #{latestLoginIp}, #{avatarUrl})
+    </insert>
+    <update id="updatePassword">
+        UPDATE user
+        SET user.password = #{newPassword}
+        WHERE user.username = #{userName}
+    </update>
 
     <select id="findUserByUserName" resultType="com.example.server.entity.User">
         SELECT *

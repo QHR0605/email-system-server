@@ -20,6 +20,9 @@ public class SmtpServerThread extends Thread {
     private Socket socket;
     private BufferedReader reader;
     private PrintWriter writer;
+    /**
+     * 具体的SMTP指令的处理函数实现
+     */
     private SmtpService smtpService;
 
     public SmtpServerThread(Socket socket) {
@@ -33,9 +36,11 @@ public class SmtpServerThread extends Thread {
         try {
             writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
             while (true) {
                 String command = reader.readLine();
                 System.out.println("客户端:" + command);
+                //解析客户端指令
                 String[] args = CommandParse.parseCommand(command);
                 if (args == null) {
                     writer.println(SmtpStateCode.COMMAND_ERROR_DESC);

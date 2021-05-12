@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
+ *
  * @author 全鸿润
  */
 public abstract class SmtpService {

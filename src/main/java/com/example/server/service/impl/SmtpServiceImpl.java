@@ -21,13 +21,18 @@ import java.net.Socket;
 import java.sql.Date;
 
 /**
+ * SMTP指令处理函数的具体实现
  * @author 全鸿润
  */
 public class SmtpServiceImpl extends SmtpService {
 
-    private final AuthService authService = SpringContextConfig.getBean(AuthService.class);
+    private final AuthService authService = SpringContextConfig.getBean("AuthServiceImpl");
     private final MailMapper mailMapper = SpringContextConfig.getBean(MailMapper.class);
 
+    /**
+     * @param socket 当前连接的套接字
+     * @param smtpSession 会话对象，用以保存用户的一些状态
+     */
     public SmtpServiceImpl(Socket socket, SmtpSession smtpSession) {
         super(socket, smtpSession);
         try {
@@ -49,7 +54,6 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    @isHello
     public void handleAuthCommand(String[] args) throws IOException {
         if (!this.session.isHelloSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR + " send HELO first");
@@ -78,8 +82,6 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    @isHello
-    @isAuth
     public void handleMailCommand(String[] args) {
         if (!this.session.isAuthSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR_DESC);
@@ -98,8 +100,6 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    @isHello
-    @isAuth
     public void handleRcptCommand(String[] args) {
         if (!this.session.isHelloSent() || !this.session.isAuthSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR_DESC);
@@ -127,10 +127,6 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    @isHello
-    @isAuth
-    @isMail
-    @isRcpt
     public void handleDataCommand(String[] args) {
         if (!this.session.isHelloSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR + " send HELO first");
@@ -203,17 +199,17 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    @isHello
     public void handleResetCommand(String[] args) {
         this.writer.println(SmtpStateCode.SUCCESS_DESC);
     }
 
     @Override
-    @isHello
     public void handleQuitCommand(String[] args) {
         try {
             this.writer.println(SmtpStateCode.BYE);
+            //关闭连接
             this.socket.close();
+            //初始化会话
             this.session = new SmtpSession();
         } catch (IOException e) {
             e.printStackTrace();

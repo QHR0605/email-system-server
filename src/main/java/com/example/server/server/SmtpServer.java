@@ -15,6 +15,9 @@ public class SmtpServer extends Thread {
     private int port;
     private boolean shutDown;
 
+    /**
+     * 默认端口号为25
+     */
     public SmtpServer() {
         port = 25;
         shutDown = false;
@@ -26,6 +29,10 @@ public class SmtpServer extends Thread {
         }
     }
 
+    /**
+     * 循环等待客户端得请求连接
+     * 建立连接后,开启一个服务线程处理该连接
+     */
     @Override
     public void run() {
         try {

@@ -1,6 +1,7 @@
 package com.example.server.util.json;
 
 /**
+ * 状态码及其状态信息
  * @author 全鸿润
  */
 public class JsonResultStateCode {

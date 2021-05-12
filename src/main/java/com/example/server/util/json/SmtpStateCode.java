@@ -1,6 +1,7 @@
 package com.example.server.util.json;
 
 /**
+ * SMTP状态码
  * @author 全鸿润
  */
 public class SmtpStateCode {
