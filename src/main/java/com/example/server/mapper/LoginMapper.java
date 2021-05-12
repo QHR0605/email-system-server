@@ -1,10 +1,12 @@
 package com.example.server.mapper;
 
 import com.example.server.entity.User;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author 全鸿润
  */
+@Repository
 public interface LoginMapper {
 
     /**

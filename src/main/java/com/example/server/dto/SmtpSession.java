@@ -1,5 +1,7 @@
 package com.example.server.dto;
 
+import java.util.LinkedList;
+
 /**
  * @author 全鸿润
  */
@@ -11,6 +13,8 @@ public class SmtpSession {
     private boolean isRcptSent = false;
     private boolean isUserNameSent = false;
     private boolean isPasswordSent = false;
+    private String sender = null;
+    private LinkedList<String> receivers = new LinkedList<>();
 
     public boolean isUserNameSent() {
         return isUserNameSent;
@@ -58,5 +62,21 @@ public class SmtpSession {
 
     public void setRcptSent(boolean rcptSent) {
         isRcptSent = rcptSent;
+    }
+
+    public LinkedList<String> getReceivers() {
+        return receivers;
+    }
+
+    public void setReceivers(LinkedList<String> receivers) {
+        this.receivers = receivers;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 }

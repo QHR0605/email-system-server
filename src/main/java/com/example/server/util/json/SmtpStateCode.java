@@ -8,7 +8,7 @@ public class SmtpStateCode {
     public static final int READY = 220;
 
     public static final int SUCCESS = 250;
-    public static final String SUCCESS_DESC = " OK";
+    public static final String SUCCESS_DESC = SUCCESS+ " OK";
 
     public static final int AUTH_SUCCESS = 235;
     public static final String AUTH_SUCCESS_DESC = AUTH_SUCCESS + " Authentication successful";
@@ -17,7 +17,9 @@ public class SmtpStateCode {
     public static final String AUTH_FAILED_DESC = AUTH_FAILED + " Error: Authentication failed";
 
     public static final int PROCESSING = 221;
-    public static final int SENDING = 354;
+    public static final String BYE = PROCESSING+" Bye";
+    public static final int START_EMAIL_INPUT = 354;
+    public static final String START_EMAIL_INPUT_DESC = START_EMAIL_INPUT+" Start mail input; end with <CRLF>.<CRLF>";
 
     public static final int COMMAND_ERROR = 500;
     public static final String COMMAND_ERROR_DESC = COMMAND_ERROR + " Error: bad Syntax";

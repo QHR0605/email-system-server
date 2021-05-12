@@ -5,7 +5,6 @@ import com.example.server.entity.User;
 import com.example.server.mapper.LoginMapper;
 import com.example.server.service.AuthService;
 import com.example.server.util.base64.Base64Util;
-import com.example.server.util.json.JsonResultStateCode;
 import com.example.server.util.json.SmtpStateCode;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +17,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String handleLogin(String encodedUsername, String encodedPassword) {
-
-        User user;
-        String username = Base64Util.decodeByBase64(encodedUsername.getBytes());
-        String password = Base64Util.decodeByBase64(encodedUsername.getBytes());
         try {
+            User user;
+            String username = Base64Util.decodeByBase64(encodedUsername.getBytes());
+            String password = Base64Util.decodeByBase64(encodedPassword.getBytes());
+
+            System.out.println("username: " + username);
+            System.out.println("password: " + password);
             user = loginMapper.findUserByUserName(username);
             if (user != null && user.getPassword().equals(password)) {
                 return SmtpStateCode.AUTH_SUCCESS_DESC;
@@ -30,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
             return SmtpStateCode.AUTH_FAILED_DESC;
         } catch (Exception e) {
             e.printStackTrace();
-            return JsonResultStateCode.UNKNOWN_ERROR_DESC;
+            return SmtpStateCode.AUTH_FAILED_DESC;
         }
     }
 
