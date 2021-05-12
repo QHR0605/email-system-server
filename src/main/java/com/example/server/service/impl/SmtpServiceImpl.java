@@ -11,6 +11,7 @@ import com.example.server.util.annotation.isAuth;
 import com.example.server.util.annotation.isHello;
 import com.example.server.util.annotation.isMail;
 import com.example.server.util.annotation.isRcpt;
+import com.example.server.util.base64.Base64Util;
 import com.example.server.util.command.CommandConstant;
 import com.example.server.util.idGenerator.IdGenerator;
 import com.example.server.util.json.SmtpStateCode;
@@ -68,6 +69,8 @@ public class SmtpServiceImpl extends SmtpService {
                 String smtpResult = authService.handleLogin(encodedUsername, encodedPassword);
                 if (SmtpStateCode.AUTH_SUCCESS_DESC.equals(smtpResult)) {
                     this.session.setAuthSent(true);
+                    //这才是真正的发信人地址
+                    this.session.setSender(Base64Util.decodeByBase64(encodedUsername.getBytes()));
                 }
                 this.writer.println(smtpResult);
             }
@@ -88,8 +91,7 @@ public class SmtpServiceImpl extends SmtpService {
             int beginIndex = args[2].indexOf("<");
             int endIndex = args[2].indexOf(">");
             String username = args[2].substring(beginIndex + 1, endIndex);
-            System.out.println("发件人: " + username);
-            this.session.setSender(username);
+            System.out.println("信封上的发件人: " + username);
             this.writer.println(SmtpStateCode.SUCCESS_DESC);
             this.session.setMailSent(true);
         }
