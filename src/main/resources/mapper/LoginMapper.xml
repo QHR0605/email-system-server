@@ -5,6 +5,8 @@
 <mapper namespace="com.example.server.mapper.LoginMapper">
 
     <select id="findUserByUserName" resultType="com.example.server.entity.User">
-        SELECT * FROM user
+        SELECT *
+        FROM user
+        WHERE user.username = #{username}
     </select>
 </mapper>
