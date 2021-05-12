@@ -7,9 +7,9 @@ import org.springframework.util.StringUtils;
  */
 public class CommandParse {
 
-    public static String[] parseCommand(String command){
+    public static String[] parseCommand(String command) {
         String[] args;
-        if (StringUtils.isEmpty(command) || command.startsWith(" ")){
+        if (StringUtils.isEmpty(command) || command.startsWith(" ")) {
             return null;
         }
         args = command.split("\\s+");
