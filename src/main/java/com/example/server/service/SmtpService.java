@@ -1,45 +1,73 @@
 package com.example.server.service;
 
-import com.example.server.entity.SmtpResult;
+import com.example.server.dto.SmtpSession;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 /**
  * @author 全鸿润
  */
-public interface SmtpService {
+public abstract class SmtpService {
+
+    protected Socket socket;
+    protected PrintWriter writer;
+    protected BufferedReader reader;
+    protected SmtpSession session;
+
+    public SmtpService(Socket socket, SmtpSession smtpSession) {
+        this.socket = socket;
+        this.session = smtpSession;
+    }
 
     /**
-     * 处理Helo指令
-     * @return SMTP指令的状态码
+     * 处理Hello指令
+     *
+     * @param args 指令参数
      */
-    SmtpResult handleHelloCommand(String[] args);
+    abstract public void handleHelloCommand(String[] args);
+
     /**
-     * 处理AUTH LOGIN指令
-     * @return SMTP指令的状态码
+     * 处理AUTH指令
+     *
+     * @param args 指令参数
      */
-    SmtpResult handleAuthCommand(String[] args);
+    abstract public void handleAuthCommand(String[] args) throws IOException;
+
     /**
-     * 处理MAIL FROM指令
-     * @return SMTP指令的状态码
+     * 处理MAIL指令
+     *
+     * @param args 指令参数
      */
-    SmtpResult handleMailCommand(String[] args);
+    abstract public void handleMailCommand(String[] args);
+
     /**
-     * 处理RCPT TO指令
-     * @return SMTP指令的状态码
+     * 处理RCPT指令
+     *
+     * @param args 指令参数
      */
-    SmtpResult handleRcptCommand(String[] args);
+    abstract public void handleRcptCommand(String[] args);
+
     /**
      * 处理DATA指令
-     * @return SMTP指令的状态码
+     *
+     * @param args 指令参数
      */
-    SmtpResult handleDataCommand(String[] args);
+    abstract public void handleDataCommand(String[] args);
+
     /**
-     * 处理Reset指令
-     * @return SMTP指令的状态码
+     * 处理RESET指令
+     *
+     * @param args 指令参数
      */
-    SmtpResult handleResetCommand(String[] args);
+    abstract public void handleResetCommand(String[] args);
+
     /**
      * 处理QUIT指令
-     * @return SMTP指令的状态码
+     *
+     * @param args 指令参数
      */
-    SmtpResult handleQuitCommand(String[] args);
+    abstract public void handleQuitCommand(String[] args);
 }
