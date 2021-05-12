@@ -36,12 +36,29 @@ public class SmtpClient extends Thread {
                     InputStream in = socket.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                     OutputStream out = socket.getOutputStream();
-                    PrintWriter writer = new PrintWriter(new OutputStreamWriter(out),true);
+                    PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));
                     Scanner scanner = new Scanner(System.in);
                     System.out.println(reader.readLine());
                     while (true){
                         String output = scanner.nextLine();
+                        if ("DATA".equals(output)){
+                            writer.println(output);
+                            writer.flush();
+                            System.out.println(reader.readLine());
+                            while (true){
+                                String content = scanner.nextLine();
+                                if (".".equals(content)){
+                                    writer.append(content+"\n");
+                                    writer.flush();
+                                    break;
+                                }
+                                writer.append(content+"\n");
+                            }
+                            System.out.println(reader.readLine());
+                            continue;
+                        }
                         writer.println(output);
+                        writer.flush();
                         String s = reader.readLine();
                         System.out.println(s);
                     }
