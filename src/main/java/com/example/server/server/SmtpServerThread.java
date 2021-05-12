@@ -57,6 +57,7 @@ public class SmtpServerThread extends Thread {
                         smtpService.handleResetCommand(args);
                     } else if (CommandConstant.QUIT.equals(args[0])) {
                         smtpService.handleQuitCommand(args);
+                        this.interrupt();
                     } else {
                         System.out.println("没有命令执行");
                         writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
@@ -64,6 +65,7 @@ public class SmtpServerThread extends Thread {
                 }
             }
         } catch (IOException e) {
+            System.out.println(socket.getInetAddress() + " 断开连接");
             e.printStackTrace();
         }
     }
