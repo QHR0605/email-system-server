@@ -9,6 +9,24 @@ public class SmtpSession {
     private boolean isAuthSent = false;
     private boolean isMailSent = false;
     private boolean isRcptSent = false;
+    private boolean isUserNameSent = false;
+    private boolean isPasswordSent = false;
+
+    public boolean isUserNameSent() {
+        return isUserNameSent;
+    }
+
+    public void setUserNameSent(boolean userNameSent) {
+        isUserNameSent = userNameSent;
+    }
+
+    public boolean isPasswordSent() {
+        return isPasswordSent;
+    }
+
+    public void setPasswordSent(boolean passwordSent) {
+        isPasswordSent = passwordSent;
+    }
 
     public boolean isHelloSent() {
         return isHelloSent;
