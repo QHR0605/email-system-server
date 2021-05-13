@@ -32,7 +32,6 @@ public interface MailMapper {
      * 根据用户标记要删除的邮件，删除mid为mid的邮件
      *
      * @param mid
-     * @return 返回-1表示操作失败，其他是sql语句影响的行数
      */
-    int delectMailByMid(Integer mid);
+    void delectMailByMid(Integer mid);
 }

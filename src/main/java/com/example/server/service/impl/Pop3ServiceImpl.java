@@ -178,17 +178,15 @@ public class Pop3ServiceImpl extends Pop3Service {
      */
     @Override
     public void handleQuitCommand(String[] args) {
-        if (!pop3Session.isAuth()) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL + '\n' + "#end#");
-            return;
-        }
-        for(Email email : pop3Session.getEmails()) {
-            if(email.getDeleted()){
-                mailMapper.delectMailByMid(email.getMid());
+        this.writer.println(Pop3StateCode.OK + Pop3StateCode.BYE + '\n' + "#end#");
+        if (pop3Session.isAuth()) {
+            for(Email email : pop3Session.getEmails()) {
+                if(email.getDeleted()){
+                    mailMapper.delectMailByMid(email.getMid());
+                }
             }
         }
         try {
-            this.writer.println(Pop3StateCode.OK + '\n' + Pop3StateCode.BYE + '\n' + "#end#");
             //关闭连接
             this.socket.close();
             //初始化会话

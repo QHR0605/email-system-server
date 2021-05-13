@@ -45,11 +45,16 @@ public class Pop3Client extends Thread {
                         while(!(line = reader.readLine()).equals("#end#")) {
                             System.out.println(line);
                         }
+                        if("QUIT".equals(output)) {
+                            writer.close();
+                            reader.close();
+                            socket.close();
+                            break;
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         });
         t1.start();

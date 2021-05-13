@@ -65,9 +65,13 @@ public class Pop3ServerThread extends Thread {
                     } else if (QUIT.equals(args[0])) {
                         System.out.println("执行" + QUIT);
                         pop3Service.handleQuitCommand(args);
+                        reader.close();
+                        writer.close();
+                        socket.close();
+                        break;
                     } else {
                         System.out.println("没有相应的命令");
-                        writer.println(Pop3StateCode.ERR + Pop3StateCode.STNTAX);
+                        writer.println(Pop3StateCode.ERR + Pop3StateCode.STNTAX  + '\n' + "#end#");
                     }
                 }
             }
