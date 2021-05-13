@@ -45,6 +45,7 @@ public class SmtpServiceImpl extends SmtpService {
 
     @Override
     public void handleHelloCommand(String[] args) {
+        System.out.println("你好你好你啊");
         if (args.length != 2) {
             this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
             return;
@@ -67,22 +68,31 @@ public class SmtpServiceImpl extends SmtpService {
                 this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
             } else {
                 this.writer.println(SmtpStateCode.USERNAME_SENT_DESC);
-                String encodedUsername = this.reader.readLine();
+                String encodedUsername = this.reader.readLine(); // base64 user
                 this.writer.println(SmtpStateCode.PASSWORD_SENT_DESC);
-                String encodedPassword = this.reader.readLine();
-                String smtpResult = authService.handleLogin(encodedUsername, encodedPassword);
-                if (SmtpStateCode.AUTH_SUCCESS_DESC.equals(smtpResult)) {
+                String encodedPassword = this.reader.readLine(); // base64 pass
+
+                String username = Base64Util.decodeByBase64(encodedUsername.getBytes());
+                String password = Base64Util.decodeByBase64(encodedPassword.getBytes());
+
+                String result = authService.handleLogin(username, password); // 登录验证
+                if ("SUCCESS".equals(result)) {
+                    result = SmtpStateCode.AUTH_SUCCESS_DESC;
                     this.session.setAuthSent(true);
                     //这才是真正的发信人地址
-                    this.session.setSender(Base64Util.decodeByBase64(encodedUsername.getBytes()));
+                    this.session.setSender(username);
+                    // 感觉这里还要把其他状态初始化成 false，因为它重新登录了
+                } else {
+                    result = SmtpStateCode.AUTH_FAILED_DESC;
+                    this.session.setAuthSent(false); // 重新登录但是验证失败
                 }
-                this.writer.println(smtpResult);
+                this.writer.println(result);
             }
         }
     }
 
     @Override
-    public void handleMailCommand(String[] args) {
+    public void handleMailCommand(String[] args) { // 设置了发送方
         if (!this.session.isAuthSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR_DESC);
             return;
@@ -100,11 +110,11 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    public void handleRcptCommand(String[] args) {
+    public void handleRcptCommand(String[] args) { // 设置了接收方
         if (!this.session.isHelloSent() || !this.session.isAuthSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR_DESC);
         } else if (!this.session.isMailSent()) {
-            this.writer.println(" send MAIL FROM:<sender address> first");
+            this.writer.println("send MAIL FROM:<sender address> first");
         } else {
             if (args.length <= 2) {
                 this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
@@ -131,7 +141,7 @@ public class SmtpServiceImpl extends SmtpService {
         if (!this.session.isHelloSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR + " send HELO first");
             return;
-        } else if (!this.session.isRcptSent()) {
+        } else if (!this.session.isMailSent() || !this.session.isRcptSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR_DESC);
             return;
         } else if (args.length > 2 || !CommandConstant.DATA.equals(args[0])) {
@@ -152,7 +162,7 @@ public class SmtpServiceImpl extends SmtpService {
                 System.out.println(line);
                 if (".".equals(line)) {
                     break;
-                } else if (line.startsWith("from")) {
+                } else if (line.startsWith("from")) { // 感觉这里的 from to 没有必要
                     int index = line.indexOf(":");
                     from = line.substring(index + 1);
                 } else if (line.startsWith("to")) {

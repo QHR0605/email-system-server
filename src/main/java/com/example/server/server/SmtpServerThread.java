@@ -28,7 +28,7 @@ public class SmtpServerThread extends Thread {
     public SmtpServerThread(Socket socket) {
         this.socket = socket;
         smtpService = new SmtpServiceImpl(socket, new SmtpSession());
-        System.out.println("开启服务线程");
+        System.out.println("开启 SMTP 服务线程");
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SmtpServerThread extends Thread {
 
             while (true) {
                 String command = reader.readLine();
-                System.out.println("客户端:" + command);
+                System.out.println("客户端: " + command);
                 //解析客户端指令
                 String[] args = CommandParse.parseCommand(command);
                 if (args == null) {

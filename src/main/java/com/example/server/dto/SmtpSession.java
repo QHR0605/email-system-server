@@ -14,7 +14,7 @@ public class SmtpSession {
     private boolean isUserNameSent = false;
     private boolean isPasswordSent = false;
     private String sender = null;
-    private LinkedList<String> receivers = new LinkedList<>();
+    private LinkedList<String> receivers = new LinkedList<>(); // 群发
 
     public boolean isUserNameSent() {
         return isUserNameSent;

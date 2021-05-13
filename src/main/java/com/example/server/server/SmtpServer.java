@@ -23,7 +23,7 @@ public class SmtpServer extends Thread {
         shutDown = false;
         try {
             serverSocket = new ServerSocket(port);
-            System.out.println("Smtp Server start");
+            System.out.println("SMTP 服务已开启");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,7 +31,7 @@ public class SmtpServer extends Thread {
 
     /**
      * 循环等待客户端得请求连接
-     * 建立连接后,开启一个服务线程处理该连接
+     * 建立连接后, 开启一个服务线程处理该连接
      */
     @Override
     public void run() {
@@ -39,7 +39,7 @@ public class SmtpServer extends Thread {
             while (true) {
                 Socket socket = serverSocket.accept();
                 PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-                printWriter.println("建立连接成功");
+                printWriter.println("220 lyq.com SMTP ready");
                 SmtpServerThread t = new SmtpServerThread(socket);
                 t.start();
             }
