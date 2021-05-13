@@ -46,7 +46,6 @@ public class SmtpServiceImpl extends SmtpService {
 
     @Override
     public void handleHelloCommand(String[] args) {
-        System.out.println("你好你好你啊");
         if (args.length != 2) {
             this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
             return;
