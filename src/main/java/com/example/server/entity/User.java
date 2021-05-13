@@ -16,6 +16,50 @@ public class User {
     private Integer mailBoxSize;
     private String avatarUrl;
 
+    public User() {
+
+    }
+
+    public User username(String username) {
+        this.setUsername(username);
+        return this;
+    }
+
+    public User password(String password) {
+        this.setPassword(password);
+        return this;
+    }
+
+    public User phone(String phone) {
+        this.setPhone(phone);
+        return this;
+    }
+
+    public User accountType(Boolean accountType) {
+        this.setAccountType(accountType);
+        return this;
+    }
+
+    public User latestLoginTime(Timestamp latestLoginTime) {
+        this.setLatestLoginTime(latestLoginTime);
+        return this;
+    }
+
+    public User latestLoginIp(String latestLoginIp) {
+        this.setLatestLoginIp(latestLoginIp);
+        return this;
+    }
+
+    public User mailBoxSize(Integer mailBoxSize) {
+        this.setMailBoxSize(mailBoxSize);
+        return this;
+    }
+
+    public User avatarURL(String avatarUrl) {
+        this.setAvatarUrl(avatarUrl);
+        return this;
+    }
+
     public String getUsername() {
         return username;
     }
