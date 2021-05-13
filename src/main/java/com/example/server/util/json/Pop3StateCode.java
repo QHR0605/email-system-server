@@ -7,4 +7,5 @@ public class Pop3StateCode {
     public static final String AUTH_FAIL = "authorization failed"; // 登陆失败
     public static final String AUTH_SUCCESS = "messages";
     public static final String BYE = "Connection closed";
+    public static final String STNTAX = "Bad Syntax";
 }
