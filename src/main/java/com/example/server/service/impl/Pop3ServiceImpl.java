@@ -166,8 +166,9 @@ public class Pop3ServiceImpl extends Pop3Service {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL);
         }
         for(Email email : pop3Session.getEmails()) {
-            if(email.getDeleted())
+            if(email.getDeleted()){
                 mailMapper.delectMailByMid(email.getMid());
+            }
         }
         writer.println(Pop3StateCode.OK + '\n' + Pop3StateCode.BYE);
     }
