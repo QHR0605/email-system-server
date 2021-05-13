@@ -15,4 +15,10 @@
         FROM email
         WHERE receiver_email = #{username}
     </select>
+
+    <delete id="delectMailByMid">
+        DELETE
+        FROM email
+        WHERE mid = #{mid}
+    </delete>
 </mapper>

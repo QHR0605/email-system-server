@@ -34,7 +34,7 @@ public interface MailMapper {
      * @param mid
      * @return 返回-1表示操作失败，其他是sql语句影响的行数
      */
-    int delectMails(String mid);
+    int delectMailByMid(Integer mid);
 
     /**
      * 某用户收到的邮件数量

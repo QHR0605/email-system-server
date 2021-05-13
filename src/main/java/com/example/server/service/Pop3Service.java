@@ -30,4 +30,11 @@ public abstract class Pop3Service {
     abstract public void handleDeleCommand(String[] args);
 
     abstract public void handleRestCommand(String[] args);
+
+    /**
+     * 处理QUIT指令
+     *
+     * @param args 指令参数
+     */
+    abstract public void handleQuitCommand(String[] args);
 }
