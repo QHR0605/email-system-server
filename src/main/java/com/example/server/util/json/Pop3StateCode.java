@@ -10,4 +10,5 @@ public class Pop3StateCode {
     public static final String AUTH_SUCCESS = "messages";
     public static final String BYE = "Connection closed";
     public static final String STNTAX = "Unknown command"; // 不识别的命令
+    public static final String OUT_OF_INDEX = "Out of index";
 }

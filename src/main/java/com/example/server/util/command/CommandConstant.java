@@ -22,7 +22,7 @@ public class CommandConstant {
     public static final String PASS = "PASS";
     public static final String STAT = "STAT";
     public static final String LIST = "LIST";
-    public static final String RETR = "RETE";
+    public static final String RETR = "RETR";
     public static final String DELE = "DELE";
     public static final String REST = "REST";
 }

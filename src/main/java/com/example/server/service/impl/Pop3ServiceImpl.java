@@ -2,11 +2,13 @@ package com.example.server.service.impl;
 
 import com.example.server.config.SpringContextConfig;
 import com.example.server.dto.Pop3Session;
+import com.example.server.dto.SmtpSession;
 import com.example.server.entity.Email;
 import com.example.server.mapper.MailMapper;
 import com.example.server.service.AuthService;
 import com.example.server.service.Pop3Service;
 import com.example.server.util.json.Pop3StateCode;
+import com.example.server.util.json.SmtpStateCode;
 
 import java.io.*;
 import java.net.Socket;
@@ -33,9 +35,12 @@ public class Pop3ServiceImpl extends Pop3Service {
     @Override
     public void handleUserCommand(String[] args) {
         if (args.length != 2) {
-            this.writer.println(Pop3StateCode.VALID);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID + '\n' + "#end#");
         }
+        pop3Session.setUserSent(true);
+        pop3Session.setAuth(false);
         pop3Session.setUsername(args[1]);
+        this.writer.println(Pop3StateCode.OK+ '\n' + "#end#");
     }
 
     /**
@@ -45,9 +50,11 @@ public class Pop3ServiceImpl extends Pop3Service {
     @Override
     public void handlePassCommand(String[] args) {
         if (args.length != 2) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID + '\n' + "#end#");
+            return;
         } else if (!pop3Session.isUserSent()) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.USER);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.USER + '\n' + "#end#");
+            return;
         }
         String username = pop3Session.getUsername();
         String password = args[1];
@@ -61,7 +68,7 @@ public class Pop3ServiceImpl extends Pop3Service {
             result = Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL;
             pop3Session.setAuth(false); // 重新登录但是验证失败
         }
-        this.writer.println(result);
+        this.writer.println(result + '\n' + "#end#");
     }
 
     /**
@@ -71,9 +78,10 @@ public class Pop3ServiceImpl extends Pop3Service {
     @Override
     public void handleStatCommand(String[] args) {
         if (!pop3Session.isAuth()) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL + '\n' + "#end#");
+            return;
         }
-        writer.println(Pop3StateCode.OK + pop3Session.getCount() + ' ' + pop3Session.getTotalSize());
+        this.writer.println(Pop3StateCode.OK + pop3Session.getCount() + ' ' + pop3Session.getTotalSize() + '\n' + "#end#");
     }
 
     /**
@@ -83,39 +91,43 @@ public class Pop3ServiceImpl extends Pop3Service {
     @Override
     public void handleListCommand(String[] args) {
         if (!pop3Session.isAuth()) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL + '\n' + "#end#");
+            return;
         }
-        StringBuilder result = new StringBuilder(Pop3StateCode.OK);
+        String result = Pop3StateCode.OK;
         int index = 1;
         for(Email email : pop3Session.getEmails()) {
-            result.append('\n' + index + ' ' + email.getSize());
+            result += "" + '\n' + index + ' ' + email.getSize();
             ++index;
         }
-        writer.println(result);
+        System.out.println(result);
+        this.writer.println(result  + '\n' + "#end#");
     }
 
     @Override
     public void handleRetrCommand(String[] args) {
         if (args.length != 2) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID + '\n' + "#end#");
+            return;
         } else if (!pop3Session.isAuth()) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL);
-        }
-        // 取回的邮件编号 大于 邮件数量
-        int index = Integer.parseInt(args[1]);
-        if(index > pop3Session.getCount()) {
-            writer.println(Pop3StateCode.ERR);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL + '\n' + "#end#");
             return;
         }
-        StringBuilder result = new StringBuilder(Pop3StateCode.OK);
+        // 取回的邮件编号 大于 邮件数量
+        int index = Integer.parseInt(args[1]) - 1;
+        if(index > pop3Session.getCount()) {
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
+            return;
+        }
+        String result = Pop3StateCode.OK;
         Email email = pop3Session.getEmails().get(index);
-        result.append("From: <").append(email.getSenderEmail()).append(">").append('\n');
-        result.append("To: <").append(email.getReceiverEmail()).append(">").append('\n');
-        result.append("Date: ").append(email.getSendTime()).append('\n');
-        result.append("Subject: ").append(email.getSubject()).append('\n');
-        result.append("Body: ").append('\n');
-        result.append(email.getBody()).append('\n');
-        writer.println(result);
+        result += "From: <" + email.getSenderEmail() + ">" + '\n';
+        result += "To: <" + email.getReceiverEmail() + ">" + '\n';
+        result += "Date: " + email.getSendTime() + '\n';
+        result += "Subject: " + email.getSubject() + '\n';
+        result += "Body: " + '\n';
+        result += email.getBody() + '\n';
+        this.writer.println(result + '\n' + "#end#");
     }
 
     /**
@@ -125,35 +137,39 @@ public class Pop3ServiceImpl extends Pop3Service {
     @Override
     public void handleDeleCommand(String[] args) {
         if (args.length != 2) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID + '\n' + "#end#");
+            return;
         } if (!pop3Session.isAuth()) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL + '\n' + "#end#");
+            return;
         }
         // 标记的邮件编号 大于 邮件数量
-        int index = Integer.parseInt(args[1]);
+        int index = Integer.parseInt(args[1]) - 1;
         if(index > pop3Session.getCount()) {
-            writer.println(Pop3StateCode.ERR);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
             return;
         }
         pop3Session.getEmails().get(index).setDeleted(true);
-        writer.println(Pop3StateCode.OK);
+        this.writer.println(Pop3StateCode.OK + '\n' + "#end#");
     }
 
     @Override
     public void handleRestCommand(String[] args) {
         if (args.length != 2) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID + '\n' + "#end#");
+            return;
         } if (!pop3Session.isAuth()) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL + '\n' + "#end#");
+            return;
         }
         // 取消标记的邮件编号 大于 邮件数量
-        int index = Integer.parseInt(args[1]);
+        int index = Integer.parseInt(args[1]) - 1;
         if(index > pop3Session.getCount()) {
-            writer.println(Pop3StateCode.ERR);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
             return;
         }
         pop3Session.getEmails().get(index).setDeleted(false);
-        writer.println(Pop3StateCode.OK);
+        this.writer.println(Pop3StateCode.OK + '\n' + "#end#");
     }
 
     /**
@@ -163,12 +179,21 @@ public class Pop3ServiceImpl extends Pop3Service {
     @Override
     public void handleQuitCommand(String[] args) {
         if (!pop3Session.isAuth()) {
-            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL);
+            this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL + '\n' + "#end#");
+            return;
         }
         for(Email email : pop3Session.getEmails()) {
             if(email.getDeleted())
                 mailMapper.delectMailByMid(email.getMid());
         }
-        writer.println(Pop3StateCode.OK + '\n' + Pop3StateCode.BYE);
+        try {
+            this.writer.println(Pop3StateCode.OK + '\n' + Pop3StateCode.BYE + '\n' + "#end#");
+            //关闭连接
+            this.socket.close();
+            //初始化会话
+            this.pop3Session = new Pop3Session();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

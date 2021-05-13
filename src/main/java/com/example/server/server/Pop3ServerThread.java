@@ -45,23 +45,26 @@ public class Pop3ServerThread extends Thread {
                         System.out.println("执行" + USER);
                         pop3Service.handleUserCommand(args);
                     } else if (PASS.equals(args[0])) {
-                        System.out.println("执行" + USER);
+                        System.out.println("执行" + PASS);
                         pop3Service.handlePassCommand(args);
                     } else if (STAT.equals(args[0])) {
-                        System.out.println("执行" + USER);
+                        System.out.println("执行" + STAT);
                         pop3Service.handleStatCommand(args);
                     } else if (LIST.equals(args[0])) {
-                        System.out.println("执行" + USER);
+                        System.out.println("执行" + LIST);
                         pop3Service.handleListCommand(args);
                     } else if (RETR.equals(args[0])) {
-                        System.out.println("执行" + USER);
+                        System.out.println("执行" + RETR);
                         pop3Service.handleRetrCommand(args);
                     } else if (DELE.equals(args[0])) {
-                        System.out.println("执行" + USER);
+                        System.out.println("执行" + DELE);
                         pop3Service.handleDeleCommand(args);
                     } else if (REST.equals(args[0])) {
-                        System.out.println("执行" + USER);
+                        System.out.println("执行" + REST);
                         pop3Service.handleRestCommand(args);
+                    } else if (QUIT.equals(args[0])) {
+                        System.out.println("执行" + QUIT);
+                        pop3Service.handleQuitCommand(args);
                     } else {
                         System.out.println("没有相应的命令");
                         writer.println(Pop3StateCode.ERR + Pop3StateCode.STNTAX);
