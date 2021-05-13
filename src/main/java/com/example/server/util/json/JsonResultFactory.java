@@ -4,6 +4,7 @@ import com.example.server.entity.SmtpResult;
 
 /**
  * 生成某个状态码对应的Json对象
+ *
  * @author 全鸿润
  */
 public class JsonResultFactory {

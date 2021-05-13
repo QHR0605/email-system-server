@@ -4,8 +4,6 @@ import com.example.server.config.SpringContextConfig;
 import com.example.server.entity.User;
 import com.example.server.mapper.LoginMapper;
 import com.example.server.service.AuthService;
-import com.example.server.util.base64.Base64Util;
-import com.example.server.util.json.SmtpStateCode;
 import org.springframework.stereotype.Service;
 
 /**

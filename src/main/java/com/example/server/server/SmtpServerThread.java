@@ -58,20 +58,25 @@ public class SmtpServerThread extends Thread {
                         smtpService.handleRcptCommand(args);
                     } else if (CommandConstant.DATA.equals(args[0])) {
                         smtpService.handleDataCommand(args);
+                        System.out.println("执行完成");
                     } else if (CommandConstant.REST.equals(args[0])) {
                         smtpService.handleResetCommand(args);
                     } else if (CommandConstant.QUIT.equals(args[0])) {
                         smtpService.handleQuitCommand(args);
-                        this.interrupt();
+                        break;
                     } else {
                         System.out.println("没有命令执行");
                         writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
                     }
                 }
             }
+            this.interrupt();
         } catch (IOException e) {
             System.out.println(socket.getInetAddress() + " 断开连接");
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            this.writer.println(SmtpStateCode.OPERATION_FAILED_DESC);
         }
     }
 }

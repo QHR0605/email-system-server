@@ -2,6 +2,7 @@ package com.example.server.util.command;
 
 /**
  * 指令常量
+ *
  * @author 全鸿润
  */
 public class CommandConstant {

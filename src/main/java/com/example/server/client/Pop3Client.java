@@ -1,12 +1,7 @@
 package com.example.server.client;
 
-import com.example.server.config.SpringContextConfig;
-import com.example.server.entity.Email;
-import com.example.server.mapper.MailMapper;
-
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
 import java.util.Scanner;
 
 public class Pop3Client extends Thread {
@@ -26,7 +21,7 @@ public class Pop3Client extends Thread {
         }
     }
 
-    public void handle(Socket socket){
+    public void handle(Socket socket) {
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -37,7 +32,7 @@ public class Pop3Client extends Thread {
                     PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));
                     Scanner scanner = new Scanner(System.in);
                     System.out.println(reader.readLine());
-                    while (true){
+                    while (true) {
                         // 接收用户 cmd 输入
                         String output = scanner.nextLine();
                         writer.println(output);
@@ -45,7 +40,7 @@ public class Pop3Client extends Thread {
                         String s = reader.readLine(); // 接收服务器响应
                         System.out.println(s);
                     }
-                }catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 

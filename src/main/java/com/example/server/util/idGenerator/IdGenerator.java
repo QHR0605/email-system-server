@@ -11,6 +11,7 @@ public class IdGenerator {
 
     /**
      * 生成全局唯一的id,可用作mid
+     *
      * @return 全局唯一的id
      */
     public synchronized static int getId() {

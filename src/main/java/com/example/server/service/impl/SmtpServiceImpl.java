@@ -7,10 +7,6 @@ import com.example.server.entity.User;
 import com.example.server.mapper.MailMapper;
 import com.example.server.service.AuthService;
 import com.example.server.service.SmtpService;
-import com.example.server.util.annotation.isAuth;
-import com.example.server.util.annotation.isHello;
-import com.example.server.util.annotation.isMail;
-import com.example.server.util.annotation.isRcpt;
 import com.example.server.util.base64.Base64Util;
 import com.example.server.util.command.CommandConstant;
 import com.example.server.util.idGenerator.IdGenerator;
@@ -19,10 +15,10 @@ import com.example.server.util.json.SmtpStateCode;
 import java.io.*;
 import java.net.Socket;
 import java.sql.Date;
-import java.util.List;
 
 /**
  * SMTP指令处理函数的具体实现
+ *
  * @author 全鸿润
  */
 public class SmtpServiceImpl extends SmtpService {
@@ -31,7 +27,7 @@ public class SmtpServiceImpl extends SmtpService {
     private final MailMapper mailMapper = SpringContextConfig.getBean(MailMapper.class);
 
     /**
-     * @param socket 当前连接的套接字
+     * @param socket      当前连接的套接字
      * @param smtpSession 会话对象，用以保存用户的一些状态
      */
     public SmtpServiceImpl(Socket socket, SmtpSession smtpSession) {
@@ -45,7 +41,7 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    public void handleHelloCommand(String[] args) {
+    public void handleHelloCommand(String[] args) throws Exception {
         if (args.length != 2) {
             this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
             return;
@@ -55,7 +51,7 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    public void handleAuthCommand(String[] args) throws IOException {
+    public void handleAuthCommand(String[] args) throws Exception {
         if (!this.session.isHelloSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR + " send HELO first");
             return;
@@ -92,16 +88,20 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    public void handleMailCommand(String[] args) { // 设置了发送方
+    public void handleMailCommand(String[] args) throws Exception { // 设置了发送方
         if (!this.session.isAuthSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR_DESC);
             return;
         }
-        if (args.length <= 2) {
+        if (args.length < 3) {
             this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
         } else {
             int beginIndex = args[2].indexOf("<");
             int endIndex = args[2].indexOf(">");
+            if (endIndex == -1 || beginIndex == -1 || args[2].length() <= 2) {
+                this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
+                return;
+            }
             String username = args[2].substring(beginIndex + 1, endIndex);
             System.out.println("信封上的发件人: " + username);
             this.writer.println(SmtpStateCode.SUCCESS_DESC);
@@ -110,23 +110,27 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    public void handleRcptCommand(String[] args) { // 设置了接收方
+    public void handleRcptCommand(String[] args) throws Exception { // 设置了接收方
         if (!this.session.isHelloSent() || !this.session.isAuthSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR_DESC);
         } else if (!this.session.isMailSent()) {
             this.writer.println("send MAIL FROM:<sender address> first");
         } else {
-            if (args.length <= 2) {
+            if (args.length < 3) {
                 this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
             } else {
                 int beginIndex = args[2].indexOf("<");
                 int endIndex = args[2].indexOf(">");
+                if (endIndex == -1 || beginIndex == -1 || args[2].length() <= 2) {
+                    this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
+                    return;
+                }
                 String receiver = args[2].substring(beginIndex + 1, endIndex);
                 System.out.println("收件人:" + receiver);
                 this.session.getReceivers().add(receiver);
                 User user = authService.findUserByUsername(receiver);
                 if (user == null) {
-                    this.writer.println(SmtpStateCode.ADDRESS_NOT_AVAILABLE_DESC + "<" + receiver + ">");
+                    this.writer.println(SmtpStateCode.ADDRESS_NOT_AVAILABLE_DESC + "<\"" + receiver + "\">");
                     return;
                 }
                 this.session.setRcptSent(true);
@@ -137,7 +141,7 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    public void handleDataCommand(String[] args) {
+    public void handleDataCommand(String[] args) throws Exception {
         if (!this.session.isHelloSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR + " send HELO first");
             return;
@@ -209,12 +213,12 @@ public class SmtpServiceImpl extends SmtpService {
     }
 
     @Override
-    public void handleResetCommand(String[] args) {
+    public void handleResetCommand(String[] args) throws Exception {
         this.writer.println(SmtpStateCode.SUCCESS_DESC);
     }
 
     @Override
-    public void handleQuitCommand(String[] args) {
+    public void handleQuitCommand(String[] args) throws Exception {
         try {
             this.writer.println(SmtpStateCode.BYE);
             //关闭连接

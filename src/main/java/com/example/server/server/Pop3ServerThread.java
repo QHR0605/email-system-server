@@ -32,34 +32,34 @@ public class Pop3ServerThread extends Thread {
             writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            while(true) {
+            while (true) {
                 String command = reader.readLine();
                 System.out.println("客户端：" + command);
                 String[] args = CommandParse.parseCommand(command);
                 // 输入空格或回车
-                if(args == null) {
+                if (args == null) {
                     //writer.println(Pop3StateCode.ERR + Pop3StateCode.STNTAX);
                     int a = 1;
                 } else {
-                    if(USER.equals(args[0])) {
+                    if (USER.equals(args[0])) {
                         System.out.println("执行" + USER);
                         pop3Service.handleUserCommand(args);
-                    } else if(PASS.equals(args[0])) {
+                    } else if (PASS.equals(args[0])) {
                         System.out.println("执行" + USER);
                         pop3Service.handlePassCommand(args);
-                    } else if(STAT.equals(args[0])) {
+                    } else if (STAT.equals(args[0])) {
                         System.out.println("执行" + USER);
                         pop3Service.handleStatCommand(args);
-                    } else if(LIST.equals(args[0])) {
+                    } else if (LIST.equals(args[0])) {
                         System.out.println("执行" + USER);
                         pop3Service.handleListCommand(args);
-                    } else if(RETR.equals(args[0])) {
+                    } else if (RETR.equals(args[0])) {
                         System.out.println("执行" + USER);
                         pop3Service.handleRetrCommand(args);
-                    } else if(DELE.equals(args[0])) {
+                    } else if (DELE.equals(args[0])) {
                         System.out.println("执行" + USER);
                         pop3Service.handleDeleCommand(args);
-                    } else if(REST.equals(args[0])) {
+                    } else if (REST.equals(args[0])) {
                         System.out.println("执行" + USER);
                         pop3Service.handleRestCommand(args);
                     } else {
