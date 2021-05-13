@@ -125,4 +125,23 @@ public class Email {
     public void setSize(Integer size) {
         this.size = size;
     }
+
+    @Override
+    public String toString() {
+        return "Email{" +
+                "mid=" + mid +
+                ", senderEmail='" + senderEmail + '\'' +
+                ", receiverEmail='" + receiverEmail + '\'' +
+                ", sendTime=" + sendTime +
+                ", subject='" + subject + '\'' +
+                ", body='" + body + '\'' +
+                ", read=" + read +
+                ", deleted=" + deleted +
+                ", tag=" + tag +
+                ", send=" + send +
+                ", annexUrl='" + annexUrl + '\'' +
+                ", summary='" + summary + '\'' +
+                ", size=" + size +
+                '}';
+    }
 }

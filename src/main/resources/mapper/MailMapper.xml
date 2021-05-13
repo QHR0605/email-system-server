@@ -9,4 +9,10 @@
         VALUES (#{mid}, #{senderEmail}, #{receiverEmail}, #{sendTime}, #{subject}, #{body},#{read},#{deleted},#{tag},#{send},#{annexUrl},
                 #{summary}, #{size})
     </insert>
+
+    <select id="findMailsByRcpt" resultType="com.example.server.entity.Email">
+        SELECT *
+        FROM email
+        WHERE receiver_email = #{username}
+    </select>
 </mapper>

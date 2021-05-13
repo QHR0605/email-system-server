@@ -1,7 +1,10 @@
 package com.example.server.mapper;
 
 import com.example.server.entity.Email;
+import com.example.server.entity.User;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author 全鸿润
@@ -16,4 +19,25 @@ public interface MailMapper {
      * @throws Exception 数据库操作异常
      */
     Integer addMail(Email email) throws Exception;
+
+    /**
+     * 以username为接收方查询其收到的邮件列表
+     * @param username
+     * @return 返回该用户收到邮件列表
+     */
+    List<Email> findMailsByRcpt(String username);
+
+    /**
+     * 根据用户标记要删除的邮件，删除mid为mid的邮件
+     * @param mid
+     * @return 返回-1表示操作失败，其他是sql语句影响的行数
+     */
+    int delectMails(String mid);
+
+    /**
+     * 某用户收到的邮件数量
+     * @param username
+     * @return
+     */
+    int countByRcpt(String username);
 }

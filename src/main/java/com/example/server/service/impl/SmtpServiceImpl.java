@@ -19,6 +19,7 @@ import com.example.server.util.json.SmtpStateCode;
 import java.io.*;
 import java.net.Socket;
 import java.sql.Date;
+import java.util.List;
 
 /**
  * SMTP指令处理函数的具体实现
