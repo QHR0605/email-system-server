@@ -62,7 +62,7 @@ public class Pop3ServerThread extends Thread {
                     } else if (REST.equals(args[0])) {
                         System.out.println("执行" + REST);
                         pop3Service.handleRestCommand(args);
-                    } else if (QUIT.equals(args[0])) {
+                    } else if (QUIT.equals(args[0])) { // 退出时关闭IO流和套接字
                         System.out.println("执行" + QUIT);
                         pop3Service.handleQuitCommand(args);
                         reader.close();

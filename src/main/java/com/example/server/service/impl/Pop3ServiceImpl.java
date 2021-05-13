@@ -85,7 +85,7 @@ public class Pop3ServiceImpl extends Pop3Service {
     }
 
     /**
-     * 列出邮件信息： 序号(从1开始) 字节大小
+     * 列出邮件信息，每个信息有两列：序号(从1开始) 字节大小
      * @param args
      */
     @Override
@@ -104,6 +104,10 @@ public class Pop3ServiceImpl extends Pop3Service {
         this.writer.println(result  + '\n' + "#end#");
     }
 
+    /**
+     * 如 RETR 1，表示取出编号为 i 的邮件
+     * @param args
+     */
     @Override
     public void handleRetrCommand(String[] args) {
         if (args.length != 2) {
@@ -115,13 +119,13 @@ public class Pop3ServiceImpl extends Pop3Service {
         }
         // 取回的邮件编号 大于 邮件数量
         int index = Integer.parseInt(args[1]) - 1;
-        if(index > pop3Session.getCount()) {
+        if(index > pop3Session.getCount() - 1) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
             return;
         }
         String result = Pop3StateCode.OK;
         Email email = pop3Session.getEmails().get(index);
-        result += "From: <" + email.getSenderEmail() + ">" + '\n';
+        result += "\nFrom: <" + email.getSenderEmail() + ">" + '\n';
         result += "To: <" + email.getReceiverEmail() + ">" + '\n';
         result += "Date: " + email.getSendTime() + '\n';
         result += "Subject: " + email.getSubject() + '\n';
@@ -132,6 +136,7 @@ public class Pop3ServiceImpl extends Pop3Service {
 
     /**
      * 标记想删除哪些邮件
+     * 如：DELE 1，表示将邮件 1 的 delete 设置为 true，但是在 QUIT 命令之后才会真正删除
      * @param args
      */
     @Override
@@ -145,7 +150,7 @@ public class Pop3ServiceImpl extends Pop3Service {
         }
         // 标记的邮件编号 大于 邮件数量
         int index = Integer.parseInt(args[1]) - 1;
-        if(index > pop3Session.getCount()) {
+        if(index > pop3Session.getCount() - 1) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
             return;
         }
@@ -153,6 +158,11 @@ public class Pop3ServiceImpl extends Pop3Service {
         this.writer.println(Pop3StateCode.OK + '\n' + "#end#");
     }
 
+    /**
+     * 取消标记删除
+     * 如：REST 1，表示将邮件 1 的 delete 设置为 false
+     * @param args
+     */
     @Override
     public void handleRestCommand(String[] args) {
         if (args.length != 2) {
@@ -164,7 +174,7 @@ public class Pop3ServiceImpl extends Pop3Service {
         }
         // 取消标记的邮件编号 大于 邮件数量
         int index = Integer.parseInt(args[1]) - 1;
-        if(index > pop3Session.getCount()) {
+        if(index > pop3Session.getCount() - 1) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
             return;
         }

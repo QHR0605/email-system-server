@@ -45,7 +45,7 @@ public class Pop3Client extends Thread {
                         while(!(line = reader.readLine()).equals("#end#")) {
                             System.out.println(line);
                         }
-                        if("QUIT".equals(output)) {
+                        if("QUIT".equals(output)) { // 退出时关闭IO流和套接字
                             writer.close();
                             reader.close();
                             socket.close();
