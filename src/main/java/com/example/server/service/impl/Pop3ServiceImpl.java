@@ -7,7 +7,6 @@ import com.example.server.mapper.MailMapper;
 import com.example.server.service.AuthService;
 import com.example.server.service.Pop3Service;
 import com.example.server.util.json.Pop3StateCode;
-import com.example.server.util.json.SmtpStateCode;
 
 import java.io.*;
 import java.net.Socket;
