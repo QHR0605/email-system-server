@@ -10,6 +10,9 @@ public class JsonResultStateCode {
     static public Integer SUCCESS = 200;
     static public String SUCCESS_DESC = "success";
 
+    static public Integer FAILED = 400;
+    static public String FAILED_DESC = "failed";
+
     public static Integer USERNAME_WRONG = 410;
     public static String USERNAME_WRONG_DESC = "用户名错误";
 
