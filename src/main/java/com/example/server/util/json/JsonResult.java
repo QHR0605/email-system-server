@@ -2,6 +2,7 @@ package com.example.server.util.json;
 
 /**
  * 封装返回的Json数据的类
+ *
  * @author 全鸿润
  */
 public class JsonResult {
