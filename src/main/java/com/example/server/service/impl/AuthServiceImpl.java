@@ -1,6 +1,7 @@
 package com.example.server.service.impl;
 
 import com.example.server.config.SpringContextConfig;
+import com.example.server.dto.UserMessage;
 import com.example.server.entity.User;
 import com.example.server.mapper.LoginMapper;
 import com.example.server.service.AuthService;
@@ -44,5 +45,15 @@ public class AuthServiceImpl implements AuthService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public Integer registerUser(UserMessage userMessage) {
+        return null;
+    }
+
+    @Override
+    public Integer updatePassword(String username, String newPassword) {
+        return null;
     }
 }

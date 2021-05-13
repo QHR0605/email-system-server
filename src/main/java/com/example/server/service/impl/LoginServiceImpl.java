@@ -5,6 +5,7 @@ package com.example.server.service.impl;
  */
 
 import com.example.server.config.SpringContextConfig;
+import com.example.server.dto.UserMessage;
 import com.example.server.entity.User;
 import com.example.server.mapper.LoginMapper;
 import com.example.server.service.AuthService;
@@ -47,5 +48,44 @@ public class LoginServiceImpl implements AuthService {
             e.printStackTrace();
         }
         return user;
+    }
+
+    @Override
+    public Integer registerUser(UserMessage userMessage) {
+
+        Integer rows = null;
+        try {
+            User res = loginMapper.findUserByUserName(userMessage.getUsername());
+            if (res != null) {
+                return JsonResultStateCode.USERNAME_IS_EXITED;
+            }
+            User user = new User()
+                    .username(userMessage.getUsername())
+                    .password(userMessage.getPassword())
+                    .accountType(userMessage.getAccountType())
+                    .phone(userMessage.getPhone())
+                    .latestLoginTime(userMessage.getLatestLoginTime())
+                    .latestLoginIp(userMessage.getLatestLoginIp())
+                    .mailBoxSize(10)
+                    .avatarURL(userMessage.getAvatarUrl());
+            rows = loginMapper.insertNewUser(user);
+            return rows;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return rows;
+        }
+    }
+
+    @Override
+    public Integer updatePassword(String username, String newPassword) {
+
+        Integer rows = null;
+        try {
+            rows = loginMapper.updatePassword(username, newPassword);
+            return rows;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return rows;
+        }
     }
 }
