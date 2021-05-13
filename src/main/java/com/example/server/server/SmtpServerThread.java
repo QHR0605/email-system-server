@@ -63,6 +63,9 @@ public class SmtpServerThread extends Thread {
                         smtpService.handleResetCommand(args);
                     } else if (CommandConstant.QUIT.equals(args[0])) {
                         smtpService.handleQuitCommand(args);
+                        reader.close();
+                        writer.close();
+                        socket.close();
                         break;
                     } else {
                         System.out.println("没有命令执行");

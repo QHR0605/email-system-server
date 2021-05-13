@@ -36,7 +36,7 @@ public class Pop3Client extends Thread {
                     System.out.println(reader.readLine());
                     while (true) {
                         // 接收用户 cmd 输入
-                        String output = scanner.nextLine();
+                        String output = scanner.nextLine().trim();
                         writer.println(output);
                         writer.flush();
 //                        String line = reader.readLine(); // 接收服务器响应
@@ -45,7 +45,7 @@ public class Pop3Client extends Thread {
                         while(!(line = reader.readLine()).equals("#end#")) {
                             System.out.println(line);
                         }
-                        if("QUIT".equals(output)) { // 退出时关闭IO流和套接字
+                        if("QUIT".equals(output.trim())) { // 退出时关闭IO流和套接字
                             writer.close();
                             reader.close();
                             socket.close();

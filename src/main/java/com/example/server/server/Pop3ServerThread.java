@@ -75,6 +75,7 @@ public class Pop3ServerThread extends Thread {
                     }
                 }
             }
+            this.interrupt();
         } catch (IOException e) {
             System.out.println(socket.getInetAddress() + "断开连接");
             e.printStackTrace();

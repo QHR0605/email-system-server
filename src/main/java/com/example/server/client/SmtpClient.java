@@ -40,8 +40,8 @@ public class SmtpClient extends Thread {
                     Scanner scanner = new Scanner(System.in);
                     System.out.println(reader.readLine());
                     while (true) {
-                        String output = scanner.nextLine();
-                        if ("DATA".equals(output)) {
+                        String output = scanner.nextLine().trim();
+                        if ("DATA".equals(output.trim())) {
                             writer.println(output);
                             writer.flush();
                             String line = reader.readLine();
@@ -64,6 +64,12 @@ public class SmtpClient extends Thread {
                         writer.flush();
                         String s = reader.readLine();
                         System.out.println(s);
+                        if("QUIT".equals(output.trim())) { // 退出时关闭IO流和套接字
+                            writer.close();
+                            reader.close();
+                            socket.close();
+                            break;
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
