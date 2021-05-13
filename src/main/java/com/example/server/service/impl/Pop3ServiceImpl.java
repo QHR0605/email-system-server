@@ -183,8 +183,9 @@ public class Pop3ServiceImpl extends Pop3Service {
             return;
         }
         for(Email email : pop3Session.getEmails()) {
-            if(email.getDeleted())
+            if(email.getDeleted()){
                 mailMapper.delectMailByMid(email.getMid());
+            }
         }
         try {
             this.writer.println(Pop3StateCode.OK + '\n' + Pop3StateCode.BYE + '\n' + "#end#");

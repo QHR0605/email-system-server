@@ -18,7 +18,11 @@ public class JsonResultFactory {
     }
 
     public static JsonResult buildSuccessResult() {
-        return buildJsonResult(JsonResultStateCode.SUCCESS, "", null);
+        return buildJsonResult(JsonResultStateCode.SUCCESS, JsonResultStateCode.SUCCESS_DESC, null);
+    }
+
+    public static JsonResult buildFailureResult() {
+        return JsonResultFactory.buildJsonResult(JsonResultStateCode.FAILED, JsonResultStateCode.FAILED_DESC, null);
     }
 
     public static JsonResult buildSmtpCommandErrorResult() {
