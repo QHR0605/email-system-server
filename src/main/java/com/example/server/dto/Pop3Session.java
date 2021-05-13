@@ -10,6 +10,24 @@ public class Pop3Session {
     private boolean isAuth = false;
     private List<Email> emails = new ArrayList<>(); // 收到的邮件列表
     private String username = null;
+    private Integer count = 0; // 总邮件数
+    private Integer totalSize = 0; // 总字节数
+
+    public Integer getTotalSize() {
+        return totalSize;
+    }
+
+    public void setTotalSize(Integer totalSize) {
+        this.totalSize = totalSize;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
     public boolean isUserSent() {
         return isUserSent;
@@ -33,6 +51,12 @@ public class Pop3Session {
 
     public void setEmails(List<Email> emails) {
         this.emails = emails;
+        setCount(emails.size());
+        int total = 0;
+        for(Email email : emails) {
+            total += email.getSize();
+        }
+        setTotalSize(total);
     }
 
     public String getUsername() {
