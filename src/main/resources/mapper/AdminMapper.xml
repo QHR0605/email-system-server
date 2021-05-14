@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.AdminMapper">
+    <insert id="insertNewUser">
+        INSERT INTO user(username, password, phone, `account-type`, `latest-login-time`, `latest-login-ip`,
+                         `avatar-url`)
+        VALUES (#{username}, #{password}, #{phone}, #{accountType}, #{latestLoginTime}, #{latestLoginIp}, #{avatarUrl})
+    </insert>
+    <update id="updatePassword">
+        UPDATE user
+        SET user.password = #{newPassword}
+        WHERE user.username = #{userName}
+    </update>
+    <update id="updateUserType">
+        <foreach collection="usernames" index="index" item="username">
+            UPDATE user SET `account-type` = #{type} WHERE user.username = #{username}
+        </foreach>
+    </update>
+    <update id="updateUserLogState">
+        <foreach collection="usernames" item="username" index="index">
+            UPDATE user SET user.logout = #{logState} WHERE username = #{username}
+        </foreach>
+    </update>
+    <delete id="deleteUsers">
+        <foreach collection="usernames" item="username" index="index">
+            DELETE FROM user WHERE username = #{username}
+        </foreach>
+    </delete>
+
+    <select id="findUserByUserName" resultType="com.example.server.entity.User">
+        SELECT *
+        FROM user
+        WHERE user.username = #{username}
+    </select>
+    <select id="selectUsers" resultType="com.example.server.entity.User">
+        SELECT *
+        FROM user
+        WHERE user.`account-type` = 0
+    </select>
+    <select id="selectAllUsers" resultType="com.example.server.entity.User">
+        SELECT *
+        FROM user
+    </select>
+</mapper>
