@@ -2,13 +2,11 @@ package com.example.server.service.impl;
 
 import com.example.server.config.SpringContextConfig;
 import com.example.server.dto.Pop3Session;
-import com.example.server.dto.SmtpSession;
 import com.example.server.entity.Email;
 import com.example.server.mapper.MailMapper;
 import com.example.server.service.AuthService;
 import com.example.server.service.Pop3Service;
 import com.example.server.util.json.Pop3StateCode;
-import com.example.server.util.json.SmtpStateCode;
 
 import java.io.*;
 import java.net.Socket;
