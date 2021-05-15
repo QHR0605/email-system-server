@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.SuperAdminMapper">
+    <insert id="insertNewUser">
+        INSERT INTO user(username, password, phone, `account-type`, `latest-login-time`, `latest-login-ip`,
+                         `avatar-url`)
+        VALUES (#{username}, #{password}, #{phone}, #{accountType}, #{latestLoginTime}, #{latestLoginIp}, #{avatarUrl})
+    </insert>
+    <update id="updateUserAuthorization">
+        <foreach collection="usernames" item="username" index="index">
+            UPDATE user SET `account-type` = #{type}
+            WHERE user.username= #{username}
+        </foreach>
+    </update>
+</mapper>

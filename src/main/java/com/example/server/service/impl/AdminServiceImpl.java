@@ -14,7 +14,8 @@ import java.util.List;
 @Service("AdminServiceImpl")
 public class AdminServiceImpl implements AdminService {
 
-    private final AdminMapper adminMapper = SpringContextConfig.getBean(AdminMapper.class);
+    protected final AdminMapper adminMapper = SpringContextConfig.getBean(AdminMapper.class);
+
     @Override
     public Integer deleteUsersByUsername(List<String> usernames) {
         Integer row;
@@ -32,7 +33,7 @@ public class AdminServiceImpl implements AdminService {
 
         Integer row;
         try {
-            row = adminMapper.updateUserLogState(usernames,logState);
+            row = adminMapper.updateUserLogState(usernames, logState);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -44,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
     public Integer updateUsersType(List<String> usernames, Boolean type) {
         Integer row;
         try {
-            row = adminMapper.updateUserType(usernames,type);
+            row = adminMapper.updateUserType(usernames, type);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
