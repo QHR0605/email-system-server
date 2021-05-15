@@ -64,7 +64,7 @@ public class SmtpClient extends Thread {
                         writer.flush();
                         String s = reader.readLine();
                         System.out.println(s);
-                        if("QUIT".equals(output.trim())) { // 退出时关闭IO流和套接字
+                        if ("QUIT".equals(output.trim())) { // 退出时关闭IO流和套接字
                             writer.close();
                             reader.close();
                             socket.close();

@@ -28,6 +28,6 @@ public class JsonResultStateCode {
     public static Integer OPERATION_IS_NOT_COMPLETED = 490;
     public static String OPERATION_IS_NOT_COMPLETED_DESC = "操作做未全部完成";
 
-    public  static Integer NOT_FOUND = 403;
-    public  static String NOT_FOUND_DESC = "not found";
+    public static Integer NOT_FOUND = 403;
+    public static String NOT_FOUND_DESC = "not found";
 }

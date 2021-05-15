@@ -2,9 +2,7 @@ package com.example.server.client;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 public class Pop3Client extends Thread {
     public static void main(String[] args) {
@@ -42,10 +40,10 @@ public class Pop3Client extends Thread {
 //                        String line = reader.readLine(); // 接收服务器响应
 //                        System.out.println(line);
                         String line = "";
-                        while(!(line = reader.readLine()).equals("#end#")) {
+                        while (!(line = reader.readLine()).equals("#end#")) {
                             System.out.println(line);
                         }
-                        if("QUIT".equals(output.trim())) { // 退出时关闭IO流和套接字
+                        if ("QUIT".equals(output.trim())) { // 退出时关闭IO流和套接字
                             writer.close();
                             reader.close();
                             socket.close();

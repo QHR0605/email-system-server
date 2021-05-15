@@ -12,6 +12,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 @MapperScan(basePackages = "com.example.server.mapper")
 public class ServerApplication {
 
+    public static SmtpServer smtpServer = null;
+    public static Pop3Server pop3Server = null;
     public static void main(String[] args) {
         //获取当前项目的上下文对象
         ConfigurableApplicationContext context = SpringApplication.run(ServerApplication.class, args);
@@ -20,10 +22,10 @@ public class ServerApplication {
         //将当前上下文对象赋给我们自定义的上下文对象,调用该对象的方法实现对象的自动注入
         contextConfig.setApplicationContext(context);
         //启动SMTP服务
-        SmtpServer smtpServer = new SmtpServer();
+        smtpServer = new SmtpServer();
         smtpServer.start();
         //启动POP3服务
-        Pop3Server pop3Server = new Pop3Server();
+        pop3Server = new Pop3Server();
         pop3Server.start();
     }
 

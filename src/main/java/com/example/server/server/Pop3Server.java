@@ -27,6 +27,27 @@ public class Pop3Server extends Thread {
         }
     }
 
+    public void stopPop3Server(){
+        this.shutDown = true;
+        this.interrupt();
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public boolean isShutDown() {
+        return shutDown;
+    }
+
+    public void setShutDown(boolean shutDown) {
+        this.shutDown = shutDown;
+    }
+
     @Override
     public void run() {
         try {

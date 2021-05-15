@@ -53,7 +53,7 @@ public class Pop3Session {
         this.emails = emails;
         setCount(emails.size());
         int total = 0;
-        for(Email email : emails) {
+        for (Email email : emails) {
             total += email.getSize();
         }
         setTotalSize(total);

@@ -28,7 +28,8 @@ public class Pop3ServiceImpl extends Pop3Service {
 
     /**
      * 接收用户名
-     * @param args
+     *
+     * @param args 参数列表
      */
     @Override
     public void handleUserCommand(String[] args) {
@@ -38,12 +39,13 @@ public class Pop3ServiceImpl extends Pop3Service {
         pop3Session.setUserSent(true);
         pop3Session.setAuth(false);
         pop3Session.setUsername(args[1]);
-        this.writer.println(Pop3StateCode.OK+ '\n' + "#end#");
+        this.writer.println(Pop3StateCode.OK + '\n' + "#end#");
     }
 
     /**
      * 接收用户密码 → 登录验证 → 加载邮件
-     * @param args
+     *
+     * @param args 参数列表
      */
     @Override
     public void handlePassCommand(String[] args) {
@@ -71,7 +73,8 @@ public class Pop3ServiceImpl extends Pop3Service {
 
     /**
      * 统计邮件信息，返回 邮件总数 和 总字节数
-     * @param args
+     *
+     * @param args 参数列表
      */
     @Override
     public void handleStatCommand(String[] args) {
@@ -84,7 +87,8 @@ public class Pop3ServiceImpl extends Pop3Service {
 
     /**
      * 列出邮件信息，每个信息有两列：序号(从1开始) 字节大小
-     * @param args
+     *
+     * @param args 参数列表
      */
     @Override
     public void handleListCommand(String[] args) {
@@ -94,17 +98,18 @@ public class Pop3ServiceImpl extends Pop3Service {
         }
         String result = Pop3StateCode.OK;
         int index = 1;
-        for(Email email : pop3Session.getEmails()) {
+        for (Email email : pop3Session.getEmails()) {
             result += "" + '\n' + index + ' ' + email.getSize();
             ++index;
         }
         System.out.println(result);
-        this.writer.println(result  + '\n' + "#end#");
+        this.writer.println(result + '\n' + "#end#");
     }
 
     /**
      * 如 RETR 1，表示取出编号为 i 的邮件
-     * @param args
+     *
+     * @param args 参数列表
      */
     @Override
     public void handleRetrCommand(String[] args) {
@@ -117,7 +122,7 @@ public class Pop3ServiceImpl extends Pop3Service {
         }
         // 取回的邮件编号 大于 邮件数量
         int index = Integer.parseInt(args[1]) - 1;
-        if(index > pop3Session.getCount() - 1) {
+        if (index > pop3Session.getCount() - 1) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
             return;
         }
@@ -135,20 +140,22 @@ public class Pop3ServiceImpl extends Pop3Service {
     /**
      * 标记想删除哪些邮件
      * 如：DELE 1，表示将邮件 1 的 delete 设置为 true，但是在 QUIT 命令之后才会真正删除
-     * @param args
+     *
+     * @param args 参数列表
      */
     @Override
     public void handleDeleCommand(String[] args) {
         if (args.length != 2) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID + '\n' + "#end#");
             return;
-        } if (!pop3Session.isAuth()) {
+        }
+        if (!pop3Session.isAuth()) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL + '\n' + "#end#");
             return;
         }
         // 标记的邮件编号 大于 邮件数量
         int index = Integer.parseInt(args[1]) - 1;
-        if(index > pop3Session.getCount() - 1) {
+        if (index > pop3Session.getCount() - 1) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
             return;
         }
@@ -159,20 +166,22 @@ public class Pop3ServiceImpl extends Pop3Service {
     /**
      * 取消标记删除
      * 如：REST 1，表示将邮件 1 的 delete 设置为 false
-     * @param args
+     *
+     * @param args 参数列表
      */
     @Override
     public void handleRestCommand(String[] args) {
         if (args.length != 2) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.VALID + '\n' + "#end#");
             return;
-        } if (!pop3Session.isAuth()) {
+        }
+        if (!pop3Session.isAuth()) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL + '\n' + "#end#");
             return;
         }
         // 取消标记的邮件编号 大于 邮件数量
         int index = Integer.parseInt(args[1]) - 1;
-        if(index > pop3Session.getCount() - 1) {
+        if (index > pop3Session.getCount() - 1) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
             return;
         }
@@ -182,14 +191,15 @@ public class Pop3ServiceImpl extends Pop3Service {
 
     /**
      * 断开服务器，此时要执行真正的删除
+     *
      * @param args 指令参数
      */
     @Override
     public void handleQuitCommand(String[] args) {
         this.writer.println(Pop3StateCode.OK + Pop3StateCode.BYE + '\n' + "#end#");
         if (pop3Session.isAuth()) {
-            for(Email email : pop3Session.getEmails()) {
-                if(email.getDeleted()){
+            for (Email email : pop3Session.getEmails()) {
+                if (email.getDeleted()) {
                     mailMapper.delectMailByMid(email.getMid());
                 }
             }

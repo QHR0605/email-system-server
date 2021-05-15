@@ -5,6 +5,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 全鸿润
@@ -27,6 +30,26 @@ public class SmtpServer extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void stopSmtpServer(){
+        this.shutDown = true;
+        this.interrupt();
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public boolean isShutDown() {
+        return shutDown;
+    }
+
+    public void setShutDown(boolean shutDown) {
+        this.shutDown = shutDown;
     }
 
     /**
