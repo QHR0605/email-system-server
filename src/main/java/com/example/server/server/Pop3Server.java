@@ -7,11 +7,15 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class Pop3Server extends Thread {
     private ServerSocket serverSocket;
     private int port;
     private boolean shutDown;
+    private static ThreadPoolExecutor executor;
+    private List<Socket> clients;
 
     /**
      * 默认端口号 110
@@ -19,6 +23,11 @@ public class Pop3Server extends Thread {
     public Pop3Server() {
         port = 110;
         shutDown = false;
+
+        TimeUnit unit = TimeUnit.MILLISECONDS;
+        LinkedBlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
+        ThreadFactory threadFactory = Executors.defaultThreadFactory();
+        executor = new ThreadPoolExecutor(30, 50, 1000, unit, workQueue, threadFactory);
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("POP3 服务已开启");
@@ -27,9 +36,21 @@ public class Pop3Server extends Thread {
         }
     }
 
-    public void stopPop3Server(){
-        this.shutDown = true;
-        this.interrupt();
+    public void stopPop3Server() {
+        try {
+            for (Socket socket : clients
+            ) {
+                socket.getOutputStream().close();
+                socket.getInputStream().close();
+                socket.close();
+            }
+            this.shutDown = true;
+            System.out.println("关闭Pop3服务器");
+            this.serverSocket.close();
+            this.interrupt();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getPort() {
@@ -53,10 +74,11 @@ public class Pop3Server extends Thread {
         try {
             while (true) {
                 Socket socket = serverSocket.accept();
+                clients.add(socket);
                 PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
                 printWriter.println(Pop3StateCode.READY);
-                Pop3ServerThread t = new Pop3ServerThread(socket);
-                t.start();
+                Pop3ServerRunnable t = new Pop3ServerRunnable(socket);
+                executor.execute(t);
             }
         } catch (IOException e) {
             e.printStackTrace();

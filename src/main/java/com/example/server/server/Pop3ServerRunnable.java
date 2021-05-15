@@ -11,7 +11,10 @@ import java.net.Socket;
 
 import static com.example.server.util.command.CommandConstant.*;
 
-public class Pop3ServerThread extends Thread {
+/**
+ * @author 梁虹
+ */
+public class Pop3ServerRunnable implements Runnable {
     private Socket socket;
     private BufferedReader reader;
     private PrintWriter writer;
@@ -20,7 +23,7 @@ public class Pop3ServerThread extends Thread {
      */
     private Pop3Service pop3Service;
 
-    public Pop3ServerThread(Socket socket) {
+    public Pop3ServerRunnable(Socket socket) {
         this.socket = socket;
         pop3Service = new Pop3ServiceImpl(socket, new Pop3Session());
         System.out.println("开启 POP3 服务线程");
@@ -75,7 +78,6 @@ public class Pop3ServerThread extends Thread {
                     }
                 }
             }
-            this.interrupt();
         } catch (IOException e) {
             System.out.println(socket.getInetAddress() + "断开连接");
             e.printStackTrace();

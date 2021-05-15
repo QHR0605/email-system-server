@@ -15,7 +15,7 @@ import static com.example.server.util.command.CommandConstant.*;
 /**
  * @author 全鸿润
  */
-public class SmtpServerThread extends Thread {
+public class SmtpServerRunnable implements Runnable {
 
     private Socket socket;
     private BufferedReader reader;
@@ -25,7 +25,7 @@ public class SmtpServerThread extends Thread {
      */
     private SmtpService smtpService;
 
-    public SmtpServerThread(Socket socket) {
+    public SmtpServerRunnable(Socket socket) {
         this.socket = socket;
         smtpService = new SmtpServiceImpl(socket, new SmtpSession());
         System.out.println("开启 SMTP 服务线程");
@@ -73,7 +73,6 @@ public class SmtpServerThread extends Thread {
                     }
                 }
             }
-            this.interrupt();
         } catch (IOException e) {
             System.out.println(socket.getInetAddress() + " 断开连接");
             e.printStackTrace();
