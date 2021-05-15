@@ -50,7 +50,7 @@ public class SmtpServer extends Thread {
             }
             System.out.println("关闭SMTP服务器");
             serverSocket.close();
-            executor.shutdownNow();
+            executor.shutdown();
             this.interrupt();
         } catch (IOException e) {
             e.printStackTrace();

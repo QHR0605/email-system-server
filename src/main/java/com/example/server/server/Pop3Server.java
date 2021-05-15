@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -28,6 +29,7 @@ public class Pop3Server extends Thread {
         LinkedBlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
         executor = new ThreadPoolExecutor(30, 50, 1000, unit, workQueue, threadFactory);
+        clients = new LinkedList<>();
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("POP3 服务已开启");
@@ -47,6 +49,7 @@ public class Pop3Server extends Thread {
             this.shutDown = true;
             System.out.println("关闭Pop3服务器");
             this.serverSocket.close();
+            executor.shutdown();
             this.interrupt();
         } catch (IOException e) {
             e.printStackTrace();
