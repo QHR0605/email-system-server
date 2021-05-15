@@ -102,7 +102,6 @@ public class Pop3ServiceImpl extends Pop3Service {
             result += "" + '\n' + index + ' ' + email.getSize();
             ++index;
         }
-        System.out.println(result);
         this.writer.println(result + '\n' + "#end#");
     }
 
@@ -200,7 +199,7 @@ public class Pop3ServiceImpl extends Pop3Service {
         if (pop3Session.isAuth()) {
             for (Email email : pop3Session.getEmails()) {
                 if (email.getDeleted()) {
-                    mailMapper.delectMailByMid(email.getMid());
+                    mailMapper.updateDeletedMailByMid(email.getMid());
                 }
             }
         }

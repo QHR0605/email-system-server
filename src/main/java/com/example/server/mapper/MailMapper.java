@@ -21,7 +21,7 @@ public interface MailMapper {
     Integer addMail(Email email) throws Exception;
 
     /**
-     * 以username为接收方查询其收到的邮件列表
+     * 以username为接收方查询其收到的邮件列表，且邮件是未被标记为删除
      *
      * @param username
      * @return 返回该用户收到邮件列表
@@ -29,7 +29,14 @@ public interface MailMapper {
     List<Email> findMailsByRcpt(String username);
 
     /**
-     * 根据用户标记要删除的邮件，删除mid为mid的邮件
+     * 执行标记删除：根据用户标记要删除的邮件，让mid邮件的deleted=1
+     *
+     * @param mid
+     */
+    void updateDeletedMailByMid(Integer mid);
+
+    /**
+     * 执行持久的删除：删除邮件id是mid且deleted=1的邮件
      *
      * @param mid
      */
