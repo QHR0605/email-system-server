@@ -18,7 +18,7 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
     private final SuperAdminMapper superAdminMapper = SpringContextConfig.getBean(SuperAdminMapper.class);
 
     @Override
-    public Integer auth(List<String> usernames, Boolean authType) {
+    public Integer auth(List<String> usernames, Integer authType) {
         Integer row;
         try {
             row = superAdminMapper.updateUserAuthorization(usernames, authType);

@@ -14,6 +14,7 @@ public class ServerApplication {
 
     public static SmtpServer smtpServer = null;
     public static Pop3Server pop3Server = null;
+
     public static void main(String[] args) {
         //获取当前项目的上下文对象
         ConfigurableApplicationContext context = SpringApplication.run(ServerApplication.class, args);

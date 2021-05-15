@@ -42,7 +42,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Integer updateUsersType(List<String> usernames, Boolean type) {
+    public Integer updateUsersType(List<String> usernames, Integer type) {
         Integer row;
         try {
             row = adminMapper.updateUserType(usernames, type);

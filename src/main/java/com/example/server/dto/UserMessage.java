@@ -10,7 +10,7 @@ public class UserMessage {
     private String username;
     private String password;
     private String phone;
-    private Boolean accountType;
+    private Integer accountType;
     private Timestamp latestLoginTime;
     private String latestLoginIp;
     private String avatarUrl;
@@ -39,11 +39,11 @@ public class UserMessage {
         this.phone = phone;
     }
 
-    public Boolean getAccountType() {
+    public Integer getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(Boolean accountType) {
+    public void setAccountType(Integer accountType) {
         this.accountType = accountType;
     }
 

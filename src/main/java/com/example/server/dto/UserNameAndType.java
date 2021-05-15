@@ -6,7 +6,7 @@ package com.example.server.dto;
 public class UserNameAndType {
 
     private String username;
-    private Boolean accountType;
+    private Integer accountType;
 
     public String getUsername() {
         return username;
@@ -16,11 +16,11 @@ public class UserNameAndType {
         this.username = username;
     }
 
-    public Boolean getAccountType() {
+    public Integer getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(Boolean accountType) {
+    public void setAccountType(Integer accountType) {
         this.accountType = accountType;
     }
 }

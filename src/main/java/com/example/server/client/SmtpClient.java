@@ -24,6 +24,8 @@ public class SmtpClient extends Thread {
             handle(socket);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("服务不可用");
         }
     }
 

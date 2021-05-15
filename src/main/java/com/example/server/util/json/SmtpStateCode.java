@@ -27,6 +27,7 @@ public class SmtpStateCode {
     public static final String COMMAND_ERROR_DESC = COMMAND_ERROR + " Error: bad Syntax";
 
     public static final int INTERRUPTED = 552;
+    public static final String INTERRUPTED_DESC = " 服务已关闭！";
     public static final int SEQUENCE_ERROR = 503;
     public static final String SEQUENCE_ERROR_DESC = SEQUENCE_ERROR + " bad sequence of commands";
 

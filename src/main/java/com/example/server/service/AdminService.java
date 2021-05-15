@@ -36,7 +36,7 @@ public interface AdminService {
      * @param type     用户类型
      * @return 修改个数
      */
-    Integer updateUsersType(List<String> username, Boolean type);
+    Integer updateUsersType(List<String> username, Integer type);
 
     /**
      * 获取所有普通用户

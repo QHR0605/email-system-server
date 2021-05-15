@@ -16,7 +16,7 @@ public interface SupperAdminService extends AdminService {
      * @param authType  授予的用户权限
      * @return 授予成功的个数
      */
-    Integer auth(List<String> usernames, Boolean authType);
+    Integer auth(List<String> usernames, Integer authType);
 
     /**
      * 创建新账户

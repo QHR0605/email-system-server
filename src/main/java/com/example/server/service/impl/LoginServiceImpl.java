@@ -9,8 +9,13 @@ import com.example.server.dto.UserMessage;
 import com.example.server.entity.User;
 import com.example.server.mapper.LoginMapper;
 import com.example.server.service.AuthService;
+import com.example.server.util.http.HttpUtil;
 import com.example.server.util.json.JsonResultStateCode;
+import com.example.server.util.token.TokenGenerator;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 @Service("LoginServiceImpl")
 public class LoginServiceImpl implements AuthService {
@@ -30,6 +35,13 @@ public class LoginServiceImpl implements AuthService {
                 if (!user.getPassword().equals(password)) {
                     return JsonResultStateCode.PASSWORD_WRONG_DESC;
                 } else {
+                    HttpServletResponse response = HttpUtil.getResponse();
+                    String token = TokenGenerator.generateToken(username, password, user.getAccountType());
+                    Cookie cookie = new Cookie("token", token);
+                    cookie.setMaxAge(86400);
+                    cookie.setPath("/");
+                    cookie.setDomain("localhost");
+                    response.addCookie(cookie);
                     return JsonResultStateCode.SUCCESS_DESC;
                 }
             }

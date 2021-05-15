@@ -7,7 +7,7 @@ public class NewUserMessage {
 
     private String username;
     private String password;
-    private Boolean accountType;
+    private Integer accountType;
 
     public String getUsername() {
         return username;
@@ -25,11 +25,11 @@ public class NewUserMessage {
         this.password = password;
     }
 
-    public Boolean getAccountType() {
+    public Integer getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(Boolean accountType) {
+    public void setAccountType(Integer accountType) {
         this.accountType = accountType;
     }
 }

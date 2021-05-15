@@ -10,11 +10,20 @@ public class User {
     private String username;
     private String password;
     private String phone;
-    private Boolean accountType;
+    private Integer accountType;
     private Timestamp latestLoginTime;
     private String latestLoginIp;
     private Integer mailBoxSize;
     private String avatarUrl;
+    private Boolean logout;
+
+    public Boolean getLogout() {
+        return logout;
+    }
+
+    public void setLogout(Boolean logout) {
+        this.logout = logout;
+    }
 
     public User() {
 
@@ -35,7 +44,7 @@ public class User {
         return this;
     }
 
-    public User accountType(Boolean accountType) {
+    public User accountType(Integer accountType) {
         this.setAccountType(accountType);
         return this;
     }
@@ -84,11 +93,11 @@ public class User {
         this.phone = phone;
     }
 
-    public Boolean getAccountType() {
+    public Integer getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(Boolean accountType) {
+    public void setAccountType(Integer accountType) {
         this.accountType = accountType;
     }
 

@@ -30,4 +30,7 @@ public class JsonResultStateCode {
 
     public static Integer NOT_FOUND = 403;
     public static String NOT_FOUND_DESC = "not found";
+
+    static public Integer UNAUTHORIZED = 401;
+    static public String UNAUTHORIZED_DESC = "unauthorized";
 }

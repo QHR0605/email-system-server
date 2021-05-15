@@ -45,7 +45,7 @@ public interface AdminMapper {
      * @return 修改的用户个数
      * @throws Exception 数据库操作异常
      */
-    Integer updateUserType(List<String> usernames, Boolean type) throws Exception;
+    Integer updateUserType(List<String> usernames, Integer type) throws Exception;
 
     /**
      * 批量注销用户
