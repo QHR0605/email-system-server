@@ -13,8 +13,14 @@
     <select id="findMailsByRcpt" resultType="com.example.server.entity.Email">
         SELECT *
         FROM email
-        WHERE receiver_email = #{username}
+        WHERE receiver_email = #{username} and deleted != 1
     </select>
+
+    <update id="updateDeletedMailByMid">
+        UPDATE email
+        SET deleted = 1
+        WHERE mid = #{mid}
+    </update>
 
     <delete id="delectMailByMid">
         DELETE

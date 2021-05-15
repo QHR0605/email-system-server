@@ -68,7 +68,7 @@ public class SmtpServerRunnable implements Runnable {
                         socket.close();
                         break;
                     } else {
-                        System.out.println("没有命令执行");
+                        System.out.println("SMTP 没有命令" + args[0]);
                         writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
                     }
                 }

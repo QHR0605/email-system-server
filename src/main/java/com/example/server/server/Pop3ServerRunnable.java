@@ -73,7 +73,7 @@ public class Pop3ServerRunnable implements Runnable {
                         socket.close();
                         break;
                     } else {
-                        System.out.println("没有相应的命令");
+                        System.out.println("POP3 没有命令" + args[0]);
                         writer.println(Pop3StateCode.ERR + Pop3StateCode.STNTAX + '\n' + "#end#");
                     }
                 }
