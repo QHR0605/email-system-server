@@ -5,8 +5,11 @@ import com.example.server.config.SpringContextConfig;
 import com.example.server.dto.NewUserMessage;
 import com.example.server.dto.ServerState;
 import com.example.server.dto.UserNameAndType;
+import com.example.server.server.Pop3Server;
+import com.example.server.server.SmtpServer;
 import com.example.server.service.SupperAdminService;
 import com.example.server.service.impl.SupperAdminImpl;
+import com.example.server.util.annotation.IsSupperAdmin;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
@@ -26,6 +29,7 @@ public class SupperAdminController {
     private final SupperAdminService supperAdminService = SpringContextConfig.getBean(SupperAdminImpl.class);
 
     @PostMapping("/auth")
+    @IsSupperAdmin
     public JsonResult handleAuthorize(@RequestBody List<UserNameAndType> userNameAndTypes) {
 
         if (userNameAndTypes != null) {
@@ -34,7 +38,7 @@ public class SupperAdminController {
             ) {
                 usernames.add(user.getUsername());
             }
-            Boolean type = userNameAndTypes.get(0).getAccountType();
+            Integer type = userNameAndTypes.get(0).getAccountType();
             Integer rows = supperAdminService.auth(usernames, type);
             if (rows != null) {
                 if (rows.equals(userNameAndTypes.size())) {
@@ -54,7 +58,8 @@ public class SupperAdminController {
 
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create-user")
+    @IsSupperAdmin
     public JsonResult handleCreate(@RequestBody NewUserMessage userMessage) {
 
         Integer rows;
@@ -71,11 +76,13 @@ public class SupperAdminController {
     }
 
     @PostMapping("/change-server-state")
+    @IsSupperAdmin
     public JsonResult handleStopSmtp(@RequestBody ServerState serverState) {
 
         if ("POP3".equals(serverState.getServerName())) {
             if (serverState.getState()) {
                 if (ServerApplication.pop3Server.isShutDown()) {
+                    ServerApplication.pop3Server = new Pop3Server();
                     ServerApplication.pop3Server.start();
                     return JsonResultFactory.buildSuccessResult();
                 } else {
@@ -89,6 +96,7 @@ public class SupperAdminController {
 
             if (serverState.getState()) {
                 if (ServerApplication.smtpServer.isShutDown()) {
+                    ServerApplication.smtpServer = new SmtpServer();
                     ServerApplication.smtpServer.start();
                     return JsonResultFactory.buildSuccessResult();
                 } else {

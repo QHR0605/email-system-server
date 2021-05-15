@@ -31,8 +31,6 @@ public class LoginController {
         JsonResult res = null;
         if (JsonResultStateCode.USERNAME_WRONG_DESC.equals(msg)) {
             res = JsonResultFactory.buildJsonResult(JsonResultStateCode.USERNAME_WRONG, msg, null);
-        } else if (JsonResultStateCode.USERNAME_IS_EXITED.equals(msg)) {
-            res = JsonResultFactory.buildJsonResult(JsonResultStateCode.USERNAME_IS_EXITED, msg, null);
         } else if (JsonResultStateCode.PASSWORD_WRONG_DESC.equals(msg)) {
             res = JsonResultFactory.buildJsonResult(JsonResultStateCode.PASSWORD_WRONG, msg, null);
         } else if (JsonResultStateCode.SUCCESS_DESC.equals(msg)) {

@@ -3,6 +3,7 @@ package com.example.server.controller;
 import com.example.server.config.SpringContextConfig;
 import com.example.server.entity.User;
 import com.example.server.service.AdminService;
+import com.example.server.util.annotation.IsAdmin;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
@@ -21,6 +22,7 @@ public class AdminController {
     private final AdminService adminService = SpringContextConfig.getBean("AdminServiceImpl");
 
     @PostMapping("/delete-users")
+    @IsAdmin
     public JsonResult handleDeleteUser(@RequestBody List<String> usernames) {
 
         Integer rows = adminService.deleteUsersByUsername(usernames);
@@ -36,6 +38,7 @@ public class AdminController {
     }
 
     @PostMapping("/logout-users")
+    @IsAdmin
     public JsonResult handleLogout(@RequestBody List<String> usernames) {
         Integer rows = adminService.updateUsersLogState(usernames, false);
         if (rows != null) {
@@ -50,6 +53,7 @@ public class AdminController {
     }
 
     @PostMapping("/login-users")
+    @IsAdmin
     public JsonResult handleLogin(@RequestBody List<String> usernames) {
         Integer rows = adminService.updateUsersLogState(usernames, true);
         if (rows != null) {
@@ -64,6 +68,7 @@ public class AdminController {
     }
 
     @GetMapping("/get-users")
+    @IsAdmin
     public JsonResult handleGetUsers() {
         List<User> result;
         result = adminService.getUsers();
