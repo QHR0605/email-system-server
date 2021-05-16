@@ -20,6 +20,30 @@ public class SmtpServer extends Thread {
     private static ThreadPoolExecutor executor;
     private List<Socket> clients;
 
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
+
+    public static ThreadPoolExecutor getExecutor() {
+        return executor;
+    }
+
+    public static void setExecutor(ThreadPoolExecutor executor) {
+        SmtpServer.executor = executor;
+    }
+
+    public List<Socket> getClients() {
+        return clients;
+    }
+
+    public void setClients(List<Socket> clients) {
+        this.clients = clients;
+    }
+
     /**
      * 默认端口号为25
      */
@@ -39,8 +63,8 @@ public class SmtpServer extends Thread {
         }
     }
 
-    public void stopSmtpServer() {
-        try {
+    public void stopSmtpServer() throws IOException {
+
             this.shutDown = true;
             for (Socket socket : clients
             ) {
@@ -52,10 +76,6 @@ public class SmtpServer extends Thread {
             serverSocket.close();
             executor.shutdown();
             this.interrupt();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public int getPort() {

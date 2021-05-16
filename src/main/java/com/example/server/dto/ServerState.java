@@ -5,14 +5,14 @@ package com.example.server.dto;
  */
 public class ServerState {
 
-    private String serverName;
+    private Integer serverName;
     private Boolean state;
 
-    public String getServerName() {
+    public Integer getServerName() {
         return serverName;
     }
 
-    public void setServerName(String serverName) {
+    public void setServerName(Integer serverName) {
         this.serverName = serverName;
     }
 

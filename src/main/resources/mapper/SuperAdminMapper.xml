@@ -14,4 +14,28 @@
             WHERE user.username= #{username}
         </foreach>
     </update>
+    <update id="updateServerMsg">
+        <if test="#{serverType}= 'POP3'">
+            UPDATE `server-msg` SET `server-msg`.
+        </if>
+    </update>
+    <update id="updateServerPort">
+        <if test="serverType==0">
+            UPDATE `server-msg` SET `server-msg`.`smpt-port` = #{serverPort} WHERE sid = #{sid}
+        </if>
+        <if test="serverType==1">
+            UPDATE `server-msg` SET `server-msg`.`pop3-port` = #{serverPort} WHERE sid = #{sid}
+        </if>
+    </update>
+    <update id="updateServerState">
+        <if test="serverType==0">
+            UPDATE `server-msg` SET `server-msg`.`smpt-state` = #{serverState} WHERE sid = #{sid}
+        </if>
+        <if test="serverType==1">
+            UPDATE `server-msg` SET `server-msg`.`pop3-state` = #{serverState} WHERE sid = #{sid}
+        </if>
+    </update>
+    <select id="selectServerMessage" resultType="com.example.server.entity.ServerMessage">
+        SELECT * FROM `server-msg`
+    </select>
 </mapper>

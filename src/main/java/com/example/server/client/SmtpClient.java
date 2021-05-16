@@ -23,6 +23,7 @@ public class SmtpClient extends Thread {
             Socket socket = new Socket("127.0.0.1", 25);
             handle(socket);
         } catch (IOException e) {
+            System.out.println("SMTP 服务器未开启，或请检查连接的端口号");
             e.printStackTrace();
         } catch (Exception e) {
             System.out.println("服务不可用");

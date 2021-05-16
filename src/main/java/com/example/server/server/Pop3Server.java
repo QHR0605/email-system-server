@@ -38,8 +38,7 @@ public class Pop3Server extends Thread {
         }
     }
 
-    public void stopPop3Server() {
-        try {
+    public void stopPop3Server() throws IOException {
             for (Socket socket : clients
             ) {
                 socket.getOutputStream().close();
@@ -51,9 +50,6 @@ public class Pop3Server extends Thread {
             this.serverSocket.close();
             executor.shutdown();
             this.interrupt();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public int getPort() {

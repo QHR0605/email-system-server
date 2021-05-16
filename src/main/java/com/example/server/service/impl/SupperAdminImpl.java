@@ -1,12 +1,20 @@
 package com.example.server.service.impl;
 
+import com.example.server.ServerApplication;
 import com.example.server.config.SpringContextConfig;
 import com.example.server.dto.NewUserMessage;
+import com.example.server.dto.ServerPortMsg;
+import com.example.server.dto.ServerStateMsg;
+import com.example.server.entity.ServerMessage;
 import com.example.server.entity.User;
 import com.example.server.mapper.SuperAdminMapper;
+import com.example.server.server.Pop3Server;
+import com.example.server.server.SmtpServer;
 import com.example.server.service.SupperAdminService;
+import com.example.server.util.json.JsonResultStateCode;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -44,5 +52,106 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
             return null;
         }
         return row;
+    }
+
+    @Override
+    public Integer changeServerPort(ServerPortMsg msg) {
+
+        Integer row;
+        try {
+            row = superAdminMapper.updateServerPort(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return row;
+    }
+
+    @Override
+    public Integer changeServerState(ServerStateMsg msg) {
+        Integer row;
+        try {
+            row = superAdminMapper.updateServerState(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return row;
+    }
+
+    @Override
+    public List<ServerMessage> getServerMsg() {
+        List<ServerMessage> res;
+        try {
+            res = superAdminMapper.selectServerMessage();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return res;
+    }
+
+    @Override
+    public Integer restartServer(ServerPortMsg msg) {
+        try{
+            if (msg.getServerType() == 0){
+                if (!ServerApplication.smtpServer.isInterrupted() && ServerApplication.smtpServer.getPort() != msg.getServerPort()) {
+                    ServerApplication.smtpServer.stopSmtpServer();
+                    SmtpServer smtpServer = new SmtpServer();
+                    smtpServer.setPort(msg.getServerPort());
+                    smtpServer.setShutDown(false);
+                    ServerApplication.smtpServer = smtpServer;
+                    ServerApplication.smtpServer.start();
+                }else if (ServerApplication.smtpServer.getPort() == msg.getServerPort()){
+                    ServerApplication.smtpServer.start();
+                }
+            }else if (msg.getServerType() == 1){
+                if (!ServerApplication.pop3Server.isInterrupted() && ServerApplication.pop3Server.getPort() != msg.getServerPort()) {
+                    ServerApplication.pop3Server.stopPop3Server();
+                    Pop3Server pop3Server = new Pop3Server();
+                    pop3Server.setPort(msg.getServerPort());
+                    pop3Server.setShutDown(false);
+                    ServerApplication.pop3Server = pop3Server;
+                    ServerApplication.pop3Server.start();
+                }else if (ServerApplication.pop3Server.getPort() == msg.getServerPort()){
+                    ServerApplication.pop3Server.start();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return JsonResultStateCode.FAILED;
+        }
+        return JsonResultStateCode.SUCCESS;
+    }
+
+    @Override
+    public Integer stopServer(ServerPortMsg msg) {
+        try{
+            if (msg.getServerType() == 0){
+                if (!ServerApplication.smtpServer.isInterrupted() && ServerApplication.smtpServer.getPort() == msg.getServerPort()) {
+                    ServerApplication.smtpServer.stopSmtpServer();
+                }
+            }else if (msg.getServerType() == 1){
+                if (!ServerApplication.pop3Server.isInterrupted() && ServerApplication.pop3Server.getPort() == msg.getServerPort()) {
+                    ServerApplication.pop3Server.stopPop3Server();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return JsonResultStateCode.FAILED;
+        }
+        return JsonResultStateCode.SUCCESS;
+    }
+
+    @Override
+    public List<ServerMessage> getServersMsg() {
+        List<ServerMessage> res;
+        try {
+            res = superAdminMapper.selectServerMessage();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return res;
     }
 }

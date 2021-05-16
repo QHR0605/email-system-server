@@ -1,6 +1,10 @@
 package com.example.server.service;
 
 import com.example.server.dto.NewUserMessage;
+import com.example.server.dto.ServerPortMsg;
+import com.example.server.dto.ServerState;
+import com.example.server.dto.ServerStateMsg;
+import com.example.server.entity.ServerMessage;
 
 import java.util.List;
 
@@ -25,4 +29,40 @@ public interface SupperAdminService extends AdminService {
      * @return 创建成功的个数
      */
     Integer createUser(NewUserMessage message);
+
+    /**
+     * 修改端口号
+     * @param msg 服务器端口信息
+     * @return 行数
+     */
+    Integer changeServerPort(ServerPortMsg msg);
+
+    /**
+     * 修改服务器状态
+     * @param msg 服务器状态信息
+     * @return 行数
+     */
+    Integer changeServerState(ServerStateMsg msg);
+
+    /**
+     * 获取服务信息集合
+     * @return 服务器信息
+     */
+    List<ServerMessage> getServerMsg();
+
+    /**
+     * 启动服务
+     * @param port 端口号
+     */
+    Integer restartServer(ServerPortMsg msg);
+
+    /**
+     * 关闭服务
+     * @param port 端口号
+     */
+    Integer stopServer(ServerPortMsg msg);
+
+    List<ServerMessage> getServersMsg();
+
+
 }
