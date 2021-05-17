@@ -4,13 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.server.mapper.SuperAdminMapper">
     <insert id="insertNewUser">
-        INSERT INTO user(username, password, phone, `account-type`, `latest-login-time`, `latest-login-ip`,
-                         `avatar-url`)
+        INSERT INTO user(username, password, phone, `account_type`, `latest_login_time`, `latest_login_ip`,
+                         `avatar_url`)
         VALUES (#{username}, #{password}, #{phone}, #{accountType}, #{latestLoginTime}, #{latestLoginIp}, #{avatarUrl})
+    </insert>
+    <insert id="insertNewIpAddress">
+        INSERT INTO filter(fid, ip_address) VALUES (#{fid},#{ipAddress})
     </insert>
     <update id="updateUserAuthorization">
         <foreach collection="usernames" item="username" index="index">
-            UPDATE user SET `account-type` = #{type}
+            UPDATE user SET `account_type` = #{type}
             WHERE user.username= #{username}
         </foreach>
     </update>
@@ -35,7 +38,13 @@
             UPDATE `server-msg` SET `server-msg`.`pop3_state` = #{serverState} WHERE sid = #{sid}
         </if>
     </update>
+    <delete id="deleteIpAddress">
+        DELETE FROM filter WHERE fid = #{fid}
+    </delete>
     <select id="selectServerMessage" resultType="com.example.server.entity.ServerMessage">
         SELECT * FROM `server-msg`
+    </select>
+    <select id="selectFilter" resultType="com.example.server.entity.Filter">
+        SELECT * FROM filter
     </select>
 </mapper>
