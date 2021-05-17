@@ -95,25 +95,23 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
     public Integer restartServer(ServerPortMsg msg) {
         try{
             if (msg.getServerType() == 0){
-                if (!ServerApplication.smtpServer.isInterrupted() && ServerApplication.smtpServer.getPort() != msg.getServerPort()) {
+                if (!SmtpServer.isShutDown() && SmtpServer.getPort() != msg.getServerPort()) {
+                    System.out.println("之前线程没有关闭");
                     ServerApplication.smtpServer.stopSmtpServer();
-                    SmtpServer smtpServer = new SmtpServer();
-                    smtpServer.setPort(msg.getServerPort());
-                    smtpServer.setShutDown(false);
-                    ServerApplication.smtpServer = smtpServer;
+                    ServerApplication.smtpServer = new SmtpServer();
                     ServerApplication.smtpServer.start();
-                }else if (ServerApplication.smtpServer.getPort() == msg.getServerPort()){
+                }else if (SmtpServer.isShutDown()){
+                    System.out.println("之前线程已经关闭");
+                    ServerApplication.smtpServer = new SmtpServer();
                     ServerApplication.smtpServer.start();
                 }
             }else if (msg.getServerType() == 1){
-                if (!ServerApplication.pop3Server.isInterrupted() && ServerApplication.pop3Server.getPort() != msg.getServerPort()) {
+                if (!Pop3Server.isShutDown() && Pop3Server.getPort() != msg.getServerPort()) {
                     ServerApplication.pop3Server.stopPop3Server();
-                    Pop3Server pop3Server = new Pop3Server();
-                    pop3Server.setPort(msg.getServerPort());
-                    pop3Server.setShutDown(false);
-                    ServerApplication.pop3Server = pop3Server;
+                    ServerApplication.pop3Server = new Pop3Server();
                     ServerApplication.pop3Server.start();
-                }else if (ServerApplication.pop3Server.getPort() == msg.getServerPort()){
+                }else if (Pop3Server.isShutDown()){
+                    ServerApplication.pop3Server = new Pop3Server();
                     ServerApplication.pop3Server.start();
                 }
             }
@@ -128,11 +126,11 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
     public Integer stopServer(ServerPortMsg msg) {
         try{
             if (msg.getServerType() == 0){
-                if (!ServerApplication.smtpServer.isInterrupted() && ServerApplication.smtpServer.getPort() == msg.getServerPort()) {
+                if (!SmtpServer.isShutDown() && SmtpServer.getPort() == msg.getServerPort()) {
                     ServerApplication.smtpServer.stopSmtpServer();
                 }
             }else if (msg.getServerType() == 1){
-                if (!ServerApplication.pop3Server.isInterrupted() && ServerApplication.pop3Server.getPort() == msg.getServerPort()) {
+                if (!Pop3Server.isShutDown() && Pop3Server.getPort() == msg.getServerPort()) {
                     ServerApplication.pop3Server.stopPop3Server();
                 }
             }

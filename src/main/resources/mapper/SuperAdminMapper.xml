@@ -21,18 +21,18 @@
     </update>
     <update id="updateServerPort">
         <if test="serverType==0">
-            UPDATE `server-msg` SET `server-msg`.`smpt-port` = #{serverPort} WHERE sid = #{sid}
+            UPDATE `server-msg` SET `server-msg`.`smtp_port` = #{serverPort} WHERE sid = #{sid}
         </if>
         <if test="serverType==1">
-            UPDATE `server-msg` SET `server-msg`.`pop3-port` = #{serverPort} WHERE sid = #{sid}
+            UPDATE `server-msg` SET `server-msg`.`pop3_port` = #{serverPort} WHERE sid = #{sid}
         </if>
     </update>
     <update id="updateServerState">
         <if test="serverType==0">
-            UPDATE `server-msg` SET `server-msg`.`smpt-state` = #{serverState} WHERE sid = #{sid}
+            UPDATE `server-msg` SET `server-msg`.`smtp_state` = #{serverState} WHERE sid = #{sid}
         </if>
         <if test="serverType==1">
-            UPDATE `server-msg` SET `server-msg`.`pop3-state` = #{serverState} WHERE sid = #{sid}
+            UPDATE `server-msg` SET `server-msg`.`pop3_state` = #{serverState} WHERE sid = #{sid}
         </if>
     </update>
     <select id="selectServerMessage" resultType="com.example.server.entity.ServerMessage">

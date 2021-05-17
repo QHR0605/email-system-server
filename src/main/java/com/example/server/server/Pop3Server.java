@@ -1,5 +1,8 @@
 package com.example.server.server;
 
+import com.example.server.config.SpringContextConfig;
+import com.example.server.entity.ServerMessage;
+import com.example.server.mapper.SuperAdminMapper;
 import com.example.server.util.json.Pop3StateCode;
 
 import java.io.IOException;
@@ -10,21 +13,34 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
-
 public class Pop3Server extends Thread {
-    private ServerSocket serverSocket;
-    private int port;
-    private boolean shutDown;
+
+    private static ServerSocket serverSocket;
+    private static   int port;
+    private static boolean shutDown;
     private static ThreadPoolExecutor executor;
-    private List<Socket> clients;
+    private static List<Socket> clients;
+
+    private int port1;
 
     /**
      * 默认端口号 110
      */
     public Pop3Server() {
-        port = 110;
+        List<ServerMessage> serverMessage = null;
+        try {
+            SuperAdminMapper superAdminMapper = SpringContextConfig.getBean(SuperAdminMapper.class);
+            serverMessage = superAdminMapper.selectServerMessage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (serverMessage == null || serverMessage.size() == 0){
+            port = 110;
+        }else{
+            port1 = serverMessage.get(0).getPop3Port();
+            port = port1;
+        }
         shutDown = false;
-
         TimeUnit unit = TimeUnit.MILLISECONDS;
         LinkedBlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
@@ -41,31 +57,37 @@ public class Pop3Server extends Thread {
     public void stopPop3Server() throws IOException {
             for (Socket socket : clients
             ) {
-                socket.getOutputStream().close();
-                socket.getInputStream().close();
                 socket.close();
             }
-            this.shutDown = true;
+            Pop3Server.shutDown = true;
             System.out.println("关闭Pop3服务器");
-            this.serverSocket.close();
+            Pop3Server.serverSocket.close();
             executor.shutdown();
             this.interrupt();
     }
 
-    public int getPort() {
+    public static int getPort() {
         return port;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public static void setPort(int port) {
+        Pop3Server.port = port;
     }
 
-    public boolean isShutDown() {
+    public static boolean isShutDown() {
         return shutDown;
     }
 
-    public void setShutDown(boolean shutDown) {
-        this.shutDown = shutDown;
+    public static void setShutDown(boolean shutDown) {
+        Pop3Server.shutDown = shutDown;
+    }
+
+    public int getPort1() {
+        return port1;
+    }
+
+    public void setPort1(int port1) {
+        this.port1 = port1;
     }
 
     @Override

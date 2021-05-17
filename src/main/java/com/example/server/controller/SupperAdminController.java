@@ -6,6 +6,8 @@ import com.example.server.dto.NewUserMessage;
 import com.example.server.dto.ServerPortMsg;
 import com.example.server.dto.ServerStateMsg;
 import com.example.server.dto.UserNameAndType;
+import com.example.server.server.Pop3Server;
+import com.example.server.server.SmtpServer;
 import com.example.server.service.SupperAdminService;
 import com.example.server.service.impl.SupperAdminImpl;
 import com.example.server.util.annotation.IsSupperAdmin;
@@ -77,47 +79,42 @@ public class SupperAdminController {
 
     @PostMapping("/change-server-state")
     public JsonResult handleChangeServerState(@RequestBody ServerStateMsg serverState) {
-
-        System.out.println(serverState.getServerType());
         Integer state = supperAdminService.changeServerState(serverState);
         JsonResult res = JsonResultFactory.buildSuccessResult();
+        ServerPortMsg msg = new ServerPortMsg();
         if (state != null && state == 1) {
-            try {
-                if (serverState.getServerState()) {
-                    if (serverState.getServerType() == 0) {
-                        if (ServerApplication.smtpServer.isInterrupted()) {
-                            ServerApplication.smtpServer.start();
-                        }
-                    } else if (serverState.getServerType() == 1) {
-                        if (ServerApplication.pop3Server.isInterrupted()) {
-                            ServerApplication.pop3Server.start();
-                        }
-                    } else {
-                        return JsonResultFactory.buildJsonResult(JsonResultStateCode.FAILED, "没有该服务", null);
-                    }
-                    return res;
+            if (serverState.getServerState()) {
+                if (serverState.getServerType() == 0) {
+                    msg.setServerPort(SmtpServer.getPort());
+                    msg.setServerType(serverState.getServerType());
+                    msg.setSid(serverState.getSid());
+                } else if (serverState.getServerType() == 1) {
+                    msg.setServerPort(Pop3Server.getPort());
+                    msg.setServerType(serverState.getServerType());
+                    msg.setSid(serverState.getSid());
                 } else {
-                    if (serverState.getServerType() == 0) {
-                        if (!ServerApplication.smtpServer.isInterrupted()) {
-                            ServerApplication.smtpServer.stopSmtpServer();
-                        }
-                    } else if (serverState.getServerType() == 1) {
-                        if (!ServerApplication.pop3Server.isInterrupted()) {
-                            ServerApplication.pop3Server.stopPop3Server();
-                        }
-                    } else {
-                        return JsonResultFactory.buildJsonResult(JsonResultStateCode.FAILED, "没有该服务", null);
-                    }
-                    return res;
+                    return JsonResultFactory.buildJsonResult(JsonResultStateCode.FAILED, "没有该服务", null);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                return JsonResultFactory.buildFailureResult();
+                supperAdminService.restartServer(msg);
+            } else {
+                if (serverState.getServerType() == 0) {
+                    msg.setServerPort(SmtpServer.getPort());
+                    msg.setServerType(serverState.getServerType());
+                    msg.setSid(serverState.getSid());
+
+                } else if (serverState.getServerType() == 1) {
+                    msg.setServerPort(Pop3Server.getPort());
+                    msg.setServerType(serverState.getServerType());
+                    msg.setSid(serverState.getSid());
+                } else {
+                    return JsonResultFactory.buildJsonResult(JsonResultStateCode.FAILED, "没有该服务", null);
+                }
+                supperAdminService.stopServer(msg);
             }
         } else {
             return JsonResultFactory.buildFailureResult();
         }
-
+        return res;
     }
 
     @PostMapping("/change-server-port")

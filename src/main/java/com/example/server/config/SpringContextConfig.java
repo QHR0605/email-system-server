@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @author 全鸿润
  * Sring上下文配置类
@@ -41,6 +43,11 @@ public class SpringContextConfig implements ApplicationContextAware {
      */
     public static <T> T getBean(String name) {
         return (T) applicationContext.getBean(name);
+    }
+
+    @PostConstruct
+    public void init(){
+
     }
 
 }

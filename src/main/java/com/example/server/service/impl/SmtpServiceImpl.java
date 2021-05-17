@@ -11,6 +11,7 @@ import com.example.server.util.base64.Base64Util;
 import com.example.server.util.command.CommandConstant;
 import com.example.server.util.idGenerator.IdGenerator;
 import com.example.server.util.json.SmtpStateCode;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.Socket;
@@ -23,7 +24,7 @@ import java.sql.Date;
  */
 public class SmtpServiceImpl extends SmtpService {
 
-    private final AuthService authService = SpringContextConfig.getBean("AuthServiceImpl");
+    private final AuthService authService =  SpringContextConfig.getBean("AuthServiceImpl");
     private final MailMapper mailMapper = SpringContextConfig.getBean(MailMapper.class);
 
     /**
