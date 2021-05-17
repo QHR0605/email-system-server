@@ -11,7 +11,7 @@ import com.example.server.server.Pop3Server;
 import com.example.server.server.SmtpServer;
 import com.example.server.service.SupperAdminService;
 import com.example.server.service.impl.SupperAdminImpl;
-import com.example.server.util.annotation.IsSupperAdmin;
+import com.example.server.util.annotation.IsAdmin;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
@@ -34,29 +34,30 @@ public class SupperAdminController {
 
 
     @GetMapping("/get-users")
-    @IsSupperAdmin
-    public JsonResult handleGetUsers(){
+    @IsAdmin
+    public JsonResult handleGetUsers() {
         List<User> userList = supperAdminService.getAllUsers();
-        if (userList!= null){
-            if (userList.size() > 0){
+        if (userList != null) {
+            if (userList.size() > 0) {
                 return JsonResultFactory.buildJsonResult(
                         JsonResultStateCode.SUCCESS,
                         JsonResultStateCode.SUCCESS_DESC,
                         userList
                 );
-            }else{
+            } else {
                 return JsonResultFactory.buildJsonResult(
                         JsonResultStateCode.NOT_FOUND,
                         JsonResultStateCode.NOT_FOUND_DESC,
                         null
-                        );
+                );
             }
-        }else{
+        } else {
             return JsonResultFactory.buildFailureResult();
         }
     }
+
     @PostMapping("/auth")
-    @IsSupperAdmin
+    @IsAdmin
     public JsonResult handleAuthorize(@RequestBody List<UserNameAndType> userNameAndTypes) {
 
         if (userNameAndTypes != null) {
@@ -86,7 +87,7 @@ public class SupperAdminController {
     }
 
     @PostMapping("/create-user")
-    @IsSupperAdmin
+    @IsAdmin
     public JsonResult handleCreate(@RequestBody NewUserMessage userMessage) {
 
         Integer rows;
@@ -103,6 +104,7 @@ public class SupperAdminController {
     }
 
     @PostMapping("/change-server-state")
+    @IsAdmin
     public JsonResult handleChangeServerState(@RequestBody ServerStateMsg serverState) {
         Integer state = supperAdminService.changeServerState(serverState);
         JsonResult res = JsonResultFactory.buildSuccessResult();
@@ -143,7 +145,7 @@ public class SupperAdminController {
     }
 
     @PostMapping("/change-server-port")
-    @IsSupperAdmin
+    @IsAdmin
     public JsonResult handleChangeServerPort(@RequestBody ServerPortMsg msg) {
 
         //修改端口号
@@ -178,43 +180,46 @@ public class SupperAdminController {
     }
 
     @GetMapping("/get-filters")
-    @IsSupperAdmin
-    public JsonResult handleGetFilters(){
+    @IsAdmin
+    public JsonResult handleGetFilters() {
         List<Filter> res = supperAdminService.getFilters();
-        if (res != null && res.size()>0){
+        if (res != null && res.size() > 0) {
             return JsonResultFactory.buildJsonResult(
                     JsonResultStateCode.SUCCESS,
                     JsonResultStateCode.SUCCESS_DESC,
                     res
             );
-        }else if (res != null){
+        } else if (res != null) {
             return JsonResultFactory.buildJsonResult(
                     JsonResultStateCode.NOT_FOUND,
                     JsonResultStateCode.NOT_FOUND_DESC,
                     null
-                    );
-        }else{
+            );
+        } else {
             return JsonResultFactory.buildFailureResult();
         }
     }
+
     @PostMapping("/add-blacklist")
-    public JsonResult handleAddBlacklist(@RequestBody Filter filter){
+    @IsAdmin
+    public JsonResult handleAddBlacklist(@RequestBody Filter filter) {
 
         Integer row = supperAdminService.addFilter(filter);
-        if (row != null && row == 1){
+        if (row != null && row == 1) {
             return JsonResultFactory.buildSuccessResult();
-        }else{
+        } else {
             return JsonResultFactory.buildFailureResult();
         }
     }
 
     @PostMapping("del-blacklist")
-    public JsonResult handleDelBlacklist(@RequestBody Filter filter){
+    @IsAdmin
+    public JsonResult handleDelBlacklist(@RequestBody Filter filter) {
 
         Integer row = supperAdminService.deleteFilter(filter);
-        if (row != null && row == 1){
+        if (row != null && row == 1) {
             return JsonResultFactory.buildSuccessResult();
-        }else{
+        } else {
             return JsonResultFactory.buildFailureResult();
         }
     }
