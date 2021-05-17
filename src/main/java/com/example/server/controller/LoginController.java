@@ -8,6 +8,7 @@ import com.example.server.service.AuthService;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author 全鸿润
  */
+@Api
 @RestController
 @CrossOrigin
-@RequestMapping("/user")
 public class LoginController {
 
     private AuthService authService = SpringContextConfig.getBean("LoginServiceImpl");

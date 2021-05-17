@@ -5,6 +5,8 @@ import com.example.server.dto.NewUserMessage;
 import com.example.server.dto.ServerPortMsg;
 import com.example.server.dto.ServerStateMsg;
 import com.example.server.dto.UserNameAndType;
+import com.example.server.entity.Filter;
+import com.example.server.entity.User;
 import com.example.server.server.Pop3Server;
 import com.example.server.server.SmtpServer;
 import com.example.server.service.SupperAdminService;
@@ -13,6 +15,7 @@ import com.example.server.util.annotation.IsSupperAdmin;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -21,6 +24,7 @@ import java.util.List;
 /**
  * @author 全鸿润
  */
+@Api
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/supper")
@@ -28,6 +32,29 @@ public class SupperAdminController {
 
     private final SupperAdminService supperAdminService = SpringContextConfig.getBean(SupperAdminImpl.class);
 
+
+    @GetMapping("/get-users")
+    @IsSupperAdmin
+    public JsonResult handleGetUsers(){
+        List<User> userList = supperAdminService.getAllUsers();
+        if (userList!= null){
+            if (userList.size() > 0){
+                return JsonResultFactory.buildJsonResult(
+                        JsonResultStateCode.SUCCESS,
+                        JsonResultStateCode.SUCCESS_DESC,
+                        userList
+                );
+            }else{
+                return JsonResultFactory.buildJsonResult(
+                        JsonResultStateCode.NOT_FOUND,
+                        JsonResultStateCode.NOT_FOUND_DESC,
+                        null
+                        );
+            }
+        }else{
+            return JsonResultFactory.buildFailureResult();
+        }
+    }
     @PostMapping("/auth")
     @IsSupperAdmin
     public JsonResult handleAuthorize(@RequestBody List<UserNameAndType> userNameAndTypes) {
@@ -87,7 +114,6 @@ public class SupperAdminController {
                     msg.setServerType(serverState.getServerType());
                     msg.setSid(serverState.getSid());
                 } else if (serverState.getServerType() == 1) {
-                    System.out.println("pop3-state");
                     msg.setServerPort(Pop3Server.getPort());
                     msg.setServerType(serverState.getServerType());
                     msg.setSid(serverState.getSid());
@@ -111,13 +137,13 @@ public class SupperAdminController {
                 supperAdminService.stopServer(msg);
             }
         } else {
-            System.out.println("state-fail");
             return JsonResultFactory.buildFailureResult();
         }
         return res;
     }
 
     @PostMapping("/change-server-port")
+    @IsSupperAdmin
     public JsonResult handleChangeServerPort(@RequestBody ServerPortMsg msg) {
 
         //修改端口号
@@ -130,12 +156,10 @@ public class SupperAdminController {
             if (r1 != null && r1.equals(JsonResultStateCode.SUCCESS)) {
                 Integer r2 = JsonResultStateCode.SUCCESS;
                 if (msg.getServerType() == 0) {
-                    System.out.println("smtp");
                     if (!SmtpServer.isShutDown()) {
                         r2 = supperAdminService.restartServer(msg);
                     }
                 } else if (msg.getServerType() == 1) {
-                    System.out.println("pop3");
                     if (!Pop3Server.isShutDown()) {
                         r2 = supperAdminService.restartServer(msg);
                     }
@@ -143,16 +167,55 @@ public class SupperAdminController {
                 if (r2 != null && r2.equals(JsonResultStateCode.SUCCESS)) {
                     return res;
                 } else {
-                    System.out.println("dsdsd");
                     return res1;
                 }
             } else {
-                System.out.println("ewewew");
                 return res1;
             }
         } else {
-            System.out.println("ewewe");
             return res1;
+        }
+    }
+
+    @GetMapping("/get-filters")
+    @IsSupperAdmin
+    public JsonResult handleGetFilters(){
+        List<Filter> res = supperAdminService.getFilters();
+        if (res != null && res.size()>0){
+            return JsonResultFactory.buildJsonResult(
+                    JsonResultStateCode.SUCCESS,
+                    JsonResultStateCode.SUCCESS_DESC,
+                    res
+            );
+        }else if (res != null){
+            return JsonResultFactory.buildJsonResult(
+                    JsonResultStateCode.NOT_FOUND,
+                    JsonResultStateCode.NOT_FOUND_DESC,
+                    null
+                    );
+        }else{
+            return JsonResultFactory.buildFailureResult();
+        }
+    }
+    @PostMapping("/add-blacklist")
+    public JsonResult handleAddBlacklist(@RequestBody Filter filter){
+
+        Integer row = supperAdminService.addFilter(filter);
+        if (row != null && row == 1){
+            return JsonResultFactory.buildSuccessResult();
+        }else{
+            return JsonResultFactory.buildFailureResult();
+        }
+    }
+
+    @PostMapping("del-blacklist")
+    public JsonResult handleDelBlacklist(@RequestBody Filter filter){
+
+        Integer row = supperAdminService.deleteFilter(filter);
+        if (row != null && row == 1){
+            return JsonResultFactory.buildSuccessResult();
+        }else{
+            return JsonResultFactory.buildFailureResult();
         }
     }
 }

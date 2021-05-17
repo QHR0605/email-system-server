@@ -7,6 +7,7 @@ import com.example.server.util.annotation.IsAdmin;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * @author 全鸿润
  */
+@Api
 @RestController
 @CrossOrigin
 @RequestMapping("/admin")
