@@ -16,3 +16,9 @@
 ### POP3 测试样例
 
 ![image-20210514005722018](https://gitee.com/zfbz/pics/raw/master/20210514005734.png)
+
+### 查看接口文档
+
+- 启动项目，在浏览器输入地址http://localhost:8080/swagger-ui.html即可查看接口文档
+
+  ![image-20210517200811285](https://shuairun.oss-cn-beijing.aliyuncs.com/img/image-20210517200811285.png)
