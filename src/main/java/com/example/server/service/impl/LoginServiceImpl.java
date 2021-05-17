@@ -9,6 +9,7 @@ import com.example.server.dto.UserMessage;
 import com.example.server.entity.User;
 import com.example.server.mapper.LoginMapper;
 import com.example.server.service.AuthService;
+import com.example.server.util.http.CookieUtils;
 import com.example.server.util.http.HttpUtil;
 import com.example.server.util.json.JsonResultStateCode;
 import com.example.server.util.token.TokenGenerator;
@@ -37,11 +38,11 @@ public class LoginServiceImpl implements AuthService {
                 } else {
                     HttpServletResponse response = HttpUtil.getResponse();
                     String token = TokenGenerator.generateToken(username, password, user.getAccountType());
-                    Cookie cookie = new Cookie("token", token);
-                    cookie.setMaxAge(86400);
-                    cookie.setPath("/");
-                    cookie.setDomain("localhost");
-                    response.addCookie(cookie);
+                    System.out.println("生成token: "+token);
+                    Cookie tokenCookie = CookieUtils.buildCookie("token",token);
+                    Cookie usernameCookie = CookieUtils.buildCookie("username",username);
+                    response.addCookie(tokenCookie);
+                    response.addCookie(usernameCookie);
                     return JsonResultStateCode.SUCCESS_DESC;
                 }
             }
