@@ -2,7 +2,7 @@ package com.example.server.util.aspect;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.server.util.annotation.IsSupperAdmin;
-import com.example.server.util.http.CookieUtil;
+import com.example.server.util.http.CookieUtils;
 import com.example.server.util.http.HttpUtil;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author 全鸿润
@@ -35,12 +36,16 @@ public class SupperAdminAspect {
 
         System.err.println("超级管理员的切面");
         try {
-            Cookie[] cookies = HttpUtil.getRequest().getCookies();
-            Cookie cookie = CookieUtil.getCookie(cookies, "token");
-            if (cookie == null) {
-                return JsonResultFactory.buildJsonResult(JsonResultStateCode.UNAUTHORIZED, JsonResultStateCode.UNAUTHORIZED_DESC, null);
-            }
-            String token = cookie.getValue();
+            HttpServletRequest request = HttpUtil.getRequest();
+           Cookie cookie = CookieUtils.findCookie(request.getCookies(), "token");
+           if (cookie == null){
+               return JsonResultFactory.buildJsonResult(
+                       JsonResultStateCode.UNAUTHORIZED,
+                       JsonResultStateCode.UNAUTHORIZED_DESC,
+                       null
+               );
+           }
+           String token = cookie.getValue();
             if (token == null) {
                 return JsonResultFactory.buildJsonResult(JsonResultStateCode.UNAUTHORIZED, JsonResultStateCode.UNAUTHORIZED_DESC, null);
             } else {
