@@ -1,6 +1,5 @@
 package com.example.server.controller;
 
-import com.example.server.ServerApplication;
 import com.example.server.config.SpringContextConfig;
 import com.example.server.dto.NewUserMessage;
 import com.example.server.dto.ServerPortMsg;
@@ -16,7 +15,6 @@ import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,6 +87,7 @@ public class SupperAdminController {
                     msg.setServerType(serverState.getServerType());
                     msg.setSid(serverState.getSid());
                 } else if (serverState.getServerType() == 1) {
+                    System.out.println("pop3-state");
                     msg.setServerPort(Pop3Server.getPort());
                     msg.setServerType(serverState.getServerType());
                     msg.setSid(serverState.getSid());
@@ -112,6 +111,7 @@ public class SupperAdminController {
                 supperAdminService.stopServer(msg);
             }
         } else {
+            System.out.println("state-fail");
             return JsonResultFactory.buildFailureResult();
         }
         return res;
@@ -128,17 +128,30 @@ public class SupperAdminController {
             //暂停当前端口
             Integer r1 = supperAdminService.stopServer(msg);
             if (r1 != null && r1.equals(JsonResultStateCode.SUCCESS)) {
-                //重启新的端口
-                Integer r2 = supperAdminService.restartServer(msg);
+                Integer r2 = JsonResultStateCode.SUCCESS;
+                if (msg.getServerType() == 0) {
+                    System.out.println("smtp");
+                    if (!SmtpServer.isShutDown()) {
+                        r2 = supperAdminService.restartServer(msg);
+                    }
+                } else if (msg.getServerType() == 1) {
+                    System.out.println("pop3");
+                    if (!Pop3Server.isShutDown()) {
+                        r2 = supperAdminService.restartServer(msg);
+                    }
+                }
                 if (r2 != null && r2.equals(JsonResultStateCode.SUCCESS)) {
                     return res;
                 } else {
+                    System.out.println("dsdsd");
                     return res1;
                 }
             } else {
+                System.out.println("ewewew");
                 return res1;
             }
         } else {
+            System.out.println("ewewe");
             return res1;
         }
     }
