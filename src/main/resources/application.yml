@@ -8,6 +8,10 @@ spring:
     url: jdbc:mysql://rm-wz9ev2rzm1e4s0r7eyo.mysql.rds.aliyuncs.com:3306/email-system?characterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  profiles:
+    active:
+      - cookie
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
