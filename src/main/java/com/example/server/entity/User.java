@@ -132,4 +132,19 @@ public class User {
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", accountType=" + accountType +
+                ", latestLoginTime=" + latestLoginTime +
+                ", latestLoginIp='" + latestLoginIp + '\'' +
+                ", mailBoxSize=" + mailBoxSize +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", logout=" + logout +
+                '}';
+    }
 }

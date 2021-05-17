@@ -23,6 +23,7 @@ public class TokenVerifier {
             DecodedJWT jwt = jwtVerifier.verify(token);
             return true;
         } catch (Exception exception) {
+            exception.printStackTrace();
             return false;
         }
     }

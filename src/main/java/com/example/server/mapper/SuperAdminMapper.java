@@ -3,6 +3,7 @@ package com.example.server.mapper;
 import com.example.server.dto.ServerPortMsg;
 import com.example.server.dto.ServerState;
 import com.example.server.dto.ServerStateMsg;
+import com.example.server.entity.Filter;
 import com.example.server.entity.ServerMessage;
 import com.example.server.entity.User;
 import org.springframework.stereotype.Repository;
@@ -56,4 +57,10 @@ public interface SuperAdminMapper {
      * @throws Exception 数据库操作异常
      */
     Integer updateServerState(ServerStateMsg msg) throws Exception;
+
+    List<Filter> selectFilter() throws Exception;
+
+    Integer insertNewIpAddress(Filter filter) throws Exception;
+
+    Integer deleteIpAddress(Filter filter) throws Exception;
 }
