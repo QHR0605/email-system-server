@@ -16,6 +16,7 @@ public class User {
     private Integer mailBoxSize;
     private String avatarUrl;
     private Boolean logout;
+    private Boolean forbidden;
 
     public Boolean getLogout() {
         return logout;
@@ -66,6 +67,20 @@ public class User {
 
     public User avatarURL(String avatarUrl) {
         this.setAvatarUrl(avatarUrl);
+        return this;
+    }
+
+    public User isLogout(Boolean logout) {
+        this.setLogout(logout);
+        return this;
+    }
+
+    public User isForbidden(Boolean forbidden) {
+        this.setForbidden(forbidden);
+        return this;
+    }
+
+    public User build() {
         return this;
     }
 
@@ -131,6 +146,14 @@ public class User {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public Boolean getForbidden() {
+        return forbidden;
+    }
+
+    public void setForbidden(Boolean forbidden) {
+        this.forbidden = forbidden;
     }
 
     @Override

@@ -37,15 +37,15 @@ public class SupperAdminAspect {
         System.err.println("超级管理员的切面");
         try {
             HttpServletRequest request = HttpUtil.getRequest();
-           Cookie cookie = CookieUtils.findCookie(request.getCookies(), "token");
-           if (cookie == null){
-               return JsonResultFactory.buildJsonResult(
-                       JsonResultStateCode.UNAUTHORIZED,
-                       JsonResultStateCode.UNAUTHORIZED_DESC,
-                       null
-               );
-           }
-           String token = cookie.getValue();
+            Cookie cookie = CookieUtils.findCookie(request.getCookies(), "token");
+            if (cookie == null) {
+                return JsonResultFactory.buildJsonResult(
+                        JsonResultStateCode.UNAUTHORIZED,
+                        JsonResultStateCode.UNAUTHORIZED_DESC,
+                        null
+                );
+            }
+            String token = cookie.getValue();
             if (token == null) {
                 return JsonResultFactory.buildJsonResult(JsonResultStateCode.UNAUTHORIZED, JsonResultStateCode.UNAUTHORIZED_DESC, null);
             } else {

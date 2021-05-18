@@ -13,10 +13,11 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
+
 public class Pop3Server extends Thread {
 
     private static ServerSocket serverSocket;
-    private static   int port;
+    private static int port;
     private static boolean shutDown;
     private static ThreadPoolExecutor executor;
     private static List<Socket> clients;
@@ -34,9 +35,9 @@ public class Pop3Server extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (serverMessage == null || serverMessage.size() == 0){
+        if (serverMessage == null || serverMessage.size() == 0) {
             port = 110;
-        }else{
+        } else {
             port1 = serverMessage.get(0).getPop3Port();
             port = port1;
         }
@@ -55,15 +56,15 @@ public class Pop3Server extends Thread {
     }
 
     public void stopPop3Server() throws IOException {
-            for (Socket socket : clients
-            ) {
-                socket.close();
-            }
-            Pop3Server.shutDown = true;
-            System.out.println("关闭Pop3服务器");
-            Pop3Server.serverSocket.close();
-            executor.shutdown();
-            this.interrupt();
+        for (Socket socket : clients
+        ) {
+            socket.close();
+        }
+        Pop3Server.shutDown = true;
+        System.out.println("关闭Pop3服务器");
+        Pop3Server.serverSocket.close();
+        executor.shutdown();
+        this.interrupt();
     }
 
     public static int getPort() {

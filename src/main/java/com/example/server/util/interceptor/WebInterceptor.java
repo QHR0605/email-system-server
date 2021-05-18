@@ -21,6 +21,7 @@ import java.util.List;
 public class WebInterceptor implements HandlerInterceptor {
 
     private final SuperAdminMapper superAdminMapper = SpringContextConfig.getBean(SuperAdminMapper.class);
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -34,21 +35,21 @@ public class WebInterceptor implements HandlerInterceptor {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         PrintWriter writer = null;
-        System.out.println("IP地址:"+ip);
-        if (ip == null || ip.isEmpty()){
+        System.out.println("IP地址:" + ip);
+        if (ip == null || ip.isEmpty()) {
             writer = response.getWriter();
             writer.append(jsonObject.toJSONString());
             writer.flush();
             return false;
         }
         List<Filter> filters = superAdminMapper.selectFilter();
-        for (Filter  filter: filters
-             ) {
-            if (filter.getIpAddress().equals(ip)){
+        for (Filter filter : filters
+        ) {
+            if (filter.getIpAddress().equals(ip)) {
                 writer = response.getWriter();
                 writer.append(jsonObject.toJSONString());
                 writer.flush();
-                System.out.println("拦截:"+ip);
+                System.out.println("拦截:" + ip);
                 return false;
             }
         }

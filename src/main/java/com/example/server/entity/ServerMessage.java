@@ -15,24 +15,27 @@ public class ServerMessage {
     public ServerMessage() {
     }
 
-    public ServerMessage serverName(String serverName){
+    public ServerMessage serverName(String serverName) {
         this.setServerName(serverName);
         return this;
     }
 
-    public ServerMessage smtpState(Boolean smtpState){
+    public ServerMessage smtpState(Boolean smtpState) {
         this.smtpState = smtpState;
         return this;
     }
-    public ServerMessage smtpPort(Integer smtpPort){
+
+    public ServerMessage smtpPort(Integer smtpPort) {
         this.setSmtpPort(smtpPort);
         return this;
     }
-    public ServerMessage pop3State(Boolean pop3State){
+
+    public ServerMessage pop3State(Boolean pop3State) {
         this.setPop3State(pop3State);
         return this;
     }
-    public ServerMessage pop3Port(Integer pop3Port){
+
+    public ServerMessage pop3Port(Integer pop3Port) {
         this.setPop3Port(pop3Port);
         return this;
     }
@@ -44,6 +47,7 @@ public class ServerMessage {
     public void setSid(Integer sid) {
         this.sid = sid;
     }
+
     public String getServerName() {
         return serverName;
     }

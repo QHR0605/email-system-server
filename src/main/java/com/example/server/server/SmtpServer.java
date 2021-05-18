@@ -3,11 +3,7 @@ package com.example.server.server;
 import com.example.server.config.SpringContextConfig;
 import com.example.server.entity.ServerMessage;
 import com.example.server.mapper.SuperAdminMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -15,7 +11,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.*;
 
 /**
@@ -24,7 +19,7 @@ import java.util.concurrent.*;
 public class SmtpServer extends Thread {
 
     private static ServerSocket serverSocket;
-    private static   int port;
+    private static int port;
     private static boolean shutDown;
     private static ThreadPoolExecutor executor;
     private static List<Socket> clients;
@@ -38,6 +33,7 @@ public class SmtpServer extends Thread {
     public void setPort1(int port1) {
         this.port1 = port1;
     }
+
     public static int getPort() {
         return port;
     }
@@ -89,9 +85,9 @@ public class SmtpServer extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (serverMessage == null || serverMessage.size() == 0){
+        if (serverMessage == null || serverMessage.size() == 0) {
             port = 25;
-        }else{
+        } else {
             ServerMessage msg = serverMessage.get(0);
             port1 = msg.getSmtpPort();
             port = port1;
@@ -112,15 +108,15 @@ public class SmtpServer extends Thread {
     }
 
     public void stopSmtpServer() throws IOException {
-            for (Socket socket : clients
-            ) {
-                socket.close();
-            }
-            System.out.println("关闭SMTP服务器");
-            SmtpServer.shutDown = true;
-            serverSocket.close();
-            executor.shutdown();
-            this.interrupt();
+        for (Socket socket : clients
+        ) {
+            socket.close();
+        }
+        System.out.println("关闭SMTP服务器");
+        SmtpServer.shutDown = true;
+        serverSocket.close();
+        executor.shutdown();
+        this.interrupt();
     }
 
     /**

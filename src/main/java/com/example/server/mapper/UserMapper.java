@@ -2,7 +2,6 @@ package com.example.server.mapper;
 
 import com.example.server.entity.Contact;
 import com.example.server.entity.ContactMsg;
-import com.example.server.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,6 +18,7 @@ public interface UserMapper {
      * @throws Exception 数据库操作异常
      */
     Integer addContact(Contact contact) throws Exception;
+
     /**
      * @param contact 删除的联系人
      * @return 删除行数

@@ -17,9 +17,10 @@ public class WebConfig implements WebMvcConfigurer {
     private SuperAdminMapper superAdminMapper = SpringContextConfig.getBean(SuperAdminMapper.class);
 
     @Bean
-    public HandlerInterceptor getInterceptor(){
+    public HandlerInterceptor getInterceptor() {
         return new WebInterceptor();
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getInterceptor()).addPathPatterns("/**");

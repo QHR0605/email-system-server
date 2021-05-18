@@ -94,23 +94,23 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
 
     @Override
     public Integer restartServer(ServerPortMsg msg) {
-        try{
-            if (msg.getServerType() == 0){
+        try {
+            if (msg.getServerType() == 0) {
                 if (!SmtpServer.isShutDown() && SmtpServer.getPort() != msg.getServerPort()) {
                     ServerApplication.smtpServer.stopSmtpServer();
                     ServerApplication.smtpServer = new SmtpServer();
                     ServerApplication.smtpServer.start();
-                }else if (SmtpServer.isShutDown()){
+                } else if (SmtpServer.isShutDown()) {
                     ServerApplication.smtpServer = new SmtpServer();
                     ServerApplication.smtpServer.start();
                 }
                 System.out.println("重启SMTP服务器");
-            }else if (msg.getServerType() == 1){
+            } else if (msg.getServerType() == 1) {
                 if (!Pop3Server.isShutDown() && Pop3Server.getPort() != msg.getServerPort()) {
                     ServerApplication.pop3Server.stopPop3Server();
                     ServerApplication.pop3Server = new Pop3Server();
                     ServerApplication.pop3Server.start();
-                }else if (Pop3Server.isShutDown()){
+                } else if (Pop3Server.isShutDown()) {
                     ServerApplication.pop3Server = new Pop3Server();
                     ServerApplication.pop3Server.start();
                 }
@@ -125,13 +125,13 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
 
     @Override
     public Integer stopServer(ServerPortMsg msg) {
-        try{
-            if (msg.getServerType() == 0){
+        try {
+            if (msg.getServerType() == 0) {
                 if (!SmtpServer.isShutDown() && SmtpServer.getPort() == msg.getServerPort()) {
                     ServerApplication.smtpServer.stopSmtpServer();
                     System.out.println("关闭SMTP服务器");
                 }
-            }else if (msg.getServerType() == 1){
+            } else if (msg.getServerType() == 1) {
                 if (!Pop3Server.isShutDown() && Pop3Server.getPort() == msg.getServerPort()) {
                     ServerApplication.pop3Server.stopPop3Server();
                     System.out.println("关闭POP3服务器");

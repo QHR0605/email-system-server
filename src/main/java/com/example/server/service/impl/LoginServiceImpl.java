@@ -38,9 +38,9 @@ public class LoginServiceImpl implements AuthService {
                 } else {
                     HttpServletResponse response = HttpUtil.getResponse();
                     String token = TokenGenerator.generateToken(username, password, user.getAccountType());
-                    System.out.println("生成token: "+token);
-                    Cookie tokenCookie = CookieUtils.buildCookie("token",token);
-                    Cookie usernameCookie = CookieUtils.buildCookie("username",username);
+                    System.out.println("生成token: " + token);
+                    Cookie tokenCookie = CookieUtils.buildCookie("token", token);
+                    Cookie usernameCookie = CookieUtils.buildCookie("username", username);
                     response.addCookie(tokenCookie);
                     response.addCookie(usernameCookie);
                     return JsonResultStateCode.SUCCESS_DESC;
@@ -75,12 +75,11 @@ public class LoginServiceImpl implements AuthService {
             User user = new User()
                     .username(userMessage.getUsername())
                     .password(userMessage.getPassword())
-                    .accountType(userMessage.getAccountType())
-                    .phone(userMessage.getPhone())
-                    .latestLoginTime(userMessage.getLatestLoginTime())
-                    .latestLoginIp(userMessage.getLatestLoginIp())
+                    .accountType(0)
                     .mailBoxSize(10)
-                    .avatarURL(userMessage.getAvatarUrl());
+                    .isForbidden(false)
+                    .isLogout(false)
+                    .build();
             rows = loginMapper.insertNewUser(user);
             return rows;
         } catch (Exception e) {

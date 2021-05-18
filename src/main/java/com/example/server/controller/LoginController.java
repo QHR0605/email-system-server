@@ -9,7 +9,10 @@ import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 @CrossOrigin
 public class LoginController {
 
-    private AuthService authService = SpringContextConfig.getBean("LoginServiceImpl");
+    private final AuthService authService = SpringContextConfig.getBean("LoginServiceImpl");
 
     @PostMapping("/login")
     public JsonResult handleLogin(@RequestBody JSONObject userMessage, HttpServletResponse response) {

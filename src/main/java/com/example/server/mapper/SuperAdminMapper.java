@@ -1,7 +1,6 @@
 package com.example.server.mapper;
 
 import com.example.server.dto.ServerPortMsg;
-import com.example.server.dto.ServerState;
 import com.example.server.dto.ServerStateMsg;
 import com.example.server.entity.Filter;
 import com.example.server.entity.ServerMessage;
@@ -27,6 +26,7 @@ public interface SuperAdminMapper {
 
     /**
      * 创建新账户
+     *
      * @param user 新用户
      * @return 插入个数
      * @throws Exception 数据库操作异常

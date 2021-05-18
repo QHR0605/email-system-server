@@ -4,12 +4,10 @@ import com.example.server.config.SpringContextConfig;
 import com.example.server.entity.ServerMessage;
 import com.example.server.server.Pop3Server;
 import com.example.server.server.SmtpServer;
-import com.example.server.service.impl.AuthServiceImpl;
 import com.example.server.service.impl.SupperAdminImpl;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.List;
@@ -54,17 +52,17 @@ public class ServerApplication {
         ServerApplication serverApplication = new ServerApplication();
         serverApplication.init();
         //启动SMTP服务
-        if (serverApplication.smtpOn){
+        if (serverApplication.smtpOn) {
             Pop3Server.setShutDown(false);
             smtpServer.start();
-        }else{
+        } else {
             SmtpServer.setShutDown(true);
             System.out.println("SMTP服务器处于关闭状态");
         }
-        if (serverApplication.pop3On){
+        if (serverApplication.pop3On) {
             Pop3Server.setShutDown(false);
             pop3Server.start();
-        }else{
+        } else {
             Pop3Server.setShutDown(true);
             System.out.println("POP3服务器处于关闭状态");
         }
@@ -72,13 +70,13 @@ public class ServerApplication {
 
     public void init() {
         List<ServerMessage> messages = SpringContextConfig.getBean(SupperAdminImpl.class).getServersMsg();
-        if (messages != null){
+        if (messages != null) {
             ServerMessage msg = messages.get(0);
-            if (smtpOn(msg)){
+            if (smtpOn(msg)) {
                 this.smtpServer1 = new SmtpServer();
                 smtpServer = smtpServer1;
             }
-            if (pop3On(msg)){
+            if (pop3On(msg)) {
                 this.pop3Server1 = new Pop3Server();
                 pop3Server = pop3Server1;
             }
@@ -92,7 +90,7 @@ public class ServerApplication {
     }
 
     public Boolean smtpOn(ServerMessage serverMessage) {
-        smtpOn =  serverMessage.getSmtpState();
+        smtpOn = serverMessage.getSmtpState();
         return smtpOn;
     }
 

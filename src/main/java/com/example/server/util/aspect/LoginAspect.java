@@ -31,8 +31,8 @@ public class LoginAspect {
         try {
             HttpServletRequest request = HttpUtil.getRequest();
             Cookie tokenCookie = CookieUtils.findCookie(request.getCookies(), "token");
-            Cookie usernameCookie = CookieUtils.findCookie(request.getCookies(),"username");
-            if (tokenCookie == null || usernameCookie == null){
+            Cookie usernameCookie = CookieUtils.findCookie(request.getCookies(), "username");
+            if (tokenCookie == null || usernameCookie == null) {
                 return JsonResultFactory.buildJsonResult(
                         JsonResultStateCode.UNAUTHORIZED,
                         JsonResultStateCode.UNAUTHORIZED_DESC,
@@ -41,8 +41,8 @@ public class LoginAspect {
             }
             String token = tokenCookie.getValue();
             String username = usernameCookie.getValue();
-            System.out.println("token: "+token);
-            System.out.println("username: "+username);
+            System.out.println("token: " + token);
+            System.out.println("username: " + username);
             if (token == null || username == null) {
                 return JsonResultFactory.buildJsonResult(JsonResultStateCode.UNAUTHORIZED, JsonResultStateCode.UNAUTHORIZED_DESC, null);
             } else {
