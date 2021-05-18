@@ -1,5 +1,7 @@
 package com.example.server.mapper;
 
+import com.example.server.entity.Contact;
+import com.example.server.entity.ContactMsg;
 import com.example.server.entity.User;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +14,22 @@ import java.util.List;
 public interface UserMapper {
 
     /**
-     * 查询已发送过邮件的用户列表
-     * @param username 用户名
-     * @return 返回该用户之前发送过邮件的用户列表
+     * @param contact 联系人信息
+     * @return 添加行数
+     * @throws Exception 数据库操作异常
      */
-    List<User> selectContact(String username) throws Exception;
+    Integer addContact(Contact contact) throws Exception;
+    /**
+     * @param contact 删除的联系人
+     * @return 删除行数
+     * @throws Exception 数据库操作异常
+     */
+    Integer deleteContact(Contact contact) throws Exception;
+
+    /**
+     * @param username 用户名
+     * @return 该用户的联系人信息列表
+     * @throws Exception 数据库操作异常
+     */
+    List<ContactMsg> getContact(String username) throws Exception;
 }

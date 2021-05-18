@@ -3,16 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.server.mapper.UserMapper">
-
-    <select id="selectContact" resultType="com.example.server.entity.User">
+    <insert id="addContact">
+        INSERT INTO contact(username, contact_name, add_time)
+        VALUES (#{username}, #{contactName}, #{addTime})
+    </insert>
+    <delete id="deleteContact">
+        DELETE
+        FROM contact
+        WHERE username = #{username}
+          AND contact_name = #{contactName}
+    </delete>
+    <select id="getContact" resultType="com.example.server.entity.ContactMsg">
         SELECT *
-        FROM user
-        WHERE username IN (
-            SELECT receiver_email
-            FROM email
-            WHERE sender_email = #{username}
-              AND receiver_email
-                != #{username}
-        )
+        FROM contact_msg
+        WHERE username = #{username}
     </select>
 </mapper>
