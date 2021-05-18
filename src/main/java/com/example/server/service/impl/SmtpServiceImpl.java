@@ -11,7 +11,6 @@ import com.example.server.util.base64.Base64Util;
 import com.example.server.util.command.CommandConstant;
 import com.example.server.util.idGenerator.IdGenerator;
 import com.example.server.util.json.SmtpStateCode;
-import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.Socket;
@@ -24,7 +23,7 @@ import java.sql.Date;
  */
 public class SmtpServiceImpl extends SmtpService {
 
-    private final AuthService authService =  SpringContextConfig.getBean("AuthServiceImpl");
+    private final AuthService authService = SpringContextConfig.getBean("AuthServiceImpl");
     private final MailMapper mailMapper = SpringContextConfig.getBean(MailMapper.class);
 
     /**
@@ -71,7 +70,11 @@ public class SmtpServiceImpl extends SmtpService {
 
                 String username = Base64Util.decodeByBase64(encodedUsername.getBytes());
                 String password = Base64Util.decodeByBase64(encodedPassword.getBytes());
-
+                User user = authService.findUserByUsername(username);
+                if (user.getForbidden()) {
+                    this.writer.println("You have been blacklisted, please contact the administrator to unblock you");
+                    return;
+                }
                 String result = authService.handleLogin(username, password); // 登录验证
                 if ("SUCCESS".equals(result)) {
                     result = SmtpStateCode.AUTH_SUCCESS_DESC;
