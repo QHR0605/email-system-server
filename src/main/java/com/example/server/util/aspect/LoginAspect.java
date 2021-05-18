@@ -30,20 +30,23 @@ public class LoginAspect {
     public Object authToken(ProceedingJoinPoint point, IsLogin isLogin) {
         try {
             HttpServletRequest request = HttpUtil.getRequest();
-            Cookie cookie = CookieUtils.findCookie(request.getCookies(), "token");
-            if (cookie == null){
+            Cookie tokenCookie = CookieUtils.findCookie(request.getCookies(), "token");
+            Cookie usernameCookie = CookieUtils.findCookie(request.getCookies(),"username");
+            if (tokenCookie == null || usernameCookie == null){
                 return JsonResultFactory.buildJsonResult(
                         JsonResultStateCode.UNAUTHORIZED,
                         JsonResultStateCode.UNAUTHORIZED_DESC,
                         null
                 );
             }
-            String token = cookie.getValue();
-            System.out.println(token);
-            if (token == null) {
+            String token = tokenCookie.getValue();
+            String username = usernameCookie.getValue();
+            System.out.println("token: "+token);
+            System.out.println("username: "+username);
+            if (token == null || username == null) {
                 return JsonResultFactory.buildJsonResult(JsonResultStateCode.UNAUTHORIZED, JsonResultStateCode.UNAUTHORIZED_DESC, null);
             } else {
-                if (TokenVerifier.verifyToken(token)) {
+                if (TokenVerifier.verifyToken(token) && username.equals(TokenVerifier.getUserNameFromToken(token))) {
                     return point.proceed();
                 } else {
                     return JsonResultFactory.buildJsonResult(JsonResultStateCode.UNAUTHORIZED, JsonResultStateCode.UNAUTHORIZED_DESC, null);
