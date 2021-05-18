@@ -45,9 +45,4 @@ public class SpringContextConfig implements ApplicationContextAware {
         return (T) applicationContext.getBean(name);
     }
 
-    @PostConstruct
-    public void init(){
-
-    }
-
 }
