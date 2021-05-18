@@ -33,4 +33,7 @@ public class JsonResultStateCode {
 
     static public Integer UNAUTHORIZED = 401;
     static public String UNAUTHORIZED_DESC = "unauthorized";
+
+    public static Integer INTERRUPTED = 402;
+    public static String INTERRUPTED_DES = "禁止访问";
 }
