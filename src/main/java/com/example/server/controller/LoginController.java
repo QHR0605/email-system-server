@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * @author 全鸿润
  */
@@ -27,10 +25,10 @@ public class LoginController {
     private final AuthService authService = SpringContextConfig.getBean("LoginServiceImpl");
 
     @PostMapping("/login")
-    public JsonResult handleLogin(@RequestBody JSONObject userMessage, HttpServletResponse response) {
+    public JsonResult handleLogin(@RequestBody UserMessage userMessage) {
 
-        String username = userMessage.getString("username");
-        String password = userMessage.getString("password");
+        String username = userMessage.getUsername();
+        String password = userMessage.getPassword();
         String msg = authService.handleLogin(username, password);
         JsonResult res = null;
         if (JsonResultStateCode.USERNAME_WRONG_DESC.equals(msg)) {
