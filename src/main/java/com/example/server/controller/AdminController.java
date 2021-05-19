@@ -42,7 +42,7 @@ public class AdminController {
     @PostMapping("/logout-users")
     @IsAdmin
     public JsonResult handleLogout(@RequestBody List<String> usernames) {
-        Integer rows = adminService.updateUsersLogState(usernames, false);
+        Integer rows = adminService.updateUsersLogState(usernames, true);
         if (rows != null) {
             if (rows.equals(usernames.size())) {
                 return JsonResultFactory.buildSuccessResult();
@@ -57,7 +57,7 @@ public class AdminController {
     @PostMapping("/login-users")
     @IsAdmin
     public JsonResult handleLogin(@RequestBody List<String> usernames) {
-        Integer rows = adminService.updateUsersLogState(usernames, true);
+        Integer rows = adminService.updateUsersLogState(usernames, false);
         if (rows != null) {
             if (rows.equals(usernames.size())) {
                 return JsonResultFactory.buildSuccessResult();
