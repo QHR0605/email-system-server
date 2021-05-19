@@ -49,7 +49,7 @@ public class AdminAspect {
             } else {
                 if (TokenVerifier.verifyToken(token)) {
                     int type = TokenVerifier.getUserType(token);
-                    if (type == 1 || type == 2) {
+                    if (type == 1) {
                         return point.proceed();
                     }
                     return JsonResultFactory.buildJsonResult(JsonResultStateCode.UNAUTHORIZED, JsonResultStateCode.UNAUTHORIZED_DESC, null);

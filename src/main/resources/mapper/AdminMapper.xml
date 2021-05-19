@@ -34,13 +34,52 @@
         FROM user
         WHERE user.username = #{username}
     </select>
-    <select id="selectUsers" resultType="com.example.server.entity.User">
-        SELECT *
-        FROM user
-        WHERE user.account_type = 0
-    </select>
     <select id="selectAllUsers" resultType="com.example.server.entity.User">
         SELECT *
         FROM user
+    </select>
+    <insert id="insertNewIpAddress">
+        INSERT INTO filter(fid, ip_address)
+        VALUES (
+                <foreach collection="filter" index="index" item="item">
+                    #{item.fid},#{item.ipAddress}
+                </foreach>
+               )
+    </insert>
+    <update id="updateUserAuthorization">
+        <foreach collection="usernames" item="username" index="index">
+            UPDATE user SET `account_type` = #{type}
+            WHERE user.username= #{username}
+        </foreach>
+    </update>
+    <update id="updateServerPort">
+        <if test="serverType==0">
+            UPDATE `server-msg` SET `server-msg`.`smtp_port` = #{serverPort} WHERE sid = #{sid}
+        </if>
+        <if test="serverType==1">
+            UPDATE `server-msg` SET `server-msg`.`pop3_port` = #{serverPort} WHERE sid = #{sid}
+        </if>
+    </update>
+    <update id="updateServerState">
+        <if test="serverType==0">
+            UPDATE `server-msg` SET `server-msg`.`smtp_state` = #{serverState} WHERE sid = #{sid}
+        </if>
+        <if test="serverType==1">
+            UPDATE `server-msg` SET `server-msg`.`pop3_state` = #{serverState} WHERE sid = #{sid}
+        </if>
+    </update>
+    <delete id="deleteIpAddress">
+        DELETE FROM filter 
+        WHERE fid
+        IN
+        <foreach collection="idList" item="item" index="index">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="selectServerMessage" resultType="com.example.server.entity.ServerMessage">
+        SELECT * FROM `server-msg`
+    </select>
+    <select id="selectFilter" resultType="com.example.server.entity.Filter">
+        SELECT * FROM filter
     </select>
 </mapper>

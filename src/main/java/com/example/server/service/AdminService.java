@@ -1,16 +1,35 @@
 package com.example.server.service;
 
-/**
- * @author 全鸿润
- */
-
+import com.example.server.dto.NewUserMessage;
+import com.example.server.dto.ServerPortMsg;
+import com.example.server.dto.ServerStateMsg;
+import com.example.server.entity.Filter;
+import com.example.server.entity.ServerMessage;
 import com.example.server.entity.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+/**
+ * @author 全鸿润
+ */
 public interface AdminService {
+
+    /**
+     * 授权
+     *
+     * @param usernames 授权的用户集合
+     * @param authType  授予的用户权限
+     * @return 授予成功的个数
+     */
+    Integer auth(List<String> usernames, Integer authType);
+
+    /**
+     * 创建新账户
+     *
+     * @param message 账户信息
+     * @return 创建成功的个数
+     */
+    Integer createUser(NewUserMessage message);
 
     /**
      * 批量删除用户
@@ -39,11 +58,73 @@ public interface AdminService {
     Integer updateUsersType(List<String> username, Integer type);
 
     /**
-     * 获取所有普通用户
+     * 修改端口号
      *
-     * @return 所有普通用户
+     * @param msg 服务器端口信息
+     * @return 行数
      */
-    List<User> getUsers();
+    Integer changeServerPort(ServerPortMsg msg);
+
+    /**
+     * 修改服务器状态
+     *
+     * @param msg 服务器状态信息
+     * @return 行数
+     */
+    Integer changeServerState(ServerStateMsg msg);
+
+    /**
+     * 获取服务信息集合
+     *
+     * @return 服务器信息
+     */
+    List<ServerMessage> getServerMsg();
+
+    /**
+     * 启动服务
+     *
+     * @param msg 服务信息
+     * @return 重启是否成功的状态码
+     */
+    Integer restartServer(ServerPortMsg msg);
+
+    /**
+     * 关闭服务
+     *
+     * @param msg 服务端口信息
+     * @return 暂停是否成功的状态码
+     */
+    Integer stopServer(ServerPortMsg msg);
+
+    /**
+     * 获取服务器信息
+     *
+     * @return 服务器信息
+     */
+    List<ServerMessage> getServersMsg();
+
+    /**
+     * 获取IP黑名单列表
+     *
+     * @return IP黑名单列表
+     */
+    List<Filter> getFilters();
+
+    /**
+     * 添加的IP黑名单列表
+     *
+     * @param filters 新添加的IP黑名单列表
+     * @return 添加成功行数
+     */
+    Integer addFilter(List<String> filters);
+
+    /**
+     * 删除黑名单
+     *
+     * @param idList 黑名单id列表
+     * @return 删除行数
+     */
+    Integer deleteFilter(List<Integer> idList);
 
     /**
      * 获取所有用户
@@ -51,5 +132,6 @@ public interface AdminService {
      * @return 所有用户
      */
     List<User> getAllUsers();
+
 
 }

@@ -8,29 +8,31 @@ import com.example.server.dto.ServerStateMsg;
 import com.example.server.entity.Filter;
 import com.example.server.entity.ServerMessage;
 import com.example.server.entity.User;
-import com.example.server.mapper.SuperAdminMapper;
+import com.example.server.mapper.AdminMapper;
 import com.example.server.server.Pop3Server;
 import com.example.server.server.SmtpServer;
-import com.example.server.service.SupperAdminService;
+import com.example.server.service.AdminService;
+import com.example.server.util.idGenerator.IdGenerator;
 import com.example.server.util.json.JsonResultStateCode;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * @author 全鸿润
  */
 @Service("SupperAdminImpl")
-public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminService {
+public class AdminImpl implements AdminService {
 
-    private final SuperAdminMapper superAdminMapper = SpringContextConfig.getBean(SuperAdminMapper.class);
+    private final AdminMapper adminMapper = SpringContextConfig.getBean(AdminMapper.class);
 
     @Override
     public Integer auth(List<String> usernames, Integer authType) {
         Integer row;
         try {
-            row = superAdminMapper.updateUserAuthorization(usernames, authType);
+            row = adminMapper.updateUserAuthorization(usernames, authType);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -47,7 +49,44 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
                 .accountType(message.getAccountType());
         Integer row;
         try {
-            row = superAdminMapper.insertNewUser(user);
+            row = adminMapper.insertNewUser(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return row;
+    }
+
+    @Override
+    public Integer deleteUsersByUsername(List<String> usernames) {
+        Integer row;
+        try {
+            row = adminMapper.deleteUsers(usernames);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return row;
+    }
+
+    @Override
+    public Integer updateUsersLogState(List<String> usernames, Boolean logState) {
+
+        Integer row;
+        try {
+            row = adminMapper.updateUserLogState(usernames, logState);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return row;
+    }
+
+    @Override
+    public Integer updateUsersType(List<String> usernames, Integer type) {
+        Integer row;
+        try {
+            row = adminMapper.updateUserType(usernames, type);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -60,7 +99,7 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
 
         Integer row;
         try {
-            row = superAdminMapper.updateServerPort(msg);
+            row = adminMapper.updateServerPort(msg);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -72,7 +111,7 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
     public Integer changeServerState(ServerStateMsg msg) {
         Integer row;
         try {
-            row = superAdminMapper.updateServerState(msg);
+            row = adminMapper.updateServerState(msg);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -84,7 +123,7 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
     public List<ServerMessage> getServerMsg() {
         List<ServerMessage> res;
         try {
-            res = superAdminMapper.selectServerMessage();
+            res = adminMapper.selectServerMessage();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -148,7 +187,7 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
     public List<ServerMessage> getServersMsg() {
         List<ServerMessage> res;
         try {
-            res = superAdminMapper.selectServerMessage();
+            res = adminMapper.selectServerMessage();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -161,7 +200,7 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
 
         List<Filter> res;
         try {
-            res = superAdminMapper.selectFilter();
+            res = adminMapper.selectFilter();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -170,11 +209,19 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
     }
 
     @Override
-    public Integer addFilter(Filter filter) {
+    public Integer addFilter(List<String> filters) {
 
         Integer row;
+        List<Filter> filterList = new LinkedList<>();
+        for (String ip : filters
+        ) {
+            Filter filter = new Filter();
+            filter.setIpAddress(ip);
+            filter.setFid(IdGenerator.getId());
+            filterList.add(filter);
+        }
         try {
-            row = superAdminMapper.insertNewIpAddress(filter);
+            row = adminMapper.insertNewIpAddress(filterList);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -183,15 +230,27 @@ public class SupperAdminImpl extends AdminServiceImpl implements SupperAdminServ
     }
 
     @Override
-    public Integer deleteFilter(Filter filter) {
+    public Integer deleteFilter(List<Integer> idList) {
         Integer row = 0;
         try {
-            row = superAdminMapper.deleteIpAddress(filter);
+            row = adminMapper.deleteIpAddress(idList);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
         return row;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        List<User> users;
+        try {
+            users = adminMapper.selectAllUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return users;
     }
 
 }
