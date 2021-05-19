@@ -1,8 +1,10 @@
 package com.example.server.mapper;
 
+import com.example.server.dto.MailBoxSize;
 import com.example.server.dto.ServerPortMsg;
 import com.example.server.dto.ServerStateMsg;
 import com.example.server.entity.Filter;
+import com.example.server.entity.Log;
 import com.example.server.entity.ServerMessage;
 import com.example.server.entity.User;
 import org.springframework.stereotype.Repository;
@@ -120,4 +122,19 @@ public interface AdminMapper {
      * @throws Exception 数据库操作异常
      */
     Integer deleteIpAddress(List<Integer> idList) throws Exception;
+
+    /**
+     * 修改邮箱大小
+     * @param mailBoxSizeList 要修改的邮箱及其大小
+     * @return 修改行数
+     * @throws Exception 数据库操作异常
+     */
+    Integer updateMailBoxSize(List<MailBoxSize> mailBoxSizeList) throws Exception;
+
+    Integer addLog(Log log) throws Exception;
+
+    List<Log> selectLogs() throws Exception;
+
+    Integer deleteLog(List<Integer> logIdList) throws Exception;
+
 }

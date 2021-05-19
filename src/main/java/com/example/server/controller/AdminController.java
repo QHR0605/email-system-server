@@ -1,16 +1,14 @@
 package com.example.server.controller;
 
 import com.example.server.config.SpringContextConfig;
-import com.example.server.dto.NewUserMessage;
-import com.example.server.dto.ServerPortMsg;
-import com.example.server.dto.ServerStateMsg;
-import com.example.server.dto.UserNameAndType;
+import com.example.server.dto.*;
 import com.example.server.entity.Filter;
+import com.example.server.entity.Log;
 import com.example.server.entity.User;
 import com.example.server.server.Pop3Server;
 import com.example.server.server.SmtpServer;
 import com.example.server.service.AdminService;
-import com.example.server.service.impl.AdminImpl;
+import com.example.server.service.impl.AdminServiceImpl;
 import com.example.server.util.annotation.IsAdmin;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
@@ -29,7 +27,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/admin")
 public class AdminController {
-    private final AdminService adminService = SpringContextConfig.getBean(AdminImpl.class);
+    private final AdminService adminService = SpringContextConfig.getBean(AdminServiceImpl.class);
 
     @PostMapping("/delete-users")
     public JsonResult handleDeleteUser(@RequestBody List<String> usernames) {
@@ -262,6 +260,60 @@ public class AdminController {
         if (row != null && row == 1) {
             return JsonResultFactory.buildSuccessResult();
         } else {
+            return JsonResultFactory.buildFailureResult();
+        }
+    }
+
+    @PostMapping("update-mailbox-size")
+    public JsonResult handleUpdateMailboxSize(@RequestBody List<MailBoxSize> mailBoxSizeList){
+
+        Integer row = adminService.updateMailBoxSize(mailBoxSizeList);
+        if (row != null && row == mailBoxSizeList.size()){
+            return JsonResultFactory.buildSuccessResult();
+        }else if (row != null){
+            return JsonResultFactory.buildJsonResult(
+                    JsonResultStateCode.OPERATION_IS_NOT_COMPLETED,
+                    JsonResultStateCode.OPERATION_IS_NOT_COMPLETED_DESC,
+                    null
+            );
+        }else{
+            return JsonResultFactory.buildFailureResult();
+        }
+    }
+
+    @GetMapping("/get-logs")
+    @IsAdmin
+    public JsonResult getLogs(){
+
+        List<Log> logs = adminService.getLogs();
+        if (logs != null){
+            return JsonResultFactory.buildJsonResult(
+                    JsonResultStateCode.SUCCESS,
+                    JsonResultStateCode.SUCCESS_DESC,
+                    logs
+            );
+        }else{
+            return JsonResultFactory.buildJsonResult(
+                    JsonResultStateCode.FAILED,
+                    JsonResultStateCode.FAILED_DESC,
+                    null
+            );
+        }
+    }
+    @PostMapping("/del-log")
+    @IsAdmin
+    public JsonResult handleDelLog(@RequestBody List<Integer> logIdList){
+
+        Integer row = adminService.deleteLog(logIdList);
+        if (row != null && row == logIdList.size()){
+            return JsonResultFactory.buildSuccessResult();
+        }else if (row != null){
+            return JsonResultFactory.buildJsonResult(
+                    JsonResultStateCode.OPERATION_IS_NOT_COMPLETED,
+                    JsonResultStateCode.OPERATION_IS_NOT_COMPLETED_DESC,
+                    null
+            );
+        }else{
             return JsonResultFactory.buildFailureResult();
         }
     }

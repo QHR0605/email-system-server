@@ -1,11 +1,14 @@
 package com.example.server.service;
 
+import com.example.server.dto.MailBoxSize;
 import com.example.server.dto.NewUserMessage;
 import com.example.server.dto.ServerPortMsg;
 import com.example.server.dto.ServerStateMsg;
 import com.example.server.entity.Filter;
+import com.example.server.entity.Log;
 import com.example.server.entity.ServerMessage;
 import com.example.server.entity.User;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -74,13 +77,6 @@ public interface AdminService {
     Integer changeServerState(ServerStateMsg msg);
 
     /**
-     * 获取服务信息集合
-     *
-     * @return 服务器信息
-     */
-    List<ServerMessage> getServerMsg();
-
-    /**
      * 启动服务
      *
      * @param msg 服务信息
@@ -133,5 +129,17 @@ public interface AdminService {
      */
     List<User> getAllUsers();
 
+    /**
+     * 修改邮箱大小
+     * @param mailBoxSizeList 要修改的邮箱及其大小
+     * @return 修改行数
+     */
+    Integer updateMailBoxSize(List<MailBoxSize> mailBoxSizeList);
+
+    Integer addLog(Log log);
+
+    List<Log> getLogs();
+
+    Integer deleteLog(List<Integer> idList);
 
 }

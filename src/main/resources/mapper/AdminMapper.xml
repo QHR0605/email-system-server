@@ -24,8 +24,9 @@
         </foreach>
     </update>
     <delete id="deleteUsers">
-        <foreach collection="usernames" item="username" index="index">
-            DELETE FROM user WHERE username = #{username}
+        DELETE FROM user WHERE username IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+             #{item}
         </foreach>
     </delete>
 
@@ -41,10 +42,14 @@
     <insert id="insertNewIpAddress">
         INSERT INTO filter(fid, ip_address)
         VALUES (
-                <foreach collection="filter" index="index" item="item">
-                    #{item.fid},#{item.ipAddress}
-                </foreach>
-               )
+        <foreach collection="filter" index="index" item="item">
+            #{item.fid},#{item.ipAddress}
+        </foreach>
+        )
+    </insert>
+    <insert id="addLog">
+        INSERT INTO log(log_id, username, time, operation, state, reason)
+        VALUES (#{logId}, #{username}, #{time}, #{operation}, #{state}, #{reason})
     </insert>
     <update id="updateUserAuthorization">
         <foreach collection="usernames" item="username" index="index">
@@ -68,18 +73,33 @@
             UPDATE `server-msg` SET `server-msg`.`pop3_state` = #{serverState} WHERE sid = #{sid}
         </if>
     </update>
+    <update id="updateMailBoxSize">
+        <foreach collection="mailBoxSizeList" index="index" item="item">
+            UPDATE user SET user.mail_box_size = #{item.size} WHERE username = #{item.username}
+        </foreach>
+    </update>
     <delete id="deleteIpAddress">
-        DELETE FROM filter 
-        WHERE fid
-        IN
-        <foreach collection="idList" item="item" index="index">
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            DELETE FROM filter
+            WHERE fid = #{item}
+        </foreach>
+    </delete>
+    <delete id="deleteLog" parameterType="java.util.List">
+        DELETE FROM log WHERE log.log_id IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
     </delete>
     <select id="selectServerMessage" resultType="com.example.server.entity.ServerMessage">
-        SELECT * FROM `server-msg`
+        SELECT *
+        FROM `server-msg`
     </select>
     <select id="selectFilter" resultType="com.example.server.entity.Filter">
-        SELECT * FROM filter
+        SELECT *
+        FROM filter
+    </select>
+    <select id="selectLogs" resultType="com.example.server.entity.Log">
+        SELECT *
+        FROM log
     </select>
 </mapper>
