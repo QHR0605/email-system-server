@@ -2,7 +2,7 @@ package com.example.server.server;
 
 import com.example.server.config.SpringContextConfig;
 import com.example.server.entity.ServerMessage;
-import com.example.server.mapper.SuperAdminMapper;
+import com.example.server.mapper.AdminMapper;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -80,8 +80,8 @@ public class SmtpServer extends Thread {
     public SmtpServer() {
         List<ServerMessage> serverMessage = null;
         try {
-            SuperAdminMapper superAdminMapper = SpringContextConfig.getBean(SuperAdminMapper.class);
-            serverMessage = superAdminMapper.selectServerMessage();
+            AdminMapper adminMapper = SpringContextConfig.getBean(AdminMapper.class);
+            serverMessage = adminMapper.selectServerMessage();
         } catch (Exception e) {
             e.printStackTrace();
         }

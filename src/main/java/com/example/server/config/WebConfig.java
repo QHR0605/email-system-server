@@ -1,6 +1,6 @@
 package com.example.server.config;
 
-import com.example.server.mapper.SuperAdminMapper;
+import com.example.server.mapper.AdminMapper;
 import com.example.server.util.interceptor.WebInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private SuperAdminMapper superAdminMapper = SpringContextConfig.getBean(SuperAdminMapper.class);
+    private AdminMapper adminMapper = SpringContextConfig.getBean(AdminMapper.class);
 
     @Bean
     public HandlerInterceptor getInterceptor() {

@@ -2,7 +2,7 @@ package com.example.server.server;
 
 import com.example.server.config.SpringContextConfig;
 import com.example.server.entity.ServerMessage;
-import com.example.server.mapper.SuperAdminMapper;
+import com.example.server.mapper.AdminMapper;
 import com.example.server.util.json.Pop3StateCode;
 
 import java.io.IOException;
@@ -30,8 +30,8 @@ public class Pop3Server extends Thread {
     public Pop3Server() {
         List<ServerMessage> serverMessage = null;
         try {
-            SuperAdminMapper superAdminMapper = SpringContextConfig.getBean(SuperAdminMapper.class);
-            serverMessage = superAdminMapper.selectServerMessage();
+            AdminMapper adminMapper = SpringContextConfig.getBean(AdminMapper.class);
+            serverMessage = adminMapper.selectServerMessage();
         } catch (Exception e) {
             e.printStackTrace();
         }

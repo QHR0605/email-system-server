@@ -3,7 +3,7 @@ package com.example.server.util.interceptor;
 import com.alibaba.fastjson.JSONObject;
 import com.example.server.config.SpringContextConfig;
 import com.example.server.entity.Filter;
-import com.example.server.mapper.SuperAdminMapper;
+import com.example.server.mapper.AdminMapper;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class WebInterceptor implements HandlerInterceptor {
 
-    private final SuperAdminMapper superAdminMapper = SpringContextConfig.getBean(SuperAdminMapper.class);
+    private final AdminMapper adminMapper = SpringContextConfig.getBean(AdminMapper.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -42,7 +42,7 @@ public class WebInterceptor implements HandlerInterceptor {
             writer.flush();
             return false;
         }
-        List<Filter> filters = superAdminMapper.selectFilter();
+        List<Filter> filters = adminMapper.selectFilter();
         for (Filter filter : filters
         ) {
             if (filter.getIpAddress().equals(ip)) {
