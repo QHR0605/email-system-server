@@ -64,18 +64,16 @@ public class SmtpServiceImpl extends SmtpService {
                 this.writer.println(SmtpStateCode.COMMAND_ERROR_DESC);
             } else {
                 this.writer.println(SmtpStateCode.USERNAME_SENT_DESC);
-                String encodedUsername = this.reader.readLine(); // base64 user
+                // base64 user
+                String encodedUsername = this.reader.readLine();
                 this.writer.println(SmtpStateCode.PASSWORD_SENT_DESC);
-                String encodedPassword = this.reader.readLine(); // base64 pass
+                // base64 pass
+                String encodedPassword = this.reader.readLine();
 
                 String username = Base64Util.decodeByBase64(encodedUsername.getBytes());
                 String password = Base64Util.decodeByBase64(encodedPassword.getBytes());
-                User user = authService.findUserByUsername(username);
-                if (user.getForbidden()) {
-                    this.writer.println("You have been blacklisted, please contact the administrator to unblock you");
-                    return;
-                }
-                String result = authService.handleLogin(username, password); // 登录验证
+                // 登录验证
+                String result = authService.handleLogin(username, password);
                 if ("SUCCESS".equals(result)) {
                     result = SmtpStateCode.AUTH_SUCCESS_DESC;
                     this.session.setAuthSent(true);
@@ -84,7 +82,8 @@ public class SmtpServiceImpl extends SmtpService {
                     // 感觉这里还要把其他状态初始化成 false，因为它重新登录了
                 } else {
                     result = SmtpStateCode.AUTH_FAILED_DESC;
-                    this.session.setAuthSent(false); // 重新登录但是验证失败
+                    // 重新登录但是验证失败
+                    this.session.setAuthSent(false);
                 }
                 this.writer.println(result);
             }
@@ -113,8 +112,9 @@ public class SmtpServiceImpl extends SmtpService {
         }
     }
 
+    // 设置了接收方
     @Override
-    public void handleRcptCommand(String[] args) throws Exception { // 设置了接收方
+    public void handleRcptCommand(String[] args) throws Exception {
         if (!this.session.isHelloSent() || !this.session.isAuthSent()) {
             this.writer.println(SmtpStateCode.SEQUENCE_ERROR_DESC);
         } else if (!this.session.isMailSent()) {
@@ -170,7 +170,8 @@ public class SmtpServiceImpl extends SmtpService {
                 System.out.println(line);
                 if (".".equals(line)) {
                     break;
-                } else if (line.startsWith("from")) { // 感觉这里的 from to 没有必要
+                    // 感觉这里的 from to 没有必要
+                } else if (line.startsWith("from")) {
                     int index = line.indexOf(":");
                     from = line.substring(index + 1);
                 } else if (line.startsWith("to")) {
@@ -182,6 +183,12 @@ public class SmtpServiceImpl extends SmtpService {
                 } else {
                     body.append(line);
                 }
+            }
+            Integer sendedMail = mailMapper.getMailCount(this.session.getSender());
+            User user = authService.findUserByUsername(this.session.getSender());
+            if (user.getMailBoxSize() >= sendedMail){
+                this.writer.println(SmtpStateCode.MAILBOX_IS_FULL_DESC);
+                return;
             }
             for (String receiver : this.session.getReceivers()
             ) {

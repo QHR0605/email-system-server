@@ -4,7 +4,7 @@ import com.example.server.config.SpringContextConfig;
 import com.example.server.entity.ServerMessage;
 import com.example.server.server.Pop3Server;
 import com.example.server.server.SmtpServer;
-import com.example.server.service.impl.AdminImpl;
+import com.example.server.service.impl.AdminServiceImpl;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -69,7 +69,7 @@ public class ServerApplication {
     }
 
     public void init() {
-        List<ServerMessage> messages = SpringContextConfig.getBean(AdminImpl.class).getServersMsg();
+        List<ServerMessage> messages = SpringContextConfig.getBean(AdminServiceImpl.class).getServersMsg();
         if (messages != null) {
             ServerMessage msg = messages.get(0);
             if (smtpOn(msg)) {

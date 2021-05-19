@@ -66,7 +66,8 @@ public class Pop3ServiceImpl extends Pop3Service {
             pop3Session.setAuth(true);
         } else {
             result = Pop3StateCode.ERR + Pop3StateCode.AUTH_FAIL;
-            pop3Session.setAuth(false); // 重新登录但是验证失败
+            // 重新登录但是验证失败
+            pop3Session.setAuth(false);
         }
         this.writer.println(result + '\n' + "#end#");
     }
@@ -121,7 +122,7 @@ public class Pop3ServiceImpl extends Pop3Service {
         }
         // 取回的邮件编号 大于 邮件数量
         int index = Integer.parseInt(args[1]) - 1;
-        if (index > pop3Session.getCount() - 1) {
+        if (index > pop3Session.getCount() - 1 || index < 0) {
             this.writer.println(Pop3StateCode.ERR + Pop3StateCode.OUT_OF_INDEX + '\n' + "#end#");
             return;
         }

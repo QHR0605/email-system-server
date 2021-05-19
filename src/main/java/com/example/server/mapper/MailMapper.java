@@ -41,4 +41,6 @@ public interface MailMapper {
      * @param mid
      */
     void delectMailByMid(Integer mid);
+
+    Integer getMailCount(String username) throws Exception;
 }

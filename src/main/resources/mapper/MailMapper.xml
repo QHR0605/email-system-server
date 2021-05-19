@@ -5,15 +5,28 @@
 <mapper namespace="com.example.server.mapper.MailMapper">
 
     <insert id="addMail">
-        INSERT INTO email(mid, sender_email, receiver_email, send_time, subject, body, `read`, deleted, tag, send, annex_url, summary, size)
-        VALUES (#{mid}, #{senderEmail}, #{receiverEmail}, #{sendTime}, #{subject}, #{body},#{read},#{deleted},#{tag},#{send},#{annexUrl},
+        INSERT INTO email(mid, sender_email, receiver_email, send_time, subject, body, `read`, deleted, tag, send,
+                          annex_url, summary, size)
+        VALUES (#{mid}, #{senderEmail}, #{receiverEmail}, #{sendTime}, #{subject}, #{body}, #{read}, #{deleted}, #{tag},
+                #{send}, #{annexUrl},
                 #{summary}, #{size})
     </insert>
 
     <select id="findMailsByRcpt" resultType="com.example.server.entity.Email">
         SELECT *
         FROM email
-        WHERE receiver_email = #{username} and deleted != 1
+        WHERE receiver_email = #{username}
+          and deleted != 1
+          and sender_email NOT IN (
+            SELECT username
+            FROM user
+            WHERE forbidden = true
+        )
+    </select>
+    <select id="getMailCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM email
+        WHERE sender_email = #{username}
     </select>
 
     <update id="updateDeletedMailByMid">

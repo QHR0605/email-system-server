@@ -41,5 +41,8 @@ public class SmtpStateCode {
     public static final int OPERATION_FAILED = 554;
     public static final String OPERATION_FAILED_DESC = OPERATION_FAILED + " Operation failed";
 
+    public static final int MAILBOX_IS_FULL = 551;
+    public static final String MAILBOX_IS_FULL_DESC = MAILBOX_IS_FULL+" Your mailBox is full";
+
 
 }
