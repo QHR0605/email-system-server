@@ -2,15 +2,10 @@ package com.example.server.service.impl;
 
 import com.example.server.ServerApplication;
 import com.example.server.config.SpringContextConfig;
-import com.example.server.dto.MailBoxSize;
-import com.example.server.dto.NewUserMessage;
-import com.example.server.dto.ServerPortMsg;
-import com.example.server.dto.ServerStateMsg;
-import com.example.server.entity.Filter;
-import com.example.server.entity.Log;
-import com.example.server.entity.ServerMessage;
-import com.example.server.entity.User;
+import com.example.server.dto.*;
+import com.example.server.entity.*;
 import com.example.server.mapper.AdminMapper;
+import com.example.server.mapper.MailMapper;
 import com.example.server.server.Pop3Server;
 import com.example.server.server.SmtpServer;
 import com.example.server.service.AdminService;
@@ -32,6 +27,7 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminMapper adminMapper = SpringContextConfig.getBean(AdminMapper.class);
+    private final MailMapper mailMapper = SpringContextConfig.getBean(MailMapper.class);
     private Log log;
 
     public String getUsername() {
@@ -225,6 +221,44 @@ public class AdminServiceImpl implements AdminService {
                 exception.printStackTrace();
                 return row;
             }
+            return row;
+        }
+        return row;
+    }
+
+    @Override
+    public Integer filterUsers(List<String> usernames, Boolean forbidden) {
+
+        Integer row = null;
+        StringBuilder content = new StringBuilder();
+        for (String username: usernames
+             ) {
+            content.append(username).append(" ");
+        }
+        if (forbidden){
+            createLog("设置过滤账户<"+content+">",true,null);
+        }else{
+            createLog("取消过滤账户<"+content+">",true,null);
+        }
+
+        try {
+            row = adminMapper.updateUserForbidden(usernames,forbidden);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.setState(false);
+            log.setReason(e.getMessage());
+            try {
+                adminMapper.addLog(log);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                return row;
+            }
+            return row;
+        }
+        try {
+            adminMapper.addLog(log);
+        } catch (Exception e) {
+            e.printStackTrace();
             return row;
         }
         return row;
@@ -569,6 +603,55 @@ public class AdminServiceImpl implements AdminService {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+        return row;
+    }
+
+    @Override
+    public Integer sendMails(MassEmail emails) {
+        Integer row = null;
+        StringBuilder content = new StringBuilder();
+        List<Email> emailList = new LinkedList<>();
+        for (String receiver: emails.getReceiverEmails()
+             ) {
+            Email email = new Email(
+                    IdGenerator.getId(),
+                    emails.getSenderEmail(),
+                    receiver,
+                    emails.getSendTime(),
+                    emails.getSubject(),
+                    emails.getBody(),
+                    false,
+                    false,
+                    false,
+                    true,
+                    emails.getAvatarUrl(),
+                    null,
+                    emails.getBody().length()
+            );
+            emailList.add(email);
+            content.append(receiver).append(" ");
+        }
+        createLog("群发邮件: <"+content+">",true,null);
+        try {
+            row = mailMapper.addEmails(emailList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.setState(false);
+            log.setReason(e.getMessage());
+            try {
+                adminMapper.addLog(log);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                return row;
+            }
+            return row;
+        }
+        try {
+            adminMapper.addLog(log);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return row;
         }
         return row;
     }

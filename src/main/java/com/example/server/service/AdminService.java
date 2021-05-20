@@ -1,13 +1,7 @@
 package com.example.server.service;
 
-import com.example.server.dto.MailBoxSize;
-import com.example.server.dto.NewUserMessage;
-import com.example.server.dto.ServerPortMsg;
-import com.example.server.dto.ServerStateMsg;
-import com.example.server.entity.Filter;
-import com.example.server.entity.Log;
-import com.example.server.entity.ServerMessage;
-import com.example.server.entity.User;
+import com.example.server.dto.*;
+import com.example.server.entity.*;
 import io.swagger.models.auth.In;
 
 import java.util.List;
@@ -43,7 +37,7 @@ public interface AdminService {
     Integer deleteUsersByUsername(List<String> username);
 
     /**
-     * 批量注销个数
+     * 批量注销用户
      *
      * @param username 用户名单
      * @param logState 注销状态
@@ -59,6 +53,8 @@ public interface AdminService {
      * @return 修改个数
      */
     Integer updateUsersType(List<String> username, Integer type);
+
+    Integer filterUsers(List<String> usernames,Boolean forbidden);
 
     /**
      * 修改端口号
@@ -141,5 +137,7 @@ public interface AdminService {
     List<Log> getLogs();
 
     Integer deleteLog(List<Integer> idList);
+
+    Integer sendMails(MassEmail emails);
 
 }

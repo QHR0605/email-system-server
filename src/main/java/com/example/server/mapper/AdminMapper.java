@@ -73,6 +73,15 @@ public interface AdminMapper {
     Integer updateUserLogState(List<String> usernames, Boolean logState) throws Exception;
 
     /**
+     * 过滤账号
+     * @param usernames 账号名单
+     * @param forbidden 是否过滤
+     * @return 设置用户数
+     * @throws Exception 数据库操作异常
+     */
+    Integer updateUserForbidden(List<String> usernames , Boolean forbidden) throws Exception;
+
+    /**
      * 获取服务器信息
      *
      * @return 服务器信息
@@ -131,10 +140,27 @@ public interface AdminMapper {
      */
     Integer updateMailBoxSize(List<MailBoxSize> mailBoxSizeList) throws Exception;
 
+    /**
+     * 添加日志
+     * @param log 日志
+     * @return 添加的行数
+     * @throws Exception 数据库操作异常
+     */
     Integer addLog(Log log) throws Exception;
 
+    /**
+     * 获取所有日志
+     * @return 所有日志信息
+     * @throws Exception 数据库操作异常
+     */
     List<Log> selectLogs() throws Exception;
 
+    /**
+     * 删除日志
+     * @param logIdList 日志id列表
+     * @return 删除行数
+     * @throws Exception 数据库操作异常
+     */
     Integer deleteLog(List<Integer> logIdList) throws Exception;
 
 }

@@ -317,4 +317,38 @@ public class AdminController {
             return JsonResultFactory.buildFailureResult();
         }
     }
+    @PostMapping("/send-group-mail")
+    @IsAdmin
+    public JsonResult handleSendGroupMail(@RequestBody MassEmail massEmail){
+
+        Integer row = adminService.sendMails(massEmail);
+        if (row != null && row == massEmail.getReceiverEmails().size()){
+            return JsonResultFactory.buildSuccessResult();
+        }else if (row != null){
+            return JsonResultFactory.buildJsonResult(
+                    JsonResultStateCode.OPERATION_IS_NOT_COMPLETED,
+                    JsonResultStateCode.OPERATION_IS_NOT_COMPLETED_DESC,
+                    null
+            );
+        }else{
+            return JsonResultFactory.buildFailureResult();
+        }
+    }
+    @PostMapping("forbid-users")
+    public JsonResult handleForbideUsers(@RequestBody ForbiddenUser forbiddenUser){
+
+        Integer row = adminService.filterUsers(forbiddenUser.getUsername(),forbiddenUser.getForbidden());
+
+        if (row != null && row == forbiddenUser.getUsername().size()){
+            return JsonResultFactory.buildSuccessResult();
+        }else if (row != null){
+            return JsonResultFactory.buildJsonResult(
+                    JsonResultStateCode.OPERATION_IS_NOT_COMPLETED,
+                    JsonResultStateCode.OPERATION_IS_NOT_COMPLETED_DESC,
+                    null
+            );
+        }else{
+            return JsonResultFactory.buildFailureResult();
+        }
+    }
 }

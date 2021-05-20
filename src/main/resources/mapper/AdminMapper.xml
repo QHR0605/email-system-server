@@ -14,13 +14,15 @@
         WHERE user.username = #{userName}
     </update>
     <update id="updateUserType">
-        <foreach collection="usernames" index="index" item="username">
-            UPDATE user SET account_type = #{type} WHERE user.username = #{username}
+        UPDATE user SET account_type = #{type} WHERE user.username IN
+        <foreach collection="usernames" index="index" item="username" open="(" close=")" separator=",">
+            #{username}
         </foreach>
     </update>
     <update id="updateUserLogState">
-        <foreach collection="usernames" item="username" index="index">
-            UPDATE user SET user.logout = #{logState} WHERE username = #{username}
+        UPDATE user SET user.logout = #{logState} WHERE username IN
+        <foreach collection="usernames" item="username" index="index" open="(" close=")" separator=",">
+            #{username}
         </foreach>
     </update>
     <delete id="deleteUsers">
@@ -42,7 +44,7 @@
     <insert id="insertNewIpAddress">
         INSERT INTO filter(fid, ip_address)
         VALUES (
-        <foreach collection="filter" index="index" item="item">
+        <foreach collection="filter" index="index" item="item" open="(" close=")" separator=",">
             #{item.fid},#{item.ipAddress}
         </foreach>
         )
@@ -52,9 +54,10 @@
         VALUES (#{logId}, #{username}, #{time}, #{operation}, #{state}, #{reason})
     </insert>
     <update id="updateUserAuthorization">
-        <foreach collection="usernames" item="username" index="index">
-            UPDATE user SET `account_type` = #{type}
-            WHERE user.username= #{username}
+        UPDATE user SET `account_type` = #{type}
+        WHERE user.username IN
+        <foreach collection="usernames" item="username" index="index" open="(" close=")" separator=",">
+            #{username}
         </foreach>
     </update>
     <update id="updateServerPort">
@@ -74,8 +77,15 @@
         </if>
     </update>
     <update id="updateMailBoxSize">
-        <foreach collection="mailBoxSizeList" index="index" item="item">
-            UPDATE user SET user.mail_box_size = #{item.size} WHERE username = #{item.username}
+        UPDATE user SET user.mail_box_size = #{item.size} WHERE username IN
+        <foreach collection="mailBoxSizeList" index="index" item="item" open="(" close=")" separator=",">
+            #{item.username}
+        </foreach>
+    </update>
+    <update id="updateUserForbidden">
+        UPDATE user SET user.forbidden = #{forbidden} WHERE username IN
+        <foreach collection="usernames" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
         </foreach>
     </update>
     <delete id="deleteIpAddress">
