@@ -364,6 +364,9 @@ public class AdminServiceImpl implements AdminService {
         List<ServerMessage> res = null;
 
         createLog("获取服务器信息", true, null);
+        if (getUsername() == null){
+            log.setUsername("服务器");
+        }
         try {
             res = adminMapper.selectServerMessage();
         } catch (Exception e) {

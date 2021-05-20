@@ -25,6 +25,7 @@ public class HttpUtil {
         if (servletRequestAttributes != null) {
             return servletRequestAttributes.getRequest();
         } else {
+            System.err.println("服务器刚启动,没有http连接");
             throw new Exception();
         }
     }

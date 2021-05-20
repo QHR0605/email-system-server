@@ -300,7 +300,7 @@ public class AdminController {
             );
         }
     }
-    @PostMapping("/del-log")
+    @PostMapping("/del-logs")
     @IsAdmin
     public JsonResult handleDelLog(@RequestBody List<Integer> logIdList){
 
