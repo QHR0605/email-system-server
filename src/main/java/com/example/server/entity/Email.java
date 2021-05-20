@@ -1,5 +1,7 @@
 package com.example.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Date;
 
 /**
@@ -10,6 +12,7 @@ public class Email {
     private Integer mid;
     private String senderEmail;
     private String receiverEmail;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date sendTime;
     private String subject;
     private String body;
@@ -17,6 +20,28 @@ public class Email {
     private Boolean deleted;
     private Boolean tag;
     private Boolean send;
+    private String annexUrl;
+    private String summary;
+    private Integer size;
+
+    public Email() {
+    }
+
+    public Email(Integer mid, String senderEmail, String receiverEmail, Date sendTime, String subject, String body, Boolean read, Boolean deleted, Boolean tag, Boolean send, String annexUrl, String summary, Integer size) {
+        this.mid = mid;
+        this.senderEmail = senderEmail;
+        this.receiverEmail = receiverEmail;
+        this.sendTime = sendTime;
+        this.subject = subject;
+        this.body = body;
+        this.read = read;
+        this.deleted = deleted;
+        this.tag = tag;
+        this.send = send;
+        this.annexUrl = annexUrl;
+        this.summary = summary;
+        this.size = size;
+    }
 
     public Boolean getDeleted() {
         return deleted;
@@ -41,10 +66,6 @@ public class Email {
     public void setSend(Boolean send) {
         this.send = send;
     }
-
-    private String annexUrl;
-    private String summary;
-    private Integer size;
 
     public Integer getMid() {
         return mid;
