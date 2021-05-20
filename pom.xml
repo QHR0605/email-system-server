@@ -53,7 +53,7 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.62</version>
 		</dependency>
-
+		<!--swagger文档 -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>

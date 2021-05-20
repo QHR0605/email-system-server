@@ -11,6 +11,12 @@
                 #{send}, #{annexUrl},
                 #{summary}, #{size})
     </insert>
+    <insert id="addEmails">
+        INSERT INTO email(mid, sender_email, receiver_email, send_time, subject, body, `read`, deleted, tag, send, annex_url, summary, size) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.mid},#{item.senderEmail},#{item.receiverEmail},#{item.sendTime},#{item.subject},#{item.body},#{item.read},#{item.deleted},#{item.tag},#{item.send},#{item.annexUrl},#{item.summary},#{item.size})
+        </foreach>
+    </insert>
 
     <select id="findMailsByRcpt" resultType="com.example.server.entity.Email">
         SELECT *

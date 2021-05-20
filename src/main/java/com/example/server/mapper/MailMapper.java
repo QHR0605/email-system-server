@@ -21,9 +21,17 @@ public interface MailMapper {
     Integer addMail(Email email) throws Exception;
 
     /**
+     * 群发邮件
+     * @param emails 群发邮件
+     * @return 插入的行数
+     * @throws Exception 数据库操作异常
+     */
+    Integer addEmails(List<Email> emails) throws Exception;
+
+    /**
      * 以username为接收方查询其收到的邮件列表，且邮件是未被标记为删除
      *
-     * @param username
+     * @param username 用户名
      * @return 返回该用户收到邮件列表
      */
     List<Email> findMailsByRcpt(String username);
@@ -42,5 +50,11 @@ public interface MailMapper {
      */
     void delectMailByMid(Integer mid);
 
+    /**
+     * @param username 用户名
+     * @return 已发送的邮件个数
+     * @throws Exception 数据库操作异常
+     */
     Integer getMailCount(String username) throws Exception;
+
 }
