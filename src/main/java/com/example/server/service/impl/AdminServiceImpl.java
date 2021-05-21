@@ -397,27 +397,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<ServerMessage> getServersMsg() {
         List<ServerMessage> res = null;
-
-        createLog("获取服务器信息", true, null);
-        if (getUsername() == null){
-            log.setUsername("服务器");
-        }
         try {
             res = adminMapper.selectServerMessage();
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.setState(false);
-            log.setReason(e.getMessage());
-            try {
-                adminMapper.addLog(log);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                return res;
-            }
-            return res;
-        }
-        try {
-            adminMapper.addLog(log);
         } catch (Exception e) {
             e.printStackTrace();
             return res;
@@ -429,23 +410,8 @@ public class AdminServiceImpl implements AdminService {
     public List<Filter> getFilters() {
 
         List<Filter> res = null;
-        createLog("获取IP黑名单信息", true, null);
         try {
             res = adminMapper.selectFilter();
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.setState(false);
-            log.setReason(e.getMessage());
-            try {
-                adminMapper.addLog(log);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                return res;
-            }
-            return res;
-        }
-        try {
-            adminMapper.addLog(log);
         } catch (Exception e) {
             e.printStackTrace();
             return res;
@@ -521,23 +487,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<User> getAllUsers() {
         List<User> users = null;
-        createLog("获取用户信息", true, null);
         try {
             users = adminMapper.selectAllUsers();
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.setState(false);
-            log.setReason(e.getMessage());
-            try {
-                adminMapper.addLog(log);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                return users;
-            }
-            return users;
-        }
-        try {
-            adminMapper.addLog(log);
         } catch (Exception e) {
             e.printStackTrace();
             return users;
@@ -548,7 +499,12 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Integer updateMailBoxSize(List<MailBoxSize> mailBoxSizeList) {
         Integer row = 0;
-        createLog("修改用户邮箱大小", true, null);
+        StringBuilder content = new StringBuilder();
+        for (MailBoxSize mailBoxSize: mailBoxSizeList
+             ) {
+            content.append(mailBoxSize.getUsername()).append(": ").append(mailBoxSize.getSize()).append(";");
+        }
+        createLog("修改用户<"+content+">", true, null);
         try {
             row = adminMapper.updateMailBoxSize(mailBoxSizeList);
         } catch (Exception e) {
