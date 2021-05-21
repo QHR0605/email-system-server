@@ -28,7 +28,6 @@ public class UserController {
     private final UserService userService = SpringContextConfig.getBean(UserServiceImpl.class);
 
     @GetMapping("/get-contact")
-    @IsLogin
     public JsonResult handleGetContact(HttpServletRequest request) {
 
         String username = CookieUtils.findCookie(request.getCookies(), "username").getValue();

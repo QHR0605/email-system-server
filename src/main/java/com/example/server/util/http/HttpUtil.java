@@ -18,16 +18,10 @@ public class HttpUtil {
      * 获取当前请求的HttpServletRequest对象
      *
      * @return 当前请求的HttpServletRequest对象
-     * @throws Exception 获取异常
      */
-    public static HttpServletRequest getRequest() throws Exception {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (servletRequestAttributes != null) {
-            return servletRequestAttributes.getRequest();
-        } else {
-            System.err.println("服务器刚启动,没有http连接");
-            throw new Exception();
-        }
+    public static HttpServletRequest getRequest(){
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        return servletRequestAttributes.getRequest();
     }
 
     /**
