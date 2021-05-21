@@ -1,5 +1,7 @@
 package com.example.server.mapper;
 
+import com.example.server.dto.LatestLoginMsg;
+import com.example.server.dto.UserPhoneMsg;
 import com.example.server.entity.Contact;
 import com.example.server.entity.ContactMsg;
 import org.springframework.stereotype.Repository;
@@ -32,4 +34,20 @@ public interface UserMapper {
      * @throws Exception 数据库操作异常
      */
     List<ContactMsg> getContact(String username) throws Exception;
+
+    /**
+     * 更新登录信息
+     * @param msg 最近登录信息
+     * @return 修改的行数
+     * @throws Exception 数据库操作异常
+     */
+    Integer updateUserLatestLoginMsg(LatestLoginMsg msg) throws Exception;
+
+    /**
+     * 修改用户手机
+     * @param msg 手机信息
+     * @return 修改的行数
+     * @throws Exception 数据库操作异常
+     */
+    Integer updateUserPhone(UserPhoneMsg msg) throws Exception;
 }

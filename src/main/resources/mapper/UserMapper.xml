@@ -7,6 +7,13 @@
         INSERT INTO contact(username, contact_name, add_time)
         VALUES (#{username}, #{contactName}, #{addTime})
     </insert>
+    <update id="updateUserLatestLoginMsg">
+        UPDATE user SET latest_login_time = #{latestLoginTime},latest_login_ip = #{latestLoginIp}
+        WHERE #{username} = username
+    </update>
+    <update id="updateUserPhone">
+        UPDATE user SET phone = #{phone} WHERE username = #{username}
+    </update>
     <delete id="deleteContact">
         DELETE
         FROM contact

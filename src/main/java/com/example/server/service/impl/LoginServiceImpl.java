@@ -5,23 +5,28 @@ package com.example.server.service.impl;
  */
 
 import com.example.server.config.SpringContextConfig;
+import com.example.server.dto.LatestLoginMsg;
 import com.example.server.dto.UserMessage;
 import com.example.server.entity.User;
 import com.example.server.mapper.LoginMapper;
+import com.example.server.mapper.UserMapper;
 import com.example.server.service.AuthService;
 import com.example.server.util.http.CookieUtils;
 import com.example.server.util.http.HttpUtil;
+import com.example.server.util.interceptor.IpUtil;
 import com.example.server.util.json.JsonResultStateCode;
 import com.example.server.util.token.TokenGenerator;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
 
 @Service("LoginServiceImpl")
 public class LoginServiceImpl implements AuthService {
 
     private final LoginMapper loginMapper = SpringContextConfig.getBean(LoginMapper.class);
+    private final UserMapper userMapper = SpringContextConfig.getBean(UserMapper.class);
 
     @Override
     public String handleLogin(String username, String password) {
@@ -36,6 +41,7 @@ public class LoginServiceImpl implements AuthService {
                 if (!user.getPassword().equals(password)) {
                     return JsonResultStateCode.PASSWORD_WRONG_DESC;
                 } else {
+                    //设置cookie:token和用户名
                     HttpServletResponse response = HttpUtil.getResponse();
                     String token = TokenGenerator.generateToken(username, password, user.getAccountType());
                     System.out.println("生成token: " + token);
@@ -43,13 +49,24 @@ public class LoginServiceImpl implements AuthService {
                     Cookie usernameCookie = CookieUtils.buildCookie("username", username);
                     response.addCookie(tokenCookie);
                     response.addCookie(usernameCookie);
-                    return JsonResultStateCode.SUCCESS_DESC;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResultStateCode.UNKNOWN_ERROR_DESC;
         }
+        //更新最近登录时间和IP
+        LatestLoginMsg msg = new LatestLoginMsg();
+        msg.setUsername(username);
+        msg.setLatestLoginTime(new Timestamp(System.currentTimeMillis()));
+        msg.setLatestLoginIp(IpUtil.getIp(HttpUtil.getRequest()));
+        try {
+            userMapper.updateUserLatestLoginMsg(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResultStateCode.SUCCESS_DESC;
+        }
+        return JsonResultStateCode.SUCCESS_DESC;
     }
 
     @Override
