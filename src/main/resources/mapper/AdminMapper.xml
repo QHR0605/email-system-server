@@ -43,11 +43,10 @@
     </select>
     <insert id="insertNewIpAddress">
         INSERT INTO filter(fid, ip_address)
-        VALUES (
-        <foreach collection="filter" index="index" item="item" open="(" close=")" separator=",">
-            #{item.fid},#{item.ipAddress}
+        VALUES
+        <foreach collection="filter" index="index" item="item" separator=",">
+            (#{item.fid},#{item.ipAddress})
         </foreach>
-        )
     </insert>
     <insert id="addLog">
         INSERT INTO log(log_id, username, time, operation, state, reason)
@@ -89,9 +88,10 @@
         </foreach>
     </update>
     <delete id="deleteIpAddress">
+        DELETE FROM filter
+        WHERE fid IN
         <foreach collection="list" item="item" separator="," open="(" close=")">
-            DELETE FROM filter
-            WHERE fid = #{item}
+            #{item}
         </foreach>
     </delete>
     <delete id="deleteLog" parameterType="java.util.List">
