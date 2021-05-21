@@ -253,7 +253,7 @@ public class AdminController {
     public JsonResult handleAddBlacklist(@RequestBody List<String> ipList) {
 
         Integer row = adminService.addFilter(ipList);
-        if (row != null && row == 1) {
+        if (row != null && row == ipList.size()) {
             return JsonResultFactory.buildSuccessResult();
         } else {
             return JsonResultFactory.buildFailureResult();
@@ -264,7 +264,7 @@ public class AdminController {
     public JsonResult handleDelBlacklist(@RequestBody List<Integer> idList) {
 
         Integer row = adminService.deleteFilter(idList);
-        if (row != null && row == 1) {
+        if (row != null && row == idList.size()) {
             return JsonResultFactory.buildSuccessResult();
         } else {
             return JsonResultFactory.buildFailureResult();
