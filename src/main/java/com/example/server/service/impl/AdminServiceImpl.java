@@ -15,6 +15,7 @@ import com.example.server.util.idGenerator.IdGenerator;
 import com.example.server.util.json.JsonResultStateCode;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -33,7 +34,10 @@ public class AdminServiceImpl implements AdminService {
     public String getUsername() {
         String username = null;
         try {
-            username = CookieUtils.findCookie(HttpUtil.getRequest().getCookies(), "username").getValue();
+            Cookie cookie = CookieUtils.findCookie(HttpUtil.getRequest().getCookies(), "username");
+            if (cookie != null){
+                username = cookie.getValue();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -299,11 +303,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Integer changeServerState(ServerStateMsg msg) {
         Integer row = null;
-        log = new Log()
-                .logId(IdGenerator.getId())
-                .username(getUsername())
-                .state(true)
-                .build();
+        System.out.println(msg.getServerType());
         if (msg.getServerType() == 0) {
             if (msg.getServerState()) {
                 createLog("开启SMTP服务", true, null);
@@ -319,6 +319,7 @@ public class AdminServiceImpl implements AdminService {
         }
         try {
             row = adminMapper.updateServerState(msg);
+            System.out.println("row:"+row);
         } catch (Exception e) {
             e.printStackTrace();
             log.setState(false);

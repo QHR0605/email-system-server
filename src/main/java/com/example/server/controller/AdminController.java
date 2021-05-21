@@ -4,12 +4,12 @@ import com.example.server.config.SpringContextConfig;
 import com.example.server.dto.*;
 import com.example.server.entity.Filter;
 import com.example.server.entity.Log;
+import com.example.server.entity.ServerMessage;
 import com.example.server.entity.User;
 import com.example.server.server.Pop3Server;
 import com.example.server.server.SmtpServer;
 import com.example.server.service.AdminService;
 import com.example.server.service.impl.AdminServiceImpl;
-import com.example.server.util.annotation.IsAdmin;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
@@ -45,7 +45,6 @@ public class AdminController {
     }
 
     @PostMapping("/logout-users")
-    @IsAdmin
     public JsonResult handleLogout(@RequestBody List<String> usernames) {
         Integer rows = adminService.updateUsersLogState(usernames, true);
         if (rows != null) {
@@ -60,7 +59,6 @@ public class AdminController {
     }
 
     @PostMapping("/login-users")
-    @IsAdmin
     public JsonResult handleLogin(@RequestBody List<String> usernames) {
         Integer rows = adminService.updateUsersLogState(usernames, false);
         if (rows != null) {
@@ -75,7 +73,6 @@ public class AdminController {
     }
 
     @GetMapping("/get-users")
-    @IsAdmin
     public JsonResult handleGetUsers() {
         List<User> userList = adminService.getAllUsers();
         if (userList != null) {
@@ -98,7 +95,6 @@ public class AdminController {
     }
 
     @PostMapping("/auth")
-    @IsAdmin
     public JsonResult handleAuthorize(@RequestBody List<UserNameAndType> userNameAndTypes) {
 
         if (userNameAndTypes != null) {
@@ -128,7 +124,6 @@ public class AdminController {
     }
 
     @PostMapping("/create-user")
-    @IsAdmin
     public JsonResult handleCreate(@RequestBody NewUserMessage userMessage) {
 
         Integer rows;
@@ -145,9 +140,9 @@ public class AdminController {
     }
 
     @PostMapping("/change-server-state")
-    @IsAdmin
     public JsonResult handleChangeServerState(@RequestBody ServerStateMsg serverState) {
 
+        System.out.println(serverState);
         Integer state = adminService.changeServerState(serverState);
         JsonResult res = JsonResultFactory.buildSuccessResult();
         ServerPortMsg msg = new ServerPortMsg();
@@ -187,7 +182,6 @@ public class AdminController {
     }
 
     @PostMapping("/change-server-port")
-    @IsAdmin
     public JsonResult handleChangeServerPort(@RequestBody ServerPortMsg msg) {
 
         //修改端口号
@@ -221,8 +215,21 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/get-server-msg")
+    public JsonResult handleGetServerMsg(){
+        List<ServerMessage> serverMsg = adminService.getServersMsg();
+        if (serverMsg != null){
+            return JsonResultFactory.buildJsonResult(
+                    JsonResultStateCode.SUCCESS,
+                    JsonResultStateCode.SUCCESS_DESC,
+                    serverMsg
+            );
+        }else{
+            return JsonResultFactory.buildFailureResult();
+        }
+    }
+
     @GetMapping("/get-filters")
-    @IsAdmin
     public JsonResult handleGetFilters() {
         List<Filter> res = adminService.getFilters();
         if (res != null && res.size() > 0) {
@@ -265,34 +272,33 @@ public class AdminController {
     }
 
     @PostMapping("update-mailbox-size")
-    public JsonResult handleUpdateMailboxSize(@RequestBody List<MailBoxSize> mailBoxSizeList){
+    public JsonResult handleUpdateMailboxSize(@RequestBody List<MailBoxSize> mailBoxSizeList) {
 
         Integer row = adminService.updateMailBoxSize(mailBoxSizeList);
-        if (row != null && row == mailBoxSizeList.size()){
+        if (row != null && row == mailBoxSizeList.size()) {
             return JsonResultFactory.buildSuccessResult();
-        }else if (row != null){
+        } else if (row != null) {
             return JsonResultFactory.buildJsonResult(
                     JsonResultStateCode.OPERATION_IS_NOT_COMPLETED,
                     JsonResultStateCode.OPERATION_IS_NOT_COMPLETED_DESC,
                     null
             );
-        }else{
+        } else {
             return JsonResultFactory.buildFailureResult();
         }
     }
 
     @GetMapping("/get-logs")
-    @IsAdmin
-    public JsonResult getLogs(){
+    public JsonResult getLogs() {
 
         List<Log> logs = adminService.getLogs();
-        if (logs != null){
+        if (logs != null) {
             return JsonResultFactory.buildJsonResult(
                     JsonResultStateCode.SUCCESS,
                     JsonResultStateCode.SUCCESS_DESC,
                     logs
             );
-        }else{
+        } else {
             return JsonResultFactory.buildJsonResult(
                     JsonResultStateCode.FAILED,
                     JsonResultStateCode.FAILED_DESC,
@@ -300,54 +306,55 @@ public class AdminController {
             );
         }
     }
+
     @PostMapping("/del-logs")
-    @IsAdmin
-    public JsonResult handleDelLog(@RequestBody List<Integer> logIdList){
+    public JsonResult handleDelLog(@RequestBody List<Integer> logIdList) {
 
         Integer row = adminService.deleteLog(logIdList);
-        if (row != null && row == logIdList.size()){
+        if (row != null && row == logIdList.size()) {
             return JsonResultFactory.buildSuccessResult();
-        }else if (row != null){
+        } else if (row != null) {
             return JsonResultFactory.buildJsonResult(
                     JsonResultStateCode.OPERATION_IS_NOT_COMPLETED,
                     JsonResultStateCode.OPERATION_IS_NOT_COMPLETED_DESC,
                     null
             );
-        }else{
+        } else {
             return JsonResultFactory.buildFailureResult();
         }
     }
+
     @PostMapping("/send-group-mail")
-    @IsAdmin
-    public JsonResult handleSendGroupMail(@RequestBody MassEmail massEmail){
+    public JsonResult handleSendGroupMail(@RequestBody MassEmail massEmail) {
 
         Integer row = adminService.sendMails(massEmail);
-        if (row != null && row == massEmail.getReceiverEmails().size()){
+        if (row != null && row == massEmail.getReceiverEmails().size()) {
             return JsonResultFactory.buildSuccessResult();
-        }else if (row != null){
+        } else if (row != null) {
             return JsonResultFactory.buildJsonResult(
                     JsonResultStateCode.OPERATION_IS_NOT_COMPLETED,
                     JsonResultStateCode.OPERATION_IS_NOT_COMPLETED_DESC,
                     null
             );
-        }else{
+        } else {
             return JsonResultFactory.buildFailureResult();
         }
     }
+
     @PostMapping("forbid-users")
-    public JsonResult handleForbideUsers(@RequestBody ForbiddenUser forbiddenUser){
+    public JsonResult handleForbideUsers(@RequestBody ForbiddenUser forbiddenUser) {
 
-        Integer row = adminService.filterUsers(forbiddenUser.getUsername(),forbiddenUser.getForbidden());
+        Integer row = adminService.filterUsers(forbiddenUser.getUsername(), forbiddenUser.getForbidden());
 
-        if (row != null && row == forbiddenUser.getUsername().size()){
+        if (row != null && row == forbiddenUser.getUsername().size()) {
             return JsonResultFactory.buildSuccessResult();
-        }else if (row != null){
+        } else if (row != null) {
             return JsonResultFactory.buildJsonResult(
                     JsonResultStateCode.OPERATION_IS_NOT_COMPLETED,
                     JsonResultStateCode.OPERATION_IS_NOT_COMPLETED_DESC,
                     null
             );
-        }else{
+        } else {
             return JsonResultFactory.buildFailureResult();
         }
     }
