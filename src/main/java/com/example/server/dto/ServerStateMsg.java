@@ -32,4 +32,13 @@ public class ServerStateMsg {
     public void setServerState(Boolean serverState) {
         this.serverState = serverState;
     }
+
+    @Override
+    public String toString() {
+        return "ServerStateMsg{" +
+                "sid=" + sid +
+                ", serverType=" + serverType +
+                ", serverState=" + serverState +
+                '}';
+    }
 }
