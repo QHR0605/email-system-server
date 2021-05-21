@@ -261,10 +261,10 @@ public class AdminController {
     }
 
     @PostMapping("del-blacklist")
-    public JsonResult handleDelBlacklist(@RequestBody List<Integer> idList) {
+    public JsonResult handleDelBlacklist(@RequestBody List<String> ipList) {
 
-        Integer row = adminService.deleteFilter(idList);
-        if (row != null && row == idList.size()) {
+        Integer row = adminService.deleteFilter(ipList);
+        if (row != null && row == ipList.size()) {
             return JsonResultFactory.buildSuccessResult();
         } else {
             return JsonResultFactory.buildFailureResult();

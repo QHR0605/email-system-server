@@ -116,7 +116,7 @@ public interface AdminService {
      * @param idList 黑名单id列表
      * @return 删除行数
      */
-    Integer deleteFilter(List<Integer> idList);
+    Integer deleteFilter(List<String> ipList);
 
     /**
      * 获取所有用户

@@ -458,11 +458,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Integer deleteFilter(List<Integer> idList) {
+    public Integer deleteFilter(List<String> ipList) {
         Integer row = 0;
         createLog("删除IP黑名单信息", true, null);
         try {
-            row = adminMapper.deleteIpAddress(idList);
+            row = adminMapper.deleteIpAddress(ipList);
         } catch (Exception e) {
             e.printStackTrace();
             log.setState(false);

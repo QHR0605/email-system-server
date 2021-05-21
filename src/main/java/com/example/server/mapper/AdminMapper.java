@@ -126,11 +126,11 @@ public interface AdminMapper {
     /**
      * 取消黑名单的IP地址
      *
-     * @param idList 黑名单的id列表
+     * @param ipList 黑名单的id列表
      * @return 删除行数
      * @throws Exception 数据库操作异常
      */
-    Integer deleteIpAddress(List<Integer> idList) throws Exception;
+    Integer deleteIpAddress(List<String> ipList) throws Exception;
 
     /**
      * 修改邮箱大小

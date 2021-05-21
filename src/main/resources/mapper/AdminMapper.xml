@@ -89,7 +89,7 @@
     </update>
     <delete id="deleteIpAddress">
         DELETE FROM filter
-        WHERE fid IN
+        WHERE ip_address IN
         <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
