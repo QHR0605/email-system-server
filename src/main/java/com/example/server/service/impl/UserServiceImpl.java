@@ -1,6 +1,7 @@
 package com.example.server.service.impl;
 
 import com.example.server.config.SpringContextConfig;
+import com.example.server.dto.UserPhoneMsg;
 import com.example.server.entity.Contact;
 import com.example.server.entity.ContactMsg;
 import com.example.server.mapper.UserMapper;
@@ -51,5 +52,17 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return contactList;
+    }
+
+    @Override
+    public Integer updatePhone(UserPhoneMsg msg) {
+        Integer row;
+        try {
+            row = userMapper.updateUserPhone(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return row;
     }
 }

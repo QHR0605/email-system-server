@@ -1,11 +1,11 @@
 package com.example.server.controller;
 
 import com.example.server.config.SpringContextConfig;
+import com.example.server.dto.UserPhoneMsg;
 import com.example.server.entity.Contact;
 import com.example.server.entity.ContactMsg;
 import com.example.server.service.UserService;
 import com.example.server.service.impl.UserServiceImpl;
-import com.example.server.util.annotation.IsLogin;
 import com.example.server.util.http.CookieUtils;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
@@ -64,6 +64,17 @@ public class UserController {
     @PostMapping("/del-contact")
     public JsonResult handleDelContact(@RequestBody Contact contact) {
         Integer row = userService.deleteContact(contact);
+        if (row != null && row == 1) {
+            return JsonResultFactory.buildSuccessResult();
+        } else {
+            return JsonResultFactory.buildFailureResult();
+        }
+    }
+
+    @PostMapping("/update-phone")
+    public JsonResult handleUpdatePhone(@RequestBody UserPhoneMsg msg) {
+
+        Integer row = userService.updatePhone(msg);
         if (row != null && row == 1) {
             return JsonResultFactory.buildSuccessResult();
         } else {
