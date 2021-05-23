@@ -272,10 +272,10 @@ public class AdminController {
     }
 
     @PostMapping("update-mailbox-size")
-    public JsonResult handleUpdateMailboxSize(@RequestBody List<MailBoxSize> mailBoxSizeList) {
+    public JsonResult handleUpdateMailboxSize(@RequestBody MailBoxSize mailBoxSize) {
 
-        Integer row = adminService.updateMailBoxSize(mailBoxSizeList);
-        if (row != null && row == mailBoxSizeList.size()) {
+        Integer row = adminService.updateMailBoxSize(mailBoxSize.getUsername(),mailBoxSize.getSize());
+        if (row != null && row == mailBoxSize.getUsername().size()) {
             return JsonResultFactory.buildSuccessResult();
         } else if (row != null) {
             return JsonResultFactory.buildJsonResult(

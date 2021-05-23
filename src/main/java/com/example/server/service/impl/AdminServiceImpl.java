@@ -497,16 +497,16 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Integer updateMailBoxSize(List<MailBoxSize> mailBoxSizeList) {
+    public Integer updateMailBoxSize(List<String> usernames,Integer size) {
         Integer row = 0;
         StringBuilder content = new StringBuilder();
-        for (MailBoxSize mailBoxSize: mailBoxSizeList
+        for (String username: usernames
              ) {
-            content.append(mailBoxSize.getUsername()).append(": ").append(mailBoxSize.getSize()).append(";");
+            content.append(usernames).append(": ").append(size).append(";");
         }
         createLog("修改用户<"+content+">", true, null);
         try {
-            row = adminMapper.updateMailBoxSize(mailBoxSizeList);
+            row = adminMapper.updateMailBoxSize(usernames,size);
         } catch (Exception e) {
             e.printStackTrace();
             log.setState(false);

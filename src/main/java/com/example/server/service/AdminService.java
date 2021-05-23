@@ -127,10 +127,11 @@ public interface AdminService {
 
     /**
      * 修改邮箱大小
-     * @param mailBoxSizeList 要修改的邮箱及其大小
+     * @param usernames 要修改的邮箱
+     * @param size 邮箱大小
      * @return 修改行数
      */
-    Integer updateMailBoxSize(List<MailBoxSize> mailBoxSizeList);
+    Integer updateMailBoxSize(List<String> usernames,Integer size);
 
     Integer addLog(Log log);
 

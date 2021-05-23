@@ -7,6 +7,7 @@ import com.example.server.entity.Filter;
 import com.example.server.entity.Log;
 import com.example.server.entity.ServerMessage;
 import com.example.server.entity.User;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -138,7 +139,7 @@ public interface AdminMapper {
      * @return 修改行数
      * @throws Exception 数据库操作异常
      */
-    Integer updateMailBoxSize(List<MailBoxSize> mailBoxSizeList) throws Exception;
+    Integer updateMailBoxSize(List<String> usernames, Integer size) throws Exception;
 
     /**
      * 添加日志

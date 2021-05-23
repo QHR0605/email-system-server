@@ -1,17 +1,19 @@
 package com.example.server.dto;
 
+import java.util.List;
+
 /**
  * @author 全鸿润
  */
 public class MailBoxSize {
-    private String username;
+    private List<String> username;
     private Integer size;
 
-    public String getUsername() {
+    public List<String> getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(List<String> username) {
         this.username = username;
     }
 

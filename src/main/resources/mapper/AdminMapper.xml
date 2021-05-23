@@ -76,9 +76,9 @@
         </if>
     </update>
     <update id="updateMailBoxSize">
-        UPDATE user SET user.mail_box_size = #{item.size} WHERE username IN
-        <foreach collection="mailBoxSizeList" index="index" item="item" open="(" close=")" separator=",">
-            #{item.username}
+        UPDATE user SET user.mail_box_size = #{size} WHERE username IN
+        <foreach collection="usernames" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
         </foreach>
     </update>
     <update id="updateUserForbidden">
