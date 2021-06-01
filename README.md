@@ -22,3 +22,9 @@
 - 启动项目，在浏览器输入地址http://localhost:8080/swagger-ui.html 即可查看接口文档
 
   ![image-20210517200811285](https://shuairun.oss-cn-beijing.aliyuncs.com/img/image-20210517200811285.png)
+
+### SMTP代理服务器测试样例
+
+> 使用postwoman测试
+
+![image-20210601121926131](https://shuairun.oss-cn-beijing.aliyuncs.com/img/image-20210601121926131.png)
