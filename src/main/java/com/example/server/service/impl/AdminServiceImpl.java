@@ -2,7 +2,10 @@ package com.example.server.service.impl;
 
 import com.example.server.ServerApplication;
 import com.example.server.config.SpringContextConfig;
-import com.example.server.dto.*;
+import com.example.server.dto.MassEmail;
+import com.example.server.dto.NewUserMessage;
+import com.example.server.dto.ServerPortMsg;
+import com.example.server.dto.ServerStateMsg;
 import com.example.server.entity.*;
 import com.example.server.mapper.AdminMapper;
 import com.example.server.mapper.MailMapper;
@@ -35,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
         String username = null;
         try {
             Cookie cookie = CookieUtils.findCookie(HttpUtil.getRequest().getCookies(), "username");
-            if (cookie != null){
+            if (cookie != null) {
                 username = cookie.getValue();
             }
         } catch (Exception e) {
@@ -59,14 +62,14 @@ public class AdminServiceImpl implements AdminService {
     public Integer auth(List<String> usernames, Integer authType) {
         Integer row = null;
         StringBuilder content = new StringBuilder();
-        for (String username: usernames
-             ) {
+        for (String username : usernames
+        ) {
             content.append(username).append(" ");
         }
-        if (authType == 0){
-            createLog("授权<"+content+">的权限为普通用户", true, null);
-        }else if (authType == 1){
-            createLog("授权<"+content+">的权限为管理员", true, null);
+        if (authType == 0) {
+            createLog("授权<" + content + ">的权限为普通用户", true, null);
+        } else if (authType == 1) {
+            createLog("授权<" + content + ">的权限为管理员", true, null);
         }
 
         try {
@@ -128,11 +131,11 @@ public class AdminServiceImpl implements AdminService {
     public Integer deleteUsersByUsername(List<String> usernames) {
         Integer row = null;
         StringBuilder content = new StringBuilder();
-        for (String username: usernames
-             ) {
+        for (String username : usernames
+        ) {
             content.append(username).append(" ");
         }
-        createLog("删除账户<"+content+">", true, null);
+        createLog("删除账户<" + content + ">", true, null);
         try {
             row = adminMapper.deleteUsers(usernames);
         } catch (Exception e) {
@@ -235,18 +238,18 @@ public class AdminServiceImpl implements AdminService {
 
         Integer row = null;
         StringBuilder content = new StringBuilder();
-        for (String username: usernames
-             ) {
+        for (String username : usernames
+        ) {
             content.append(username).append(" ");
         }
-        if (forbidden){
-            createLog("设置过滤账户<"+content+">",true,null);
-        }else{
-            createLog("取消过滤账户<"+content+">",true,null);
+        if (forbidden) {
+            createLog("设置过滤账户<" + content + ">", true, null);
+        } else {
+            createLog("取消过滤账户<" + content + ">", true, null);
         }
 
         try {
-            row = adminMapper.updateUserForbidden(usernames,forbidden);
+            row = adminMapper.updateUserForbidden(usernames, forbidden);
         } catch (Exception e) {
             e.printStackTrace();
             log.setState(false);
@@ -319,7 +322,7 @@ public class AdminServiceImpl implements AdminService {
         }
         try {
             row = adminMapper.updateServerState(msg);
-            System.out.println("row:"+row);
+            System.out.println("row:" + row);
         } catch (Exception e) {
             e.printStackTrace();
             log.setState(false);
@@ -497,16 +500,16 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Integer updateMailBoxSize(List<String> usernames,Integer size) {
+    public Integer updateMailBoxSize(List<String> usernames, Integer size) {
         Integer row = 0;
         StringBuilder content = new StringBuilder();
-        for (String username: usernames
-             ) {
+        for (String username : usernames
+        ) {
             content.append(usernames).append(": ").append(size).append(";");
         }
-        createLog("修改用户<"+content+">", true, null);
+        createLog("修改用户<" + content + ">", true, null);
         try {
-            row = adminMapper.updateMailBoxSize(usernames,size);
+            row = adminMapper.updateMailBoxSize(usernames, size);
         } catch (Exception e) {
             e.printStackTrace();
             log.setState(false);
@@ -569,8 +572,8 @@ public class AdminServiceImpl implements AdminService {
         Integer row = null;
         StringBuilder content = new StringBuilder();
         List<Email> emailList = new LinkedList<>();
-        for (String receiver: emails.getReceiverEmails()
-             ) {
+        for (String receiver : emails.getReceiverEmails()
+        ) {
             Email email = new Email(
                     IdGenerator.getId(),
                     emails.getSenderEmail(),
@@ -589,7 +592,7 @@ public class AdminServiceImpl implements AdminService {
             emailList.add(email);
             content.append(receiver).append(" ");
         }
-        createLog("群发邮件: <"+content+">",true,null);
+        createLog("群发邮件: <" + content + ">", true, null);
         try {
             row = mailMapper.addEmails(emailList);
         } catch (Exception e) {

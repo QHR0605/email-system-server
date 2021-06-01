@@ -22,6 +22,7 @@ public interface MailMapper {
 
     /**
      * 群发邮件
+     *
      * @param emails 群发邮件
      * @return 插入的行数
      * @throws Exception 数据库操作异常

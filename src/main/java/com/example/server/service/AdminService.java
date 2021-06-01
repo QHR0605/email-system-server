@@ -1,8 +1,13 @@
 package com.example.server.service;
 
-import com.example.server.dto.*;
-import com.example.server.entity.*;
-import io.swagger.models.auth.In;
+import com.example.server.dto.MassEmail;
+import com.example.server.dto.NewUserMessage;
+import com.example.server.dto.ServerPortMsg;
+import com.example.server.dto.ServerStateMsg;
+import com.example.server.entity.Filter;
+import com.example.server.entity.Log;
+import com.example.server.entity.ServerMessage;
+import com.example.server.entity.User;
 
 import java.util.List;
 
@@ -54,7 +59,7 @@ public interface AdminService {
      */
     Integer updateUsersType(List<String> username, Integer type);
 
-    Integer filterUsers(List<String> usernames,Boolean forbidden);
+    Integer filterUsers(List<String> usernames, Boolean forbidden);
 
     /**
      * 修改端口号
@@ -113,7 +118,7 @@ public interface AdminService {
     /**
      * 删除黑名单
      *
-     * @param idList 黑名单id列表
+     * @param ipList 黑名单id列表
      * @return 删除行数
      */
     Integer deleteFilter(List<String> ipList);
@@ -127,11 +132,12 @@ public interface AdminService {
 
     /**
      * 修改邮箱大小
+     *
      * @param usernames 要修改的邮箱
-     * @param size 邮箱大小
+     * @param size      邮箱大小
      * @return 修改行数
      */
-    Integer updateMailBoxSize(List<String> usernames,Integer size);
+    Integer updateMailBoxSize(List<String> usernames, Integer size);
 
     Integer addLog(Log log);
 

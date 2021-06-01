@@ -1,6 +1,7 @@
 package com.example.server.client;
 
 import com.example.server.util.json.SmtpStateCode;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,13 +10,19 @@ import java.util.Scanner;
 /**
  * @author 全鸿润
  */
-public class SmtpClient extends Thread {
+public class SmtpClient implements Runnable {
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
+//
+//        SmtpClient smtpClient = new SmtpClient();
+//        smtpClient.start();
+//    }
 
-        SmtpClient smtpClient = new SmtpClient();
-        smtpClient.start();
-    }
+    private WebSocketSession socketSession;
+    private String message;
+    private Socket socket;
+    private BufferedReader reader;
+    private PrintWriter writer;
 
     @Override
     public void run() {

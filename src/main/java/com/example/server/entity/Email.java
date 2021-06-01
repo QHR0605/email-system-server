@@ -12,7 +12,7 @@ public class Email {
     private Integer mid;
     private String senderEmail;
     private String receiverEmail;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date sendTime;
     private String subject;
     private String body;

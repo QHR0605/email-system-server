@@ -37,6 +37,7 @@ public interface UserMapper {
 
     /**
      * 更新登录信息
+     *
      * @param msg 最近登录信息
      * @return 修改的行数
      * @throws Exception 数据库操作异常
@@ -45,6 +46,7 @@ public interface UserMapper {
 
     /**
      * 修改用户手机
+     *
      * @param msg 手机信息
      * @return 修改的行数
      * @throws Exception 数据库操作异常

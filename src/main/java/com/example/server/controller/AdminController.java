@@ -216,15 +216,15 @@ public class AdminController {
     }
 
     @GetMapping("/get-server-msg")
-    public JsonResult handleGetServerMsg(){
+    public JsonResult handleGetServerMsg() {
         List<ServerMessage> serverMsg = adminService.getServersMsg();
-        if (serverMsg != null){
+        if (serverMsg != null) {
             return JsonResultFactory.buildJsonResult(
                     JsonResultStateCode.SUCCESS,
                     JsonResultStateCode.SUCCESS_DESC,
                     serverMsg
             );
-        }else{
+        } else {
             return JsonResultFactory.buildFailureResult();
         }
     }
@@ -274,7 +274,7 @@ public class AdminController {
     @PostMapping("update-mailbox-size")
     public JsonResult handleUpdateMailboxSize(@RequestBody MailBoxSize mailBoxSize) {
 
-        Integer row = adminService.updateMailBoxSize(mailBoxSize.getUsername(),mailBoxSize.getSize());
+        Integer row = adminService.updateMailBoxSize(mailBoxSize.getUsername(), mailBoxSize.getSize());
         if (row != null && row == mailBoxSize.getUsername().size()) {
             return JsonResultFactory.buildSuccessResult();
         } else if (row != null) {

@@ -19,7 +19,7 @@ public class HttpUtil {
      *
      * @return 当前请求的HttpServletRequest对象
      */
-    public static HttpServletRequest getRequest(){
+    public static HttpServletRequest getRequest() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         return servletRequestAttributes.getRequest();
     }

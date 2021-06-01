@@ -186,7 +186,7 @@ public class SmtpServiceImpl extends SmtpService {
             }
             Integer sendedMail = mailMapper.getMailCount(this.session.getSender());
             User user = authService.findUserByUsername(this.session.getSender());
-            if (user.getMailBoxSize() >= sendedMail){
+            if (user.getMailBoxSize() <= sendedMail) {
                 this.writer.println(SmtpStateCode.MAILBOX_IS_FULL_DESC);
                 return;
             }

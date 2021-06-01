@@ -1,7 +1,5 @@
 package com.example.server.entity;
 
-import io.swagger.models.auth.In;
-
 import java.sql.Timestamp;
 
 /**
@@ -16,35 +14,41 @@ public class Log {
     private Boolean state;
     private String reason;
 
-    public Log(){
+    public Log() {
 
     }
 
-    public Log logId(Integer logId){
+    public Log logId(Integer logId) {
         this.setLogId(logId);
         return this;
     }
-    public Log username(String username){
+
+    public Log username(String username) {
         this.setUsername(username);
         return this;
     }
-    public Log time(Timestamp time){
+
+    public Log time(Timestamp time) {
         this.setTime(time);
         return this;
     }
-    public Log operation(String operation){
+
+    public Log operation(String operation) {
         this.setOperation(operation);
         return this;
     }
-    public Log state(Boolean state){
+
+    public Log state(Boolean state) {
         this.setState(state);
         return this;
     }
-    public Log reason(String reason){
+
+    public Log reason(String reason) {
         this.setReason(reason);
         return this;
     }
-    public Log build(){
+
+    public Log build() {
         return this;
     }
 

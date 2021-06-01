@@ -1,13 +1,11 @@
 package com.example.server.mapper;
 
-import com.example.server.dto.MailBoxSize;
 import com.example.server.dto.ServerPortMsg;
 import com.example.server.dto.ServerStateMsg;
 import com.example.server.entity.Filter;
 import com.example.server.entity.Log;
 import com.example.server.entity.ServerMessage;
 import com.example.server.entity.User;
-import io.swagger.models.auth.In;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -75,12 +73,13 @@ public interface AdminMapper {
 
     /**
      * 过滤账号
+     *
      * @param usernames 账号名单
      * @param forbidden 是否过滤
      * @return 设置用户数
      * @throws Exception 数据库操作异常
      */
-    Integer updateUserForbidden(List<String> usernames , Boolean forbidden) throws Exception;
+    Integer updateUserForbidden(List<String> usernames, Boolean forbidden) throws Exception;
 
     /**
      * 获取服务器信息
@@ -135,7 +134,9 @@ public interface AdminMapper {
 
     /**
      * 修改邮箱大小
-     * @param mailBoxSizeList 要修改的邮箱及其大小
+     *
+     * @param usernames 要修改的邮箱
+     * @param size 邮箱大小
      * @return 修改行数
      * @throws Exception 数据库操作异常
      */
@@ -143,6 +144,7 @@ public interface AdminMapper {
 
     /**
      * 添加日志
+     *
      * @param log 日志
      * @return 添加的行数
      * @throws Exception 数据库操作异常
@@ -151,6 +153,7 @@ public interface AdminMapper {
 
     /**
      * 获取所有日志
+     *
      * @return 所有日志信息
      * @throws Exception 数据库操作异常
      */
@@ -158,6 +161,7 @@ public interface AdminMapper {
 
     /**
      * 删除日志
+     *
      * @param logIdList 日志id列表
      * @return 删除行数
      * @throws Exception 数据库操作异常
