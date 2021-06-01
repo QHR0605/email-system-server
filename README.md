@@ -28,3 +28,9 @@
 > 使用postwoman测试
 
 ![image-20210601121926131](https://shuairun.oss-cn-beijing.aliyuncs.com/img/image-20210601121926131.png)
+
+### POP3代理服务器测试样例
+
+> 使用postwoman测试
+
+![image-20210601153000603](https://shuairun.oss-cn-beijing.aliyuncs.com/img/image-20210601153000603.png)
