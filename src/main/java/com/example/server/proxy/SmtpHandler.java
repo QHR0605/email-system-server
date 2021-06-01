@@ -1,4 +1,4 @@
-package com.example.server.server;
+package com.example.server.proxy;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -12,7 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @author 全鸿润
@@ -21,18 +21,14 @@ import java.util.concurrent.*;
 public class SmtpHandler extends AbstractWebSocketHandler {
 
     private static int clientCount = 0;
-    private static CopyOnWriteArraySet<SmtpHandler> webSocketHandlers = new CopyOnWriteArraySet<>();
-    private static ThreadPoolExecutor threadPoolExecutor;
+    private static CopyOnWriteArraySet<SmtpHandler> webSocketHandlers;
     private Socket socket;
     private BufferedReader reader;
     private PrintWriter writer;
     private boolean isDataSending;
 
     static {
-        TimeUnit unit = TimeUnit.MILLISECONDS;
-        LinkedBlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
-        ThreadFactory threadFactory = Executors.defaultThreadFactory();
-        threadPoolExecutor = new ThreadPoolExecutor(30, 50, 1000, unit, workQueue, threadFactory);
+        webSocketHandlers = new CopyOnWriteArraySet<>();
     }
 
     @Override
@@ -76,6 +72,9 @@ public class SmtpHandler extends AbstractWebSocketHandler {
                 String line = reader.readLine();
                 session.sendMessage(new TextMessage(line));
                 if ("QUIT".equals(msg)) {
+                    reader.close();
+                    writer.close();
+                    socket.close();
                     session.close();
                 }
             }
@@ -94,10 +93,8 @@ public class SmtpHandler extends AbstractWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         webSocketHandlers.remove(this);
+        subClientCount();
         System.out.println("连接断开");
-        reader.close();
-        writer.close();
-        socket.close();
     }
 
     public static synchronized void addClientCount() {

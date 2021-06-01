@@ -1,7 +1,7 @@
 package com.example.server.config;
 
-import com.example.server.server.Pop3Handler;
-import com.example.server.server.SmtpHandler;
+import com.example.server.proxy.Pop3Handler;
+import com.example.server.proxy.SmtpHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
@@ -19,6 +19,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         webSocketHandlerRegistry.addHandler(getSmtpHandler(), "/smtp").setAllowedOrigins("*");
+        webSocketHandlerRegistry.addHandler(getPop3Handler(),"/pop3").setAllowedOrigins("*");
     }
 
     @Bean
