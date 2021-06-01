@@ -7,6 +7,7 @@ public class ServerMessage {
 
     private Integer sid;
     private String serverName;
+    private String serverIp;
     private Boolean smtpState;
     private Integer smtpPort;
     private Boolean pop3State;
@@ -54,6 +55,14 @@ public class ServerMessage {
 
     public void setServerName(String serverName) {
         this.serverName = serverName;
+    }
+
+    public String getServerIp() {
+        return serverIp;
+    }
+
+    public void setServerIp(String serverIp) {
+        this.serverIp = serverIp;
     }
 
     public Boolean getSmtpState() {
