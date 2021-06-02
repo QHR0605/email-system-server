@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         webSocketHandlerRegistry.addHandler(getSmtpHandler(), "/smtp").setAllowedOrigins("*");
-        webSocketHandlerRegistry.addHandler(getPop3Handler(),"/pop3").setAllowedOrigins("*");
+        webSocketHandlerRegistry.addHandler(getPop3Handler(), "/pop3").setAllowedOrigins("*");
     }
 
     @Bean

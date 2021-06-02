@@ -136,7 +136,7 @@ public interface AdminMapper {
      * 修改邮箱大小
      *
      * @param usernames 要修改的邮箱
-     * @param size 邮箱大小
+     * @param size      邮箱大小
      * @return 修改行数
      * @throws Exception 数据库操作异常
      */

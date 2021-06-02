@@ -12,7 +12,6 @@ import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class Pop3Handler extends AbstractWebSocketHandler {
 
     private static int clientCount = 0;
-    private static CopyOnWriteArraySet<Pop3Handler> webSocketHandlers;
+    public static CopyOnWriteArraySet<Pop3Handler> webSocketHandlers;
     private Socket socket;
     private BufferedReader reader;
     private PrintWriter writer;
@@ -33,10 +32,16 @@ public class Pop3Handler extends AbstractWebSocketHandler {
     private static String hostname;
     private String host;
     private int portNumber;
+    private String username;
+    private WebSocketSession socketSession;
     private AdminService adminService = SpringContextConfig.getBean(AdminServiceImpl.class);
 
     static {
         webSocketHandlers = new CopyOnWriteArraySet<>();
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     @PostConstruct
@@ -65,7 +70,7 @@ public class Pop3Handler extends AbstractWebSocketHandler {
                 socket.close();
                 session.close();
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             session.sendMessage(new TextMessage("POP3服务器不可用"));
         }
@@ -87,6 +92,8 @@ public class Pop3Handler extends AbstractWebSocketHandler {
             e.printStackTrace();
             webSocketSession.sendMessage(new TextMessage("POP3服务不可用"));
         }
+        username = (String) webSocketSession.getAttributes().get("username");
+        socketSession = webSocketSession;
         webSocketSession.sendMessage(new TextMessage(reader.readLine()));
     }
 
@@ -130,5 +137,9 @@ public class Pop3Handler extends AbstractWebSocketHandler {
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
+    }
+
+    public void sendMessage(String message) throws Exception {
+        socketSession.sendMessage(new TextMessage(message));
     }
 }
