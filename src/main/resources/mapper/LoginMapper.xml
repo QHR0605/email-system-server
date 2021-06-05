@@ -17,6 +17,6 @@
     <select id="findUserByUserName" resultType="com.example.server.entity.User">
         SELECT *
         FROM user
-        WHERE user.username = #{username}
+        WHERE user.username = #{userName}
     </select>
 </mapper>

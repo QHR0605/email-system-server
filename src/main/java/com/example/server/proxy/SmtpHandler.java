@@ -1,9 +1,14 @@
 package com.example.server.proxy;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.server.config.SpringContextConfig;
+import com.example.server.dto.EmailMessage;
 import com.example.server.entity.ServerMessage;
 import com.example.server.service.AdminService;
 import com.example.server.service.impl.AdminServiceImpl;
+import com.example.server.util.base64.Base64Util;
+import com.example.server.util.command.CommandConstant;
+import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.SmtpStateCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -16,6 +21,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -29,7 +35,6 @@ public class SmtpHandler extends AbstractWebSocketHandler {
     private Socket socket;
     private BufferedReader reader;
     private PrintWriter writer;
-    private boolean isDataSending;
 
     private static int port;
     private static String hostname;
@@ -37,8 +42,6 @@ public class SmtpHandler extends AbstractWebSocketHandler {
     private int portNumber;
     private WebSocketSession socketSession;
     private AdminService adminService = SpringContextConfig.getBean(AdminServiceImpl.class);
-    private String username;
-    private boolean userNameSend;
 
     static {
         webSocketHandlers = new CopyOnWriteArraySet<>();
@@ -59,54 +62,90 @@ public class SmtpHandler extends AbstractWebSocketHandler {
             e.printStackTrace();
             session.sendMessage(new TextMessage("SMTP服务不可用"));
         }
-        username = (String) session.getAttributes().get("username");
         session.sendMessage(new TextMessage(reader.readLine()));
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String msg = message.getPayload();
-        try {
-            if ("DATA".equals(msg)) {
-                isDataSending = true;
-                writer.println(msg);
-                writer.flush();
-                String line = reader.readLine();
-                session.sendMessage(new TextMessage(line));
-            } else {
-                if (isDataSending) {
-                    if (".".equals(msg)) {
-                        writer.println(msg);
-                        writer.flush();
-                        isDataSending = false;
-                        String line = reader.readLine();
-                        if (line.startsWith(String.valueOf(SmtpStateCode.SUCCESS))) {
-                            for (Pop3Handler handler : Pop3Handler.webSocketHandlers
-                            ) {
-                                handler.sendMessage("您有一封新邮件");
-                            }
-                        }
-                        session.sendMessage(new TextMessage(line));
-                    } else {
-                        writer.append(msg + "\n");
-                    }
-                } else {
-                    writer.println(msg);
-                    writer.flush();
-                    String line = reader.readLine();
-                    session.sendMessage(new TextMessage(line));
-                    if ("QUIT".equals(msg)) {
-                        reader.close();
-                        writer.close();
-                        socket.close();
-                        session.close();
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            session.sendMessage(new TextMessage("SMTP服务不可用"));
+        JSONObject jsonObject = (JSONObject) JSONObject.parse(msg);
+        EmailMessage emailMessage = JSONObject.toJavaObject(jsonObject,EmailMessage.class);
+        List<String> usernames = session.getHandshakeHeaders().get("username");
+        List<String> passwords = session.getHandshakeHeaders().get("password");
+        String username = usernames.get(0);
+        String password = passwords.get(0);
+        System.out.println(emailMessage);
+        String line = null;
+        writer.println(CommandConstant.HELO+" "+username);
+        writer.flush();
+        line = reader.readLine();
+        if (!SmtpStateCode.SUCCESS_DESC.equals(line)){
+            String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
+            session.sendMessage(new TextMessage(jsonString));
+            return;
         }
+        writer.println(CommandConstant.AUTH_LOGIN);
+        writer.flush();
+        line = reader.readLine();
+        if(!SmtpStateCode.USERNAME_SENT_DESC.equals(line)){
+            String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
+            session.sendMessage(new TextMessage(jsonString));
+            return;
+        }
+        writer.println(Base64Util.encodeByBase64(username.getBytes()));
+        writer.flush();
+        line = reader.readLine();
+        if(!SmtpStateCode.PASSWORD_SENT_DESC.equals(line)){
+            String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
+            session.sendMessage(new TextMessage(jsonString));
+            return;
+        }
+        writer.println(Base64Util.encodeByBase64(password.getBytes()));
+        writer.flush();
+        line = reader.readLine();
+        if(!SmtpStateCode.AUTH_SUCCESS_DESC.equals(line)) {
+            String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
+            session.sendMessage(new TextMessage(jsonString));
+            return;
+        }
+        writer.println(CommandConstant.MAIL_FROM+": "+"<"+emailMessage.getSenderEmail()+">");
+        writer.flush();
+        line = reader.readLine();
+        if(!SmtpStateCode.SUCCESS_DESC.equals(line)) {
+            String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
+            session.sendMessage(new TextMessage(jsonString));
+            return;
+        }
+        writer.println(CommandConstant.RCPT_TO+": "+"<"+emailMessage.getReceiverEmail()+">");
+        writer.flush();
+        line = reader.readLine();
+        if(!SmtpStateCode.SUCCESS_DESC.equals(line)) {
+            String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
+            session.sendMessage(new TextMessage(jsonString));
+            return;
+        }
+        writer.println(CommandConstant.DATA);
+        writer.flush();
+        line = reader.readLine();
+        if(!SmtpStateCode.START_EMAIL_INPUT_DESC.equals(line)) {
+            String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
+            session.sendMessage(new TextMessage(jsonString));
+            return;
+        }
+        writer.println("from:"+emailMessage.getSenderEmail());
+        writer.println("to:"+emailMessage.getReceiverEmail());
+        writer.println("subject:"+emailMessage.getSubject());
+        writer.println("body:"+emailMessage.getBody());
+        writer.println(".");
+        writer.flush();
+        line = reader.readLine();
+        if(!(SmtpStateCode.SUCCESS + " Send email Successful").equals(line)) {
+            String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
+            session.sendMessage(new TextMessage(jsonString));
+            return;
+        }
+        String jsonString = JSONObject.toJSONString(JsonResultFactory.buildSuccessResult());
+        session.sendMessage(new TextMessage(jsonString));
     }
 
     @Override
@@ -154,5 +193,4 @@ public class SmtpHandler extends AbstractWebSocketHandler {
         host = serverMessageList.get(0).getServerIp();
         hostname = host;
     }
-
 }

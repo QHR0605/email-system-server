@@ -22,10 +22,6 @@ public abstract class SmtpService {
         this.session = smtpSession;
     }
 
-    public void restartServer() {
-
-    }
-
     /**
      * 处理Hello指令
      *
