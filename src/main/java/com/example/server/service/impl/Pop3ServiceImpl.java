@@ -127,14 +127,16 @@ public class Pop3ServiceImpl extends Pop3Service {
             return;
         }
         String result = Pop3StateCode.OK;
+        this.writer.println(result);
+        result = "";
         Email email = pop3Session.getEmails().get(index);
-        result += "\nFrom: <" + email.getSenderEmail() + ">" + '\n';
+        result += "From: <" + email.getSenderEmail() + ">" + '\n';
         result += "To: <" + email.getReceiverEmail() + ">" + '\n';
-        result += "Date: " + email.getSendTime() + '\n';
-        result += "Subject: " + email.getSubject() + '\n';
-        result += "Body: " + '\n';
-        result += email.getBody() + '\n';
-        this.writer.println(result + '\n' + "#end#");
+        result += "SendTime: <" + email.getSendTime() + ">" + '\n';
+        result += "Subject: <" + email.getSubject() + ">" + '\n';
+        result += "Body: <";
+        result += email.getBody() + ">" + '\n';
+        this.writer.println(result + "#end#");
     }
 
     /**
