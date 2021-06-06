@@ -322,7 +322,6 @@ public class AdminServiceImpl implements AdminService {
         }
         try {
             row = adminMapper.updateServerState(msg);
-            System.out.println("row:" + row);
         } catch (Exception e) {
             e.printStackTrace();
             log.setState(false);
@@ -357,7 +356,6 @@ public class AdminServiceImpl implements AdminService {
                     ServerApplication.smtpServer = new SmtpServer();
                     ServerApplication.smtpServer.start();
                 }
-                System.out.println("重启SMTP服务器");
             } else if (msg.getServerType() == 1) {
                 if (!Pop3Server.isShutDown() && Pop3Server.getPort() != msg.getServerPort()) {
                     ServerApplication.pop3Server.stopPop3Server();
@@ -367,7 +365,6 @@ public class AdminServiceImpl implements AdminService {
                     ServerApplication.pop3Server = new Pop3Server();
                     ServerApplication.pop3Server.start();
                 }
-                System.out.println("重启POP3服务器");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -382,12 +379,10 @@ public class AdminServiceImpl implements AdminService {
             if (msg.getServerType() == 0) {
                 if (!SmtpServer.isShutDown() && SmtpServer.getPort() == msg.getServerPort()) {
                     ServerApplication.smtpServer.stopSmtpServer();
-                    System.out.println("关闭SMTP服务器");
                 }
             } else if (msg.getServerType() == 1) {
                 if (!Pop3Server.isShutDown() && Pop3Server.getPort() == msg.getServerPort()) {
                     ServerApplication.pop3Server.stopPop3Server();
-                    System.out.println("关闭POP3服务器");
                 }
             }
         } catch (IOException e) {

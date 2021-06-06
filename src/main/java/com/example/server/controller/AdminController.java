@@ -141,8 +141,6 @@ public class AdminController {
 
     @PostMapping("/change-server-state")
     public JsonResult handleChangeServerState(@RequestBody ServerStateMsg serverState) {
-
-        System.out.println(serverState);
         Integer state = adminService.changeServerState(serverState);
         JsonResult res = JsonResultFactory.buildSuccessResult();
         ServerPortMsg msg = new ServerPortMsg();

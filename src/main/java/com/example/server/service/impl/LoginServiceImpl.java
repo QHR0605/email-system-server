@@ -44,7 +44,7 @@ public class LoginServiceImpl implements AuthService {
                     //设置cookie:token和用户名
                     HttpServletResponse response = HttpUtil.getResponse();
                     String token = TokenGenerator.generateToken(username, password, user.getAccountType());
-                    System.out.println("生成token: " + token);
+                    System.out.println("登录成功,生成token: " + token);
                     Cookie tokenCookie = CookieUtils.buildCookie("token", token);
                     Cookie usernameCookie = CookieUtils.buildCookie("username", username);
                     response.addCookie(tokenCookie);

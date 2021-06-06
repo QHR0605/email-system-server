@@ -35,7 +35,7 @@ public class WebInterceptor implements HandlerInterceptor {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         PrintWriter writer = null;
-        System.out.println("IP地址:" + ip);
+        System.out.println("客户端的IP地址: " + ip);
         if (ip == null || ip.isEmpty()) {
             writer = response.getWriter();
             writer.append(jsonObject.toJSONString());
@@ -49,7 +49,7 @@ public class WebInterceptor implements HandlerInterceptor {
                 writer = response.getWriter();
                 writer.append(jsonObject.toJSONString());
                 writer.flush();
-                System.out.println("拦截:" + ip);
+                System.out.println("拦截客户端: " + ip);
                 return false;
             }
         }

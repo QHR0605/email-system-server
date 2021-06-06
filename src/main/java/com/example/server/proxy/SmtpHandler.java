@@ -73,7 +73,7 @@ public class SmtpHandler extends AbstractWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         try {
             String msg = message.getPayload();
-            if ("QUIT".equals(msg)) {
+            if (CommandConstant.QUIT.equals(msg)) {
                 writer.println(msg);
                 writer.flush();
                 System.out.println(reader.readLine());
@@ -115,6 +115,7 @@ public class SmtpHandler extends AbstractWebSocketHandler {
             writer.println(Base64Util.encodeByBase64(password.getBytes()));
             writer.flush();
             line = reader.readLine();
+            System.out.println(line);
             if (!SmtpStateCode.AUTH_SUCCESS_DESC.equals(line)) {
                 String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
                 session.sendMessage(new TextMessage(jsonString));
