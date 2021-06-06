@@ -60,13 +60,12 @@ public class SmtpHandler extends AbstractWebSocketHandler {
             List<String> passwords = session.getHandshakeHeaders().get("password");
             username = usernames.get(0);
             password = passwords.get(0);
-            session.sendMessage(new TextMessage("连接成功！"));
             System.out.println("连接成功");
         } catch (IOException e) {
             e.printStackTrace();
             session.sendMessage(new TextMessage("SMTP服务不可用"));
         }
-        session.sendMessage(new TextMessage(reader.readLine()));
+        reader.readLine();
     }
 
     @Override

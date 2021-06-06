@@ -159,7 +159,6 @@ public class Pop3Handler extends AbstractWebSocketHandler {
                 }
                 session.sendMessage(new TextMessage(JSONObject.toJSONString(jsonResult)));
             }
-
         } catch (IOException e) {
             e.printStackTrace();
             session.sendMessage(new TextMessage("POP3服务器不可用"));
@@ -179,12 +178,12 @@ public class Pop3Handler extends AbstractWebSocketHandler {
             socket = new Socket(hostname, port);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-            webSocketSession.sendMessage(new TextMessage("连接成功！"));
+            System.out.println("连接成功");
         } catch (IOException e) {
             e.printStackTrace();
             webSocketSession.sendMessage(new TextMessage("POP3服务不可用"));
         }
-        webSocketSession.sendMessage(new TextMessage(reader.readLine()));
+        System.out.println(reader.readLine());
         List<String> usernames = webSocketSession.getHandshakeHeaders().get("username");
         List<String> passwords = webSocketSession.getHandshakeHeaders().get("password");
         username = usernames.get(0);
@@ -192,7 +191,7 @@ public class Pop3Handler extends AbstractWebSocketHandler {
         String line = null;
         writer.println(CommandConstant.USER + " " + username);
         line = reader.readLine();
-        System.out.println("返回: " + line);
+        System.out.println(line);
         reader.readLine();
         if (!line.startsWith(Pop3StateCode.OK)) {
             String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
