@@ -19,6 +19,9 @@ public class JsonResultStateCode {
     public static Integer USERNAME_IS_EXITED = 413;
     public static String USERNAME_IS_EXITED_DESC = "用户名已存在";
 
+    public static Integer USER_IS_LOG_OUT = 414;
+    public static String USER_IS_LOG_OUT_DESC = "用户已被注销";
+
     static public Integer UNKNOWN_ERROR = 404;
     static public String UNKNOWN_ERROR_DESC = "unknown error";
 

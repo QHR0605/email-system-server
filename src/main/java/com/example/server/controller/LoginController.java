@@ -5,6 +5,7 @@ import com.example.server.config.SpringContextConfig;
 import com.example.server.dto.UserMessage;
 import com.example.server.entity.User;
 import com.example.server.service.AuthService;
+import com.example.server.util.annotation.IsLogin;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
@@ -37,7 +38,10 @@ public class LoginController {
             res = JsonResultFactory.buildJsonResult(JsonResultStateCode.PASSWORD_WRONG, msg, null);
         } else if (JsonResultStateCode.SUCCESS_DESC.equals(msg)) {
             res = JsonResultFactory.buildSuccessResult();
-        } else {
+        }else if (JsonResultStateCode.USER_IS_LOG_OUT_DESC.equals(msg)){
+            res = JsonResultFactory.buildJsonResult(JsonResultStateCode.USER_IS_LOG_OUT,msg,null);
+        }
+        else {
             res = JsonResultFactory.buildJsonResult(JsonResultStateCode.UNKNOWN_ERROR, msg, null);
         }
         return res;

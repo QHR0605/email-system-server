@@ -10,6 +10,7 @@ import com.example.server.server.Pop3Server;
 import com.example.server.server.SmtpServer;
 import com.example.server.service.AdminService;
 import com.example.server.service.impl.AdminServiceImpl;
+import com.example.server.util.annotation.IsAdmin;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
 import com.example.server.util.json.JsonResultStateCode;
@@ -30,6 +31,7 @@ public class AdminController {
     private final AdminService adminService = SpringContextConfig.getBean(AdminServiceImpl.class);
 
     @PostMapping("/delete-users")
+    @IsAdmin
     public JsonResult handleDeleteUser(@RequestBody List<String> usernames) {
 
         Integer rows = adminService.deleteUsersByUsername(usernames);
@@ -45,6 +47,7 @@ public class AdminController {
     }
 
     @PostMapping("/logout-users")
+    @IsAdmin
     public JsonResult handleLogout(@RequestBody List<String> usernames) {
         Integer rows = adminService.updateUsersLogState(usernames, true);
         if (rows != null) {
@@ -59,6 +62,7 @@ public class AdminController {
     }
 
     @PostMapping("/login-users")
+    @IsAdmin
     public JsonResult handleLogin(@RequestBody List<String> usernames) {
         Integer rows = adminService.updateUsersLogState(usernames, false);
         if (rows != null) {
@@ -73,6 +77,7 @@ public class AdminController {
     }
 
     @GetMapping("/get-users")
+    @IsAdmin
     public JsonResult handleGetUsers() {
         List<User> userList = adminService.getAllUsers();
         if (userList != null) {
@@ -95,6 +100,7 @@ public class AdminController {
     }
 
     @PostMapping("/auth")
+    @IsAdmin
     public JsonResult handleAuthorize(@RequestBody List<UserNameAndType> userNameAndTypes) {
 
         if (userNameAndTypes != null) {
@@ -124,6 +130,7 @@ public class AdminController {
     }
 
     @PostMapping("/create-user")
+    @IsAdmin
     public JsonResult handleCreate(@RequestBody NewUserMessage userMessage) {
 
         Integer rows;
@@ -140,6 +147,7 @@ public class AdminController {
     }
 
     @PostMapping("/change-server-state")
+    @IsAdmin
     public JsonResult handleChangeServerState(@RequestBody ServerStateMsg serverState) {
         Integer state = adminService.changeServerState(serverState);
         JsonResult res = JsonResultFactory.buildSuccessResult();
@@ -180,6 +188,7 @@ public class AdminController {
     }
 
     @PostMapping("/change-server-port")
+    @IsAdmin
     public JsonResult handleChangeServerPort(@RequestBody ServerPortMsg msg) {
 
         //修改端口号
@@ -214,6 +223,7 @@ public class AdminController {
     }
 
     @GetMapping("/get-server-msg")
+    @IsAdmin
     public JsonResult handleGetServerMsg() {
         List<ServerMessage> serverMsg = adminService.getServersMsg();
         if (serverMsg != null) {
@@ -248,6 +258,7 @@ public class AdminController {
     }
 
     @PostMapping("/add-blacklist")
+    @IsAdmin
     public JsonResult handleAddBlacklist(@RequestBody List<String> ipList) {
 
         Integer row = adminService.addFilter(ipList);
@@ -270,6 +281,7 @@ public class AdminController {
     }
 
     @PostMapping("update-mailbox-size")
+    @IsAdmin
     public JsonResult handleUpdateMailboxSize(@RequestBody MailBoxSize mailBoxSize) {
 
         Integer row = adminService.updateMailBoxSize(mailBoxSize.getUsername(), mailBoxSize.getSize());
@@ -287,6 +299,7 @@ public class AdminController {
     }
 
     @GetMapping("/get-logs")
+    @IsAdmin
     public JsonResult getLogs() {
 
         List<Log> logs = adminService.getLogs();
@@ -306,6 +319,7 @@ public class AdminController {
     }
 
     @PostMapping("/del-logs")
+    @IsAdmin
     public JsonResult handleDelLog(@RequestBody List<Integer> logIdList) {
 
         Integer row = adminService.deleteLog(logIdList);
@@ -323,6 +337,7 @@ public class AdminController {
     }
 
     @PostMapping("/send-group-mail")
+    @IsAdmin
     public JsonResult handleSendGroupMail(@RequestBody MassEmail massEmail) {
 
         Integer row = adminService.sendMails(massEmail);
@@ -340,6 +355,7 @@ public class AdminController {
     }
 
     @PostMapping("forbid-users")
+    @IsAdmin
     public JsonResult handleForbideUsers(@RequestBody ForbiddenUser forbiddenUser) {
 
         Integer row = adminService.filterUsers(forbiddenUser.getUsername(), forbiddenUser.getForbidden());

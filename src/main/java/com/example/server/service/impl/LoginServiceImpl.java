@@ -37,6 +37,8 @@ public class LoginServiceImpl implements AuthService {
             user = loginMapper.findUserByUserName(username);
             if (user == null) {
                 return JsonResultStateCode.USERNAME_WRONG_DESC;
+            } else if(user.getLogout()){
+                return JsonResultStateCode.USER_IS_LOG_OUT_DESC;
             } else {
                 if (!user.getPassword().equals(password)) {
                     return JsonResultStateCode.PASSWORD_WRONG_DESC;

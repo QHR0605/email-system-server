@@ -275,7 +275,6 @@ public class AdminServiceImpl implements AdminService {
     public Integer changeServerPort(ServerPortMsg msg) {
 
         Integer row = null;
-
         if (msg.getServerType() == 0) {
             createLog("修改SMTP服务端口为:" + msg.getServerPort(), true, null);
         } else if (msg.getServerType() == 1) {
@@ -306,7 +305,6 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Integer changeServerState(ServerStateMsg msg) {
         Integer row = null;
-        System.out.println(msg.getServerType());
         if (msg.getServerType() == 0) {
             if (msg.getServerState()) {
                 createLog("开启SMTP服务", true, null);

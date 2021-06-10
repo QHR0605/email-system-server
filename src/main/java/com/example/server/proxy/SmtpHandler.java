@@ -8,7 +8,9 @@ import com.example.server.service.AdminService;
 import com.example.server.service.impl.AdminServiceImpl;
 import com.example.server.util.base64.Base64Util;
 import com.example.server.util.command.CommandConstant;
+import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
+import com.example.server.util.json.JsonResultStateCode;
 import com.example.server.util.json.SmtpStateCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -147,16 +149,23 @@ public class SmtpHandler extends AbstractWebSocketHandler {
             writer.println("from:" + emailMessage.getSenderEmail());
             writer.println("to:" + emailMessage.getReceiverEmail());
             writer.println("subject:" + emailMessage.getSubject());
-            writer.println("body:" + emailMessage.getBody());
+            writer.println(emailMessage.getBody());
             writer.println(".");
             writer.flush();
             line = reader.readLine();
-            if (!(SmtpStateCode.SUCCESS + " Send email Successful").equals(line)) {
-                String jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
-                session.sendMessage(new TextMessage(jsonString));
-                return;
+            String jsonString;
+            if (SmtpStateCode.MAILBOX_IS_FULL_DESC.equals(line)){
+                JsonResult result = JsonResultFactory.buildJsonResult(
+                        SmtpStateCode.MAILBOX_IS_FULL,
+                        SmtpStateCode.MAILBOX_IS_FULL_DESC,
+                        null
+                );
+                jsonString = JSONObject.toJSONString(result);
+            } else if ((SmtpStateCode.SUCCESS + " Send email Successful").equals(line)) {
+                jsonString = JSONObject.toJSONString(JsonResultFactory.buildSuccessResult());
+            }else{
+                jsonString = JSONObject.toJSONString(JsonResultFactory.buildFailureResult());
             }
-            String jsonString = JSONObject.toJSONString(JsonResultFactory.buildSuccessResult());
             session.sendMessage(new TextMessage(jsonString));
         } catch (IOException e) {
             e.printStackTrace();

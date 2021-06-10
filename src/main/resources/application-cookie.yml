@@ -1,4 +1,4 @@
 cookie:
-  domain: localhost
+  domain: 47.106.174.25
   path: /
   maxAge: 86400

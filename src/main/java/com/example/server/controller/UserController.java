@@ -6,6 +6,7 @@ import com.example.server.entity.Contact;
 import com.example.server.entity.ContactMsg;
 import com.example.server.service.UserService;
 import com.example.server.service.impl.UserServiceImpl;
+import com.example.server.util.annotation.IsLogin;
 import com.example.server.util.http.CookieUtils;
 import com.example.server.util.json.JsonResult;
 import com.example.server.util.json.JsonResultFactory;
@@ -28,8 +29,8 @@ public class UserController {
     private final UserService userService = SpringContextConfig.getBean(UserServiceImpl.class);
 
     @GetMapping("/get-contact")
+    @IsLogin
     public JsonResult handleGetContact(HttpServletRequest request) {
-
         String username = CookieUtils.findCookie(request.getCookies(), "username").getValue();
         List<ContactMsg> contactList = userService.getContactList(username);
         if (contactList != null) {
@@ -51,6 +52,7 @@ public class UserController {
     }
 
     @PostMapping("/add-contact")
+    @IsLogin
     public JsonResult handleAddContact(@RequestBody Contact contact) {
 
         Integer row = userService.addContact(contact);
@@ -62,6 +64,7 @@ public class UserController {
     }
 
     @PostMapping("/del-contact")
+    @IsLogin
     public JsonResult handleDelContact(@RequestBody Contact contact) {
         Integer row = userService.deleteContact(contact);
         if (row != null && row == 1) {
@@ -72,6 +75,7 @@ public class UserController {
     }
 
     @PostMapping("/update-phone")
+    @IsLogin
     public JsonResult handleUpdatePhone(@RequestBody UserPhoneMsg msg) {
 
         Integer row = userService.updatePhone(msg);

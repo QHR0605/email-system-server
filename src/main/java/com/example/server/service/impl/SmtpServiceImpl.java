@@ -188,6 +188,7 @@ public class SmtpServiceImpl extends SmtpService {
             User user = authService.findUserByUsername(this.session.getSender());
             if (user.getMailBoxSize() <= sendedMail) {
                 this.writer.println(SmtpStateCode.MAILBOX_IS_FULL_DESC);
+                System.out.println("邮箱已满");
                 return;
             }
             for (String receiver : this.session.getReceivers()
@@ -209,13 +210,16 @@ public class SmtpServiceImpl extends SmtpService {
                     Integer rows = mailMapper.addMail(email);
                     if (rows != 1) {
                         this.writer.println("邮件发送失败,收件人为: " + receiver);
+                        System.out.println("邮件发送失败,收件人为: " + receiver);
                     }
                 } catch (Exception e) {
                     this.writer.println("邮件发送失败,收件人为: " + receiver);
+                    System.out.println("邮件发送失败,收件人为: " + receiver);
                     e.printStackTrace();
                 }
             }
             this.writer.println(SmtpStateCode.SUCCESS + " Send email Successful");
+            System.out.println("发送成功");
             //清空发送人列表
             this.session.getReceivers().clear();
         } catch (IOException e) {
