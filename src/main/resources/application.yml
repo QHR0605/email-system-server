@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    username: qhr666
-    password: Email666
-    url: jdbc:mysql://rm-wz9ev2rzm1e4s0r7eyo.mysql.rds.aliyuncs.com:3306/email-system?characterEncoding=utf-8
+    username: xxx
+    password: xxx
+    url: jdbc:mysql://xxx:3306/xxx?characterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   profiles:
